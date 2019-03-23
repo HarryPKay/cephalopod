@@ -1,28 +1,31 @@
 #pragma once
 #include <assert.h>
-#include <map>
 #include <iostream>
-#include <vector>
 #include "Constants.h"
 #include "Position.h"
+#include "Die.h"
 //#define NDEBUG
 
-typedef std::vector<std::vector<int>> Matrix;
-
+//TODO: separate out gameViewer/gameController
+using namespace cephalopod;
 class Board
 {
 public:
+
 	Board(int width, int height);
 	~Board();
 	void print();
+	void test();
 
 private:
 	int rowCount;
 	int colCount;
-	Matrix matrix;
-	void printColumnNumbers();
-	void printRows();
-	void printRowseparator();
-	char intToSymbol(int value);
+	Matrix<Die> matrix;
+
+	void printColumnNumbers(); //const
+	void printRows(); //const
+	void printRowSeparator(); //const
+	Die* getDiePtr(const Position position);
+	AdjacencyMap<Die*> getAdjacencyMap(const Position origin);
 };
 

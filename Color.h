@@ -2,5 +2,5 @@
 
 enum Color
 {
-	white, black
+	white, black, none
 };
