@@ -2,39 +2,50 @@
 
 
 
-HumanPlayer::HumanPlayer()
-{
-}
-
-
 HumanPlayer::~HumanPlayer()
 {
 }
 
 Move HumanPlayer::getMove()
 {
-	std::cout << color << " turn (colNo rowNo isCapture)> ";
-	std::string input;
-	std::cin >> input;
-	std::vector<std::string> splitInput;
+	//TODO: validate
+	cout << color << "'s turn\n";
 
-	// TODO: put into helper function file
-	for (int left = 0, right = 0; right < input.size(); ++right)
+	int row;
+	cout << "Enter in row coordinate\n>";
+	cin >> row;
+	--row;
+
+	int col;
+	cout << "Enter in column coordinate\n>";
+	cin >> col;
+	--col;
+
+	char captureTarget = ' ';
+	vector<Direction> captureTargets;
+	cout << "Enter capture targets>\n";
+
+	while (captureTarget !=  'f')
 	{
-		if (input[right] == MOVE_SEPARATOR) {
-			splitInput.push_back(input.substr(left, right - left));
-			left = right + 1;
+		cin >> captureTarget;
+		switch (captureTarget)
+		{
+		case 'u':
+			captureTargets.push_back(Direction::up);
+			break;
+		case 'r':
+			captureTargets.push_back(Direction::right);
+			break;
+		case 'd':
+			captureTargets.push_back(Direction::down);
+			break;
+		case 'l':
+			captureTargets.push_back(Direction::left);
+			break;
 		}
 	}
 
-	Position position = { std::stoi(splitInput[0]), std::stoi(splitInput[1]) };
-	bool isCapture = false;
-	// TODO: put as const
-	if (splitInput[2] == "t")
-	{
-		isCapture = true;
-	}
+	// TODO: have this prompt only if there are captures available;
 
-	// TODO: validation (post condition)
-	return { position, color, vector<Direction>() };
+	return { Position(row,col), color, captureTargets };
 }

@@ -40,20 +40,26 @@ void Cell::setAdjacentCells(map<Direction, Cell*> value)
 	this->adjacentCells = value;
 }
 
-// TODO make better.
-void Cell::printAdjacentInfo()
+void Cell::capture()
 {
-	for (int i = 0; i < 4; ++i)
-	{
-		cout << i;
-		if (black == adjacentCells[Direction(i)]->getColor())
-		{
-			cout << " -";
-		}
-		else
-		{
-			cout << " ";
-		}
-		cout << adjacentCells[Direction(i)]->getPip() << endl;
-	}
+	occupant = noColor;
+	pip = 0;
 }
+
+//// TODO make better.
+//void Cell::printAdjacentInfo()
+//{
+//	for (int i = 0; i < 4; ++i)
+//	{
+//		cout << i;
+//		if (black == adjacentCells[Direction(i)]->getColor())
+//		{
+//			cout << " -";
+//		}
+//		else
+//		{
+//			cout << " ";
+//		}
+//		cout << adjacentCells[Direction(i)]->getPip() << endl;
+//	}
+//}

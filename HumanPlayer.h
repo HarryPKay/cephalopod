@@ -10,7 +10,8 @@ class HumanPlayer :
 	public Player
 {
 public:
-	HumanPlayer();
+	HumanPlayer(Color color)
+		:Player(color) {};
 	~HumanPlayer();
 	Move getMove();
 };

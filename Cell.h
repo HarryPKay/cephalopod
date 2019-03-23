@@ -17,10 +17,9 @@ public:
 	void setColor(Color value);
 	map<Direction, Cell*> getAdjacentCells();
 	void setAdjacentCells(map<Direction, Cell*> value);
-	void printAdjacentInfo();
+	void capture();
 private:
 	int pip = NO_DICE;
-	bool isTouched = false;
 	map<Direction, Cell*> adjacentCells;
 	Color occupant = noColor;
 };

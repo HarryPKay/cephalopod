@@ -12,24 +12,27 @@ using namespace cephalopod;
 class Board
 {
 public:
-
-	Board(int width, int height);
+	Board(int rowCount, int colCount);
 	~Board();
-	void print();
-
-	Cell getCell(const Position position);
-	Cell* getCellPointer(const Position position);
-	bool isWithinBounds(const Position position) const;
+	Cell getCell(Position position);
+	Cell* getCellPointer(Position position) ;
+	int getColCount();
+	int getRowCount();
+	Matrix<Cell>* getMatrix();
 	map<Direction, Cell*> getAdjacenctCells(const Position origin);
+	bool isWithinBounds(Position position) const;
+	void refreshPage() const;
+	void print();
+	void printColumnNumbers();
+	void printRows();
+	void printRowSeparator();
+	bool setMove(Move move);
+	bool isBoardFull();
+	Color getMajorityColor();
 
 private:
-
 	int rowCount;
 	int colCount;
 	Matrix<Cell> matrix;
-
-	void printColumnNumbers(); //const
-	void printRows(); //const
-	void printRowSeparator(); //const
 };
 

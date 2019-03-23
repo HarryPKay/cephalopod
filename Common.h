@@ -16,6 +16,7 @@ namespace cephalopod
 	const int NO_DICE = 0;
 	const int ADJACENCY_MATRIX_SIZE = 3;
 	const char MOVE_SEPARATOR = ' ';
+	const int REFRESH_PAGE_SIZE = 100;
 
 	enum Color
 	{
@@ -27,19 +28,23 @@ namespace cephalopod
 		up, right, down, left
 	};
 
+	enum GameState
+	{
+		settings, inProgress, end
+	};
+
 	struct Position
 	{
 		Position(int row, int col)
-		{
-			this->row = row;
-			this->col = col;
-		}
+			: row(row), col(col) {};
 		int row;
 		int col;
 	};
 
 	struct Move
 	{
+		Move(Position position, Color color, vector<Direction> captureTargets)
+			: position(position), color(color), captureTargets(captureTargets) {};
 		Position position;
 		Color color;
 		vector<Direction> captureTargets;
