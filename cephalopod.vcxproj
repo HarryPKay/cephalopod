@@ -116,20 +116,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="Die.h" />
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="HumanPlayer.h" />
-    <ClInclude Include="Move.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Position.h" />
+    <ClInclude Include="Viewer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Die.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Viewer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,9 +10,16 @@ Board::Board(int rowCount, int colCount)
 	matrix.resize(rowCount);
 	for (int i = 0; i < rowCount; i++)
 	{
-		matrix[i].resize(colCount, Die());
+		matrix[i].resize(colCount, Cell());
 	}
 
+	for (int i = 0; i < rowCount; ++i)
+	{
+		for (int j = 0; j < colCount; ++j)
+		{
+			matrix[i][j].setAdjacentCells(getAdjacenctCells(Position(i, j)));
+		}
+	}
 }
 
 Board::~Board()
@@ -29,13 +36,18 @@ void Board::print()
 
 void Board::test()
 {
-	matrix[3][3] = Die(getAdjacencyMap(Position(3, 3)));
-	matrix[3][3].setPip(2);
-	matrix[2][2] = Die(getAdjacencyMap(Position(2, 2)));
-	matrix[2][2].setPip(2);
-	matrix[4][4] = Die(getAdjacencyMap(Position(4, 4)));
-	matrix[4][4].setPip(2);
-	matrix[4][4].print();
+	matrix[3][3].setColor(black);
+	matrix[3][3].setPip(1);
+	matrix[3][3].printAdjacentInfo();
+	matrix[2][3].setColor(white);
+	matrix[2][3].setPip(1);
+	matrix[4][3].setColor(white);
+	matrix[4][3].setPip(1);
+	matrix[3][4].setColor(white);
+	matrix[3][4].setPip(1);
+	matrix[3][2].setColor(white);
+	matrix[3][2].setPip(1);
+	matrix[3][3].printAdjacentInfo();
 }
 
 void Board::printColumnNumbers()
@@ -49,21 +61,29 @@ void Board::printColumnNumbers()
 
 void Board::printRows()
 {
-	for (int i = 0; i < colCount; ++i)
+	for (int i = 0; i < rowCount; ++i)
 	{
-		std::cout << (i + 1) << " | ";
-		for (int j = 0; j < rowCount; ++j)
+		std::cout << (i + 1) << " |";
+		for (int j = 0; j < colCount; ++j)
 		{
-			if (matrix[j][i].getPip() == 0)
+			if (matrix[i][j].getColor() == noColor)
 			{
-				//std::cout << j << " a " << i << "\n";
-				std::cout << " " << " | ";
+				std::cout << "   |";
+			}
+			else if (matrix[i][j].getColor() == white)
+			{
+				std::cout << " " << matrix[i][j].getPip() << " |";
+			}
+			else if (matrix[i][j].getColor() == black)
+			{
+				std::cout << "-" << matrix[i][j].getPip() << " |";
 			}
 			else
 			{
-				std::cout << "?" << " | ";
+				std::cout << " ?" << " |";
 			}
 		}
+
 		printRowSeparator();
 	}
 }
@@ -78,30 +98,34 @@ void Board::printRowSeparator()
 	std::cout << std::endl;
 }
 
-Die * Board::getDiePtr(const Position position)
+Cell Board::getCell(const Position position)
 {
-	if (position.row >= 0 && position.row < rowCount
-		&& position.col >= 0 && position.col < colCount)
-	{
-		// TODO: check correct orientation.
+	assert(isWithinBounds(position));
+	return matrix[position.row][position.col];
+}
+
+Cell* Board::getCellPointer(const Position position)
+{
+	if (isWithinBounds(position)) {
 		return &matrix[position.row][position.col];
 	}
 
 	return nullptr;
 }
 
-AdjacencyMap<Die*> Board::getAdjacencyMap(const Position origin)
+bool Board::isWithinBounds(const Position position) const
 {
-	// TODO: size
-	AdjacencyMap<Die*> adjacencyMap;
+	return (position.row >= 0 && position.row < rowCount
+		&& position.col >= 0 && position.col < colCount);
+}
 
-	for (int i = -1; i < 2; ++i)
-	{
-		for (int j = -1; j < 2; ++j)
-		{
-			adjacencyMap[i + 1][j + 1] = getDiePtr(Position(origin.row + i, origin.col + j));
-		}
-	}
+map<Direction, Cell*> Board::getAdjacenctCells(const Position origin)
+{
+	map<Direction, Cell*> adjacentCells;
+	adjacentCells[Direction::up] = getCellPointer(Position(origin.row - 1, origin.col));
+	adjacentCells[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
+	adjacentCells[Direction::down] = getCellPointer(Position(origin.row + 1, origin.col));
+	adjacentCells[Direction::left] = getCellPointer(Position(origin.row, origin.col -1));
 
-	return adjacencyMap;
+	return adjacentCells;
 }

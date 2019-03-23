@@ -36,5 +36,5 @@ Move HumanPlayer::getMove()
 	}
 
 	// TODO: validation (post condition)
-	return { position, color, isCapture };
+	return { position, color, vector<Direction>() };
 }

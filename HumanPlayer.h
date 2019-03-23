@@ -2,7 +2,6 @@
 #include <iostream>
 #include <stdint.h>
 #include <string>
-#include "Constants.h"
 #include "Player.h"
 
 using namespace cephalopod;

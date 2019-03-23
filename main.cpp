@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 #include "Board.h"
-#include "Position.h"
+#include "Common.h"
 
 // absolute
 //typedef std::vector<std::vector<int>> VectorMatrix;

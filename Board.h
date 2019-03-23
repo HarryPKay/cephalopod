@@ -1,13 +1,14 @@
 #pragma once
 #include <assert.h>
 #include <iostream>
-#include "Constants.h"
-#include "Position.h"
-#include "Die.h"
+#include "Cell.h"
+#include "Common.h"
 //#define NDEBUG
 
 //TODO: separate out gameViewer/gameController
 using namespace cephalopod;
+
+
 class Board
 {
 public:
@@ -15,17 +16,20 @@ public:
 	Board(int width, int height);
 	~Board();
 	void print();
-	void test();
+
+	Cell getCell(const Position position);
+	Cell* getCellPointer(const Position position);
+	bool isWithinBounds(const Position position) const;
+	map<Direction, Cell*> getAdjacenctCells(const Position origin);
 
 private:
+
 	int rowCount;
 	int colCount;
-	Matrix<Die> matrix;
+	Matrix<Cell> matrix;
 
 	void printColumnNumbers(); //const
 	void printRows(); //const
 	void printRowSeparator(); //const
-	Die* getDiePtr(const Position position);
-	AdjacencyMap<Die*> getAdjacencyMap(const Position origin);
 };
 

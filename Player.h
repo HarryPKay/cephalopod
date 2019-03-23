@@ -1,6 +1,7 @@
 #pragma once
-#include "Color.h"
-#include "Move.h"
+#include "Common.h"
+
+using namespace cephalopod;
 
 class Player
 {
