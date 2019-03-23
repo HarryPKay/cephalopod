@@ -30,6 +30,10 @@ public:
 	void printRowSeparator();
 	string getAdjacentInfo(Position position);
 	bool setMove(Move move);
+	bool isMoveValid(Move move, int& pipSum);
+	bool isMoveValid(Move move);
+	bool isCaptureValid(Move move, int & pipSum);
+	bool isCellVacant(Position position);
 	bool isBoardFull();
 	Color getMajorityColor();
 

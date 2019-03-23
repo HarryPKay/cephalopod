@@ -1,6 +1,7 @@
 #pragma once
+#include <algorithm>
+#include <iostream>
 #include "Common.h"
-#include <string>
 
 namespace cephalopod
 {

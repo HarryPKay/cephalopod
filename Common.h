@@ -14,9 +14,8 @@ namespace cephalopod
 	const int MIN_PIP = 1;
 	const int MAX_PIP = 6;
 	const int NO_DICE = 0;
-	const int ADJACENCY_MATRIX_SIZE = 3;
 	const char MOVE_SEPARATOR = ' ';
-	const int REFRESH_PAGE_SIZE = 100;
+	const int REFRESH_PAGE_SIZE = 15;
 
 	enum Color
 	{

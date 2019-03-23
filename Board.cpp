@@ -148,7 +148,7 @@ string Board::getAdjacentInfo(Position position)
 	int pipSum = 0;
 	string info = "";
 	info.append("\nAdjacent info for last move at " +
-		to_string(position.row) + "," + to_string(position.col) + ":\n\n");
+		to_string(position.row + 1) + "," + to_string(position.col + 1) + ":\n\n");
 
 	for (int i = 0; i < (int)Direction::size; ++i)
 	{
@@ -180,25 +180,61 @@ string Board::getAdjacentInfo(Position position)
 	return info;
 }
 
-// do we need a is valid move?
 bool Board::setMove(Move move)
 {
-	Cell& cell = matrix[move.position.row][move.position.col];
+	int pipSum = 0;
 
-	if (!isWithinBounds(move.position)
-		|| cell.getColor() != noColor
-		|| move.captureTargets.size() > 4
+	if (!isMoveValid(move, pipSum))
+	{
+		return false;
+	}
+
+	previousAdjacentInfo = getAdjacentInfo(move.position);
+
+	Cell& cell = matrix[move.position.row][move.position.col];
+	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+
+	for (int i = 0; i < move.captureTargets.size(); ++i)
+	{
+		adjacentCells[move.captureTargets[i]]->capture();
+	}
+
+	cell.setColor(move.color);
+	cell.setPip(pipSum);
+
+	return true;
+}
+
+bool Board::isMoveValid(Move move, int& pipSum)
+{
+	return isWithinBounds(move.position)
+		&& isCaptureValid(move, pipSum)
+		&& isCellVacant(move.position);
+}
+
+bool Board::isMoveValid(Move move)
+{
+	int temp;
+	return isMoveValid(move, temp);
+}
+
+bool Board::isCaptureValid(Move move, int & pipSum)
+{
+	if (move.captureTargets.size() > 4
 		|| move.captureTargets.size() == 1)
 	{
 		return false;
 	}
 
-	int pipSum = 0;
+	Cell& cell = matrix[move.position.row][move.position.col];
 	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+
+	pipSum = 0;
 	for (int i = 0; i < move.captureTargets.size(); ++i)
 	{
 		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
-		if (adjacentCell->getColor() != move.color)
+		if (adjacentCell != nullptr &&
+			adjacentCell->getColor() != move.color)
 		{
 			pipSum += adjacentCell->getPip();
 		}
@@ -217,27 +253,26 @@ bool Board::setMove(Move move)
 	bool isAllOpponentsCells = true;
 
 	for (int i = 0; i < move.captureTargets.size(); ++i) {
-		if (adjacentCells[move.captureTargets[i]]->getColor() == move.color)
+		
+		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
+
+		if (adjacentCell == nullptr)
+		{
+			continue;
+		}
+
+		if ( adjacentCell->getColor() == move.color)
 		{
 			isAllOpponentsCells = false;
 		}
 	}
 
-	if (!isAllOpponentsCells)
-	{
-		return false;
-	}
+	return isAllOpponentsCells;
+}
 
-	previousAdjacentInfo = getAdjacentInfo(move.position);
-
-	for (int i = 0; i < move.captureTargets.size(); ++i) {
-		adjacentCells[move.captureTargets[i]]->capture();
-	}
-
-	cell.setColor(move.color);
-	cell.setPip(pipSum);
-
-	return true;
+bool Board::isCellVacant(Position position)
+{
+	return matrix[position.row][position.col].getColor() == noColor;
 }
 
 bool Board::isBoardFull()
