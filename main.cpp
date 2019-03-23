@@ -27,7 +27,6 @@ int main()
 		for (Player* player : players) {
 			
 			board.print();
-			
 			while (!board.setMove(player->getMove())) {
 				board.print();
 				cout << "Invalid move.\n"; 

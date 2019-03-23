@@ -1,8 +1,10 @@
 #pragma once
 #include <assert.h>
 #include <iostream>
+#include <string>
 #include "Cell.h"
 #include "Common.h"
+#include "Helpers.h"
 //#define NDEBUG
 
 //TODO: separate out gameViewer/gameController
@@ -26,6 +28,7 @@ public:
 	void printColumnNumbers();
 	void printRows();
 	void printRowSeparator();
+	string getAdjacentInfo(Position position);
 	bool setMove(Move move);
 	bool isBoardFull();
 	Color getMajorityColor();
@@ -34,5 +37,6 @@ private:
 	int rowCount;
 	int colCount;
 	Matrix<Cell> matrix;
+	string previousAdjacentInfo;
 };
 

@@ -87,6 +87,7 @@ void Board::print()
 	printColumnNumbers();
 	printRowSeparator();
 	printRows();
+	cout << previousAdjacentInfo << endl;
 }
 
 void Board::printColumnNumbers()
@@ -140,6 +141,45 @@ void Board::printRowSeparator()
 	std::cout << std::endl;
 }
 
+string Board::getAdjacentInfo(Position position)
+{
+	map<Direction, Cell*> adjacentCells = matrix[position.row][position.col].getAdjacentCells();
+
+	int pipSum = 0;
+	string info = "";
+	info.append("\nAdjacent info for last move at " +
+		to_string(position.row) + "," + to_string(position.col) + ":\n\n");
+
+	for (int i = 0; i < (int)Direction::size; ++i)
+	{
+		Cell* cell = adjacentCells[(Direction)i];
+
+		if (cell == nullptr)
+		{
+			continue;
+		}
+
+		int pip = cell->getPip();
+		pipSum += pip;
+
+		if (cell->getColor() == black)
+		{
+			pip *= -1;
+		}
+
+		if (pip == 0)
+		{
+			continue;
+		}
+
+		info.append(directionEnumToString((Direction)i) + ": ");
+		info.append(to_string(pip) + "\n");
+	}
+	info.append("Total pip counts: " + to_string(pipSum) + "\n");
+
+	return info;
+}
+
 // do we need a is valid move?
 bool Board::setMove(Move move)
 {
@@ -188,12 +228,12 @@ bool Board::setMove(Move move)
 		return false;
 	}
 
+	previousAdjacentInfo = getAdjacentInfo(move.position);
+
 	for (int i = 0; i < move.captureTargets.size(); ++i) {
 		adjacentCells[move.captureTargets[i]]->capture();
 	}
 
-	//TODO: Can capture? remove captured dice
-	
 	cell.setColor(move.color);
 	cell.setPip(pipSum);
 

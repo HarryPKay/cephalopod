@@ -25,7 +25,7 @@ namespace cephalopod
 
 	enum Direction
 	{
-		up, right, down, left
+		up, right, down, left, size
 	};
 
 	enum GameState
