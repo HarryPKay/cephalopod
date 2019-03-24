@@ -115,22 +115,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Board.h" />
+    <ClInclude Include="BoardModel.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="GameController.h" />
+    <ClInclude Include="BoardViewer.h" />
+    <ClInclude Include="HardComputer.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="RandomPlayer.h" />
+    <ClInclude Include="EasyComputer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BoardModel.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="BoardViewer.cpp" />
+    <ClCompile Include="HardComputer.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="RandomPlayer.cpp" />
+    <ClCompile Include="EasyComputer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
