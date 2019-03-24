@@ -27,6 +27,13 @@ namespace cephalopod
 		up, right, down, left, size
 	};
 
+	const vector<Direction> directions = {
+	Direction::up,
+	Direction::right,
+	Direction::down,
+	Direction::left
+	};
+
 	enum GameState
 	{
 		settings, inProgress, end

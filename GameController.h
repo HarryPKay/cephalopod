@@ -4,6 +4,7 @@
 #include "BoardViewer.h"
 #include "HumanPlayer.h"
 #include "EasyComputer.h"
+#include "HardComputer.h"
 
 class GameController
 {

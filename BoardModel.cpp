@@ -132,6 +132,7 @@ bool BoardModel::setMove(Move move)
 	Cell& cell = matrix[move.position.row][move.position.col];
 	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
 
+
 	for (int i = 0; i < move.captureTargets.size(); ++i)
 	{
 		adjacentCells[move.captureTargets[i]]->capture();
@@ -158,29 +159,38 @@ bool BoardModel::isMoveValid(Move move)
 
 bool BoardModel::isCaptureValid(Move move, int & pipSum)
 {
+	if (move.captureTargets.size() == 0)
+	{
+		pipSum = 1;
+		return true;
+	}
+
 	if (move.captureTargets.size() > 4
 		|| move.captureTargets.size() == 1)
 	{
 		return false;
 	}
 
+	pipSum = 0;
 	Cell& cell = matrix[move.position.row][move.position.col];
 	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
 
-	pipSum = 0;
-	for (int i = 0; i < move.captureTargets.size(); ++i)
-	{
+	for (int i = 0; i < move.captureTargets.size(); ++i) {
+
 		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
-		if (adjacentCell != nullptr &&
-			adjacentCell->getColor() != move.color)
+
+		if (adjacentCell == nullptr
+			|| adjacentCell->getColor() == move.color
+			|| adjacentCell->getColor() == noColor)
 		{
-			pipSum += adjacentCell->getPip();
+			return false;
 		}
 	}
 
-	if (pipSum == 0)
+	for (int i = 0; i < move.captureTargets.size(); ++i)
 	{
-		pipSum = 1;
+		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
+		pipSum += adjacentCell->getPip();
 	}
 
 	if (pipSum > MAX_PIP)
@@ -188,24 +198,7 @@ bool BoardModel::isCaptureValid(Move move, int & pipSum)
 		return false;
 	}
 
-	bool isAllOpponentsCells = true;
-
-	for (int i = 0; i < move.captureTargets.size(); ++i) {
-		
-		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
-
-		if (adjacentCell == nullptr)
-		{
-			continue;
-		}
-
-		if ( adjacentCell->getColor() == move.color)
-		{
-			isAllOpponentsCells = false;
-		}
-	}
-
-	return isAllOpponentsCells;
+	return true;
 }
 
 bool BoardModel::isCellVacant(Position position)
