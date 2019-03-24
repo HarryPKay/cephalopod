@@ -15,7 +15,7 @@ class BoardModel
 {
 public:
 	BoardModel();
-	BoardModel(int rowCount, int colCount);
+	BoardModel(int rowCount, int colCount, vector<vector<Direction>> potentialCaptures);
 	~BoardModel();
 	Cell getCell(Position position);
 	Cell* getCellPointer(Position position) ;
@@ -29,10 +29,12 @@ public:
 	bool isMoveValid(Move move, int& pipSum);
 	bool isMoveValid(Move move);
 	bool isCaptureValid(Move move, int & pipSum);
+	bool mustCapture(Move move);
 	bool isCellVacant(Position position);
 	bool isBoardFull();
 	Color getMajorityColor();
 	string previousAdjacentInfo;
+	vector<vector<Direction>> potentialCaptures;
 private:
 	int rowCount;
 	int colCount;

@@ -40,7 +40,7 @@ void GameController::initBoard()
 	cout << "Enter board column count\n>";
 	cin >> colCount;
 
-	board = new BoardModel(rowCount, colCount);
+	board = new BoardModel(rowCount, colCount, generateCombinationsVaryingSize(directions, 2, 4));
 }
 
 void GameController::initBoardView()
@@ -57,10 +57,10 @@ void GameController::initPlayers()
 	//players.push_back(new HumanPlayer(white));
 	//players.push_back(new HumanPlayer(black));
 	players.push_back(new EasyComputer(white, board));
-	//players.push_back(new EasyComputer(black, board));
+	players.push_back(new EasyComputer(black, board));
 	
 	//players.push_back(new HardComputer(white, board));
-	players.push_back(new HardComputer(black, board));
+	//players.push_back(new HardComputer(black, board));
 }
 
 void GameController::play()

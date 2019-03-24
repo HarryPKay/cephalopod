@@ -1,6 +1,5 @@
 #pragma once
 #include "Common.h"
-#include "BoardModel.h"
 #include "Player.h"
 
 using namespace std;
@@ -16,8 +15,6 @@ private:
 	Move getMove();
 	Move Minimax(BoardModel* board, int depth, Color color);
 	BoardModel *board;
-	vector<Move> generatePossibleMoves(BoardModel* state);
-	vector<vector<Direction>> allPossibleCaptures;
 	int evaluate(BoardModel* board);
 };
 

@@ -7,11 +7,13 @@ BoardModel::BoardModel()
 	colCount = 0;
 }
 
-BoardModel::BoardModel(int rowCount, int colCount)
+
+BoardModel::BoardModel(int rowCount, int colCount, vector<vector<Direction>> potentialCaptures)
 {
 	assert(colCount >= M_MIN && rowCount <= N_MAX);
 	this->rowCount = rowCount;
 	this->colCount = colCount;
+	this->potentialCaptures = potentialCaptures;
 
 	matrix.resize(rowCount);
 	for (int i = 0; i < rowCount; i++)
@@ -144,8 +146,15 @@ bool BoardModel::setMove(Move move)
 	return true;
 }
 
+
 bool BoardModel::isMoveValid(Move move, int& pipSum)
 {
+	// _ true
+	if (mustCapture(move) && move.captureTargets.size() < 2) 
+	{
+		return false;
+	}
+
 	return isWithinBounds(move.position)
 		&& isCaptureValid(move, pipSum)
 		&& isCellVacant(move.position);
@@ -180,7 +189,6 @@ bool BoardModel::isCaptureValid(Move move, int & pipSum)
 		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
 
 		if (adjacentCell == nullptr
-			|| adjacentCell->getColor() == move.color
 			|| adjacentCell->getColor() == noColor)
 		{
 			return false;
@@ -195,10 +203,51 @@ bool BoardModel::isCaptureValid(Move move, int & pipSum)
 
 	if (pipSum > MAX_PIP)
 	{
+		pipSum = 1;
 		return false;
 	}
 
 	return true;
+}
+
+bool BoardModel::mustCapture(Move move)
+{
+	Cell& cell = matrix[move.position.row][move.position.col];
+	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+
+	int occupiedCellCount = 0;
+	int pipSum = 0;
+	bool mustCapture = false;
+
+	for (int i = 0; i < potentialCaptures.size(); ++i)
+	{
+		vector<Direction> temp = potentialCaptures[i];
+
+		for (int j = 0; j < temp.size(); ++j)
+		{
+			if (adjacentCells[temp[j]] == nullptr)
+			{
+				continue;
+			}
+			if (adjacentCells[temp[j]]->getColor() != noColor) 
+			{
+				++occupiedCellCount;
+				pipSum += adjacentCells[temp[j]]->getPip();
+			}
+		}
+
+		if (pipSum >= MIN_CAPTURE_PIP 
+			&& pipSum <= MAX_PIP 
+			&& occupiedCellCount >= 2)
+		{
+			mustCapture = true;
+		}
+
+		pipSum = 0;
+		occupiedCellCount = 0;
+	}
+
+	return mustCapture;
 }
 
 bool BoardModel::isCellVacant(Position position)
