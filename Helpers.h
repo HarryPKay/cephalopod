@@ -7,6 +7,7 @@ namespace cephalopod
 {
 	using namespace std;
 	string directionEnumToString(Direction direction);
+	Color findOpposition(Color playerColor);
 
 	template<typename T>
 	vector<vector<T>> generateCombinations(const vector<T> & source, int combinationSize)

@@ -129,11 +129,11 @@ bool BoardModel::setMove(Move move)
 		return false;
 	}
 
+	history.push_back(matrix);
 	previousAdjacentInfo = getAdjacentInfo(move.position);
 
 	Cell& cell = matrix[move.position.row][move.position.col];
 	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
-
 
 	for (int i = 0; i < move.captureTargets.size(); ++i)
 	{
@@ -144,6 +144,12 @@ bool BoardModel::setMove(Move move)
 	cell.setPip(pipSum);
 
 	return true;
+}
+
+void BoardModel::undoMove()
+{
+	matrix = history[history.size() - 1];
+	history.pop_back();
 }
 
 
@@ -273,23 +279,8 @@ bool BoardModel::isBoardFull()
 
 Color BoardModel::getMajorityColor()
 {
-	int whiteCount = 0;
-	int blackCount = 0;
-
-	for (int i = 0; i < rowCount; ++i)
-	{
-		for (int j = 0; j < colCount; ++j)
-		{
-			if (matrix[i][j].getColor() == black)
-			{
-				++blackCount;
-			}
-			if (matrix[i][j].getColor() == white)
-			{
-				++whiteCount;
-			}
-		}
-	}
+	int whiteCount = getTotalColorCount(white);
+	int blackCount = getTotalColorCount(black);
 
 	if (whiteCount > blackCount)
 	{
@@ -301,4 +292,21 @@ Color BoardModel::getMajorityColor()
 	}
 
 	return noColor;
+}
+
+int BoardModel::getTotalColorCount(Color color)
+{
+	int blackCount = 0;
+
+	for (int i = 0; i < rowCount; ++i)
+	{
+		for (int j = 0; j < colCount; ++j)
+		{
+			if (matrix[i][j].getColor() == color)
+			{
+				++blackCount;
+			}
+		}
+	}
+	return blackCount;
 }

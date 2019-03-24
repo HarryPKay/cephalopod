@@ -8,7 +8,7 @@ EasyComputer::~EasyComputer()
 
 Move EasyComputer::getMove()
 {
-	vector<Move> potentialMoves = generatePossibleMoves(board);
+	vector<Move> potentialMoves = generatePossibleMoves(board, color);
 	if (potentialMoves.size() == 0)
 	{
 		cout << " ahh\n";

@@ -13,19 +13,19 @@ Player::~Player()
 }
 
 
-vector<Move> Player::generatePossibleMoves(BoardModel* state)
+vector<Move> Player::generatePossibleMoves(BoardModel* board, Color playerColor)
 {
 	vector<Move> potentialMoves;
-	Move move = { Position(0,0),color, vector<Direction>() };
+	Move move = { Position(0,0), playerColor, vector<Direction>() };
 
-	for (int i = 0; i < state->getRowCount(); ++i)
+	for (int i = 0; i < board->getRowCount(); ++i)
 	{
-		for (int j = 0; j < state->getColCount(); ++j)
+		for (int j = 0; j < board->getColCount(); ++j)
 		{
 			move.position = Position(i, j);
 			move.captureTargets.clear();
 
-			if (state->isMoveValid(move))
+			if (board->isMoveValid(move))
 			{
 				potentialMoves.push_back(move);
 			}
@@ -34,7 +34,7 @@ vector<Move> Player::generatePossibleMoves(BoardModel* state)
 			{
 				move.captureTargets = allPossibleCaptures[i];
 
-				if (state->isMoveValid(move))
+				if (board->isMoveValid(move))
 				{
 					potentialMoves.push_back(move);
 				}

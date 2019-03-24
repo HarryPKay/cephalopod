@@ -1,4 +1,6 @@
 #pragma once
+#include <math.h>
+#include "BoardViewer.h"
 #include "Common.h"
 #include "Player.h"
 
@@ -13,8 +15,11 @@ public:
 	~HardComputer();
 private:
 	Move getMove();
-	Move Minimax(BoardModel* board, int depth, Color color);
+	BestMove minimax(BoardModel * board, int depth, Color playerColor, const Move & bestMove);
 	BoardModel *board;
 	int evaluate(BoardModel* board);
+
+	// temp;
+	BoardViewer* boardViewer;
 };
 

@@ -16,7 +16,7 @@ namespace cephalopod
 	const int MIN_CAPTURE_PIP = 2;
 	const int NO_DICE = 0;
 	const char MOVE_SEPARATOR = ' ';
-	const int REFRESH_PAGE_SIZE = 15;
+	const int REFRESH_PAGE_SIZE = 1;
 
 	enum Color
 	{
@@ -55,5 +55,13 @@ namespace cephalopod
 		Position position;
 		Color color;
 		vector<Direction> captureTargets;
+	};
+
+	struct BestMove
+	{
+		BestMove(Move move, int score)
+			: move(move), score(score) {};
+		Move move;
+		float score;
 	};
 }

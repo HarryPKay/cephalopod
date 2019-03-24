@@ -18,4 +18,13 @@ namespace cephalopod
 		}
 		return "";
 	}
+
+	Color findOpposition(Color playerColor)
+	{
+		if (playerColor == white)
+		{
+			return black;
+		}
+		return white;
+	}
 }

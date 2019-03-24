@@ -56,11 +56,12 @@ void GameController::initPlayers()
 	cout << "row in initplayers: " << board->getRowCount() << endl;
 	//players.push_back(new HumanPlayer(white));
 	//players.push_back(new HumanPlayer(black));
-	players.push_back(new EasyComputer(white, board));
-	players.push_back(new EasyComputer(black, board));
+	//players.push_back(new EasyComputer(white, board));
 	
-	//players.push_back(new HardComputer(white, board));
-	//players.push_back(new HardComputer(black, board));
+	
+	players.push_back(new HardComputer(white, board));
+	players.push_back(new HardComputer(black, board));
+	//players.push_back(new EasyComputer(black, board));
 }
 
 void GameController::play()
@@ -88,6 +89,21 @@ void GameController::cycleTurns()
 	for (Player* player : players) {
 
 		delegateTurn(player);
+
+		//char keepOpen = ' ';
+		//do
+		//{
+
+		//	cout << "rewind?\n";
+		//	cin >> keepOpen;
+		//	if (keepOpen == 'y')
+		//	{
+		//		board->undoMove();
+		//		boardViewer->renderBoardToConsole();
+		//	}
+
+		//} while (keepOpen == 'y');
+
 		boardViewer->renderBoardToConsole();
 
 		if (board->isBoardFull())
