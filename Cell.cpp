@@ -16,7 +16,7 @@ int Cell::getPip()
 
 void Cell::setPip(int value)
 {
-	//TODO: pip under 7 above 0
+	//TODO: validate pip under 7 above 0
 	pip = value;
 }
 
@@ -45,21 +45,3 @@ void Cell::capture()
 	occupant = noColor;
 	pip = 0;
 }
-
-//// TODO make better.
-//void Cell::printAdjacentInfo()
-//{
-//	for (int i = 0; i < 4; ++i)
-//	{
-//		cout << i;
-//		if (black == adjacentCells[Direction(i)]->getColor())
-//		{
-//			cout << " -";
-//		}
-//		else
-//		{
-//			cout << " ";
-//		}
-//		cout << adjacentCells[Direction(i)]->getPip() << endl;
-//	}
-//}

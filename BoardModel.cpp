@@ -42,7 +42,8 @@ Cell BoardModel::getCell(const Position position)
 
 Cell* BoardModel::getCellPointer(const Position position)
 {
-	if (isWithinBounds(position)) {
+	if (isWithinBounds(position)) 
+	{
 		return &matrix[position.row][position.col];
 	}
 
@@ -73,6 +74,7 @@ bool BoardModel::isWithinBounds(const Position position) const
 map<Direction, Cell*> BoardModel::getAdjacenctCells(const Position origin)
 {
 	map<Direction, Cell*> adjacentCells;
+
 	adjacentCells[Direction::up] = getCellPointer(Position(origin.row - 1, origin.col));
 	adjacentCells[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
 	adjacentCells[Direction::down] = getCellPointer(Position(origin.row + 1, origin.col));

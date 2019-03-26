@@ -14,13 +14,9 @@ HardComputer::~HardComputer()
 
 Move HardComputer::getMove()
 {
-	//vector<Move> potentialMoves = generatePossibleMoves(board, color);
 	Move move = { Position(0, 0), color, vector<Direction>() };
 	BestMove bestMove = minimax(board, 3, color, move);
-	cout << "bestMove: " << bestMove.move.position.row << bestMove.move.position.col << "\n";
 	return bestMove.move;
-	//return move;
-	//return Move{ Position(0,0),color,vector<Direction>() };
 }
 
 BestMove HardComputer::minimax(BoardModel * board, int depth, Color playerColor, const Move & prevMove)
@@ -30,11 +26,11 @@ BestMove HardComputer::minimax(BoardModel * board, int depth, Color playerColor,
 
 	if (playerColor == color)
 	{
-		bestMove.score = INFINITY;
+		bestMove.score = pow(board->getRowCount(),3);
 	}
 	else
 	{
-		bestMove.score = -INFINITY;
+		bestMove.score = -pow(board->getRowCount(), 3);
 	}
 
 	if (depth == 0 || board->isBoardFull())
@@ -48,84 +44,22 @@ BestMove HardComputer::minimax(BoardModel * board, int depth, Color playerColor,
 	for (Move move : moves)
 	{
 		int score = 0;
-
 		board->setMove(move);
-		//cout << "\n\nsimulation set: " << move.position.row << " " << move.position.col << "\n";
-		//boardViewer->renderBoardToConsole();
 		score = minimax(board, depth - 1, opposition, move).score;
 		board->undoMove();
-		//cout << "\n\nsimulation delete:\n";
-		//boardViewer->renderBoardToConsole();
 		if (playerColor == color && score < bestMove.score)
 		{
 			bestMove.score = score;
-			bestMove.move = move;
-			
-			if (score >= 2)
-			{
-				cout << "aplayer: " << playerColor << " score: " << score << endl;
-				cout << move.position.row << " " << move.position.col << endl;
-				char keepOpen;
-				cin >> keepOpen;
-			}
-			
+			bestMove.move = move;	
 		}
 		else if (playerColor != color && score > bestMove.score)
 		{
 			bestMove.score = score;
 			bestMove.move = move;
-			
-			if (score <= -2)
-			{
-				cout << "bplayer: " << playerColor << " score: " << score << endl;
-				cout << move.position.row << " " << move.position.col << endl;
-				char keepOpen;
-				cin >> keepOpen;
-			}
-
 		}	
 	}
 
 	return bestMove;
-
-
-	//Color opposition = findOpposition(playerColor);
-
-	//BestMove bestMove = { prevMove, evaluate(board) };
-
-	//if (depth == 0 || board->isBoardFull())
-	//{
-	//	return bestMove;
-	//}
-
-	//vector<Move> moves = generatePossibleMoves(board, playerColor);
-
-	//if (playerColor == color)
-	//{
-	//	float maxScore = -INFINITY;
-
-	//	for (Move move : moves) 
-	//	{
-	//		board->setMove(move);
-	//		bestMove = minimax(board, depth - 1, opposition, move);
-	//		bestMove.score = max(maxScore, (float)bestMove.score);
-	//		board->undoMove();
-	//	}
-	//}
-	//else
-	//{
-	//	float minScore = INFINITY;
-
-	//	for (Move move : moves)
-	//	{
-	//		board->setMove(move);
-	//		bestMove = minimax(board, depth - 1, opposition, move);
-	//		bestMove.score = min(minScore, (float)bestMove.score);
-	//		board->undoMove();
-	//	}
-	//}
-
-	//return bestMove;
 }
 
 int HardComputer::evaluate(BoardModel * board)
@@ -135,11 +69,11 @@ int HardComputer::evaluate(BoardModel * board)
 
 	if (color == white)
 	{
-		return white - black;
+		return whiteCount - blackCount;
 	}
 	else
 	{
-		return black - white;
+		return blackCount - whiteCount;
 	}
 	return 0;
 }

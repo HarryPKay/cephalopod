@@ -23,11 +23,21 @@ vector<Move> Player::generatePossibleMoves(BoardModel* board, Color playerColor)
 		for (int j = 0; j < board->getColCount(); ++j)
 		{
 			move.position = Position(i, j);
+
+			if (!board->isCellVacant(move.position))
+			{
+				continue;
+			}
+
 			move.captureTargets.clear();
 
 			if (board->isMoveValid(move))
 			{
 				potentialMoves.push_back(move);
+			}
+
+			if (board->getAdjacenctCells(move.position).size() < 2) {
+				continue;
 			}
 
 			for (int i = 0; i < allPossibleCaptures.size(); ++i)

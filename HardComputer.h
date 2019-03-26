@@ -15,7 +15,7 @@ public:
 	~HardComputer();
 private:
 	Move getMove();
-	BestMove minimax(BoardModel * board, int depth, Color playerColor, const Move & bestMove);
+	BestMove minimax(BoardModel * board, int depth, Color playerColor, const Move & prevMove);
 	BoardModel *board;
 	int evaluate(BoardModel* board);
 

@@ -50,14 +50,13 @@ void GameController::initBoardView()
 
 void GameController::initPlayers()
 {
-	//TODO: implement
-	cout << "Enter white player's Type\n>";
-	cout << "Enter black player's Type\n>";
-	cout << "row in initplayers: " << board->getRowCount() << endl;
+	//TODO: implement prompt
+	//cout << "Enter white player's Type\n>";
+	//cout << "Enter black player's Type\n>";
+	//cout << "row in initplayers: " << board->getRowCount() << endl;
 	//players.push_back(new HumanPlayer(white));
 	//players.push_back(new HumanPlayer(black));
 	//players.push_back(new EasyComputer(white, board));
-	
 	
 	players.push_back(new HardComputer(white, board));
 	players.push_back(new HardComputer(black, board));
@@ -89,21 +88,6 @@ void GameController::cycleTurns()
 	for (Player* player : players) {
 
 		delegateTurn(player);
-
-		//char keepOpen = ' ';
-		//do
-		//{
-
-		//	cout << "rewind?\n";
-		//	cin >> keepOpen;
-		//	if (keepOpen == 'y')
-		//	{
-		//		board->undoMove();
-		//		boardViewer->renderBoardToConsole();
-		//	}
-
-		//} while (keepOpen == 'y');
-
 		boardViewer->renderBoardToConsole();
 
 		if (board->isBoardFull())

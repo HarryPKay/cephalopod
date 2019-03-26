@@ -45,5 +45,3 @@ namespace cephalopod
 		return combinations;
 	}
 }
-
-
