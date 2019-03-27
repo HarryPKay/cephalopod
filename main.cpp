@@ -10,11 +10,11 @@ int main()
 	GameController game;
 	game.run();
 
-	//vector<vector<Direction>> potentialTargets = generateCombinationsVaryingSize(directions, 2, 4);
+	//vector<Capture> potentialTargets = generateCombinationsVaryingSize(directions, 2, 4);
 
 	//for (int i = 0; i < potentialTargets.size(); ++i)
 	//{
-	//	vector<Direction> temp = potentialTargets[i];
+	//	Capture temp = potentialTargets[i];
 	//	for (int j = 0; j < temp.size(); ++j)
 	//	{
 	//		cout << temp[j] << " ";

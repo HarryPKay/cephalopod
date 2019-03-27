@@ -15,8 +15,8 @@ namespace cephalopod
 	const int MAX_PIP = 6;
 	const int MIN_CAPTURE_PIP = 2;
 	const int NO_DICE = 0;
-	const char MOVE_SEPARATOR = ' ';
 	const int REFRESH_PAGE_SIZE = 1;
+	//const char MOVE_SEPARATOR = ' ';
 
 	enum Color
 	{
@@ -28,12 +28,7 @@ namespace cephalopod
 		up, right, down, left, size
 	};
 
-	const vector<Direction> directions = {
-	Direction::up,
-	Direction::right,
-	Direction::down,
-	Direction::left
-	};
+	using Capture = vector<Direction>;
 
 	enum GameState
 	{
@@ -50,16 +45,16 @@ namespace cephalopod
 
 	struct Move
 	{
-		Move(Position position, Color color, vector<Direction> captureTargets)
+		Move(Position position, Color color, Capture captureTargets)
 			: position(position), color(color), captureTargets(captureTargets) {};
 		Position position;
 		Color color;
-		vector<Direction> captureTargets;
+		Capture captureTargets;
 	};
 
-	struct BestMove
+	struct MoveWithScore
 	{
-		BestMove(Move move, int score)
+		MoveWithScore(Move move, float score)
 			: move(move), score(score) {};
 		Move move;
 		float score;

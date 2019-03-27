@@ -3,18 +3,19 @@
 #include <iostream>
 #include "Common.h"
 
+
 namespace cephalopod
 {
+	
 	using namespace std;
 	string directionEnumToString(Direction direction);
-	Color findOpposition(Color playerColor);
 
 	template<typename T>
-	vector<vector<T>> generateCombinations(const vector<T> & source, int combinationSize)
+	vector<vector<T>> getCombinationsOfSizeN(const vector<T> & source, int n)
 	{
 		vector<T> combination;
 		vector<vector<T>> combinations;
-		string bitmask(combinationSize, 1);
+		string bitmask(n, 1);
 		bitmask.resize(source.size(), 0);
 
 		do
@@ -34,12 +35,12 @@ namespace cephalopod
 	}
 
 	template<typename T>
-	vector<vector<T>> generateCombinationsVaryingSize(const vector<T> & source, int minSize, int maxSize)
+	vector<vector<T>> getCombinationsOfSizeKToN(const vector<T> & source, int k, int n)
 	{
 		vector<vector<T>> combinations;
-		for (int i = minSize; i <= maxSize; ++i)
+		for (int i = k; i <= n; ++i)
 		{
-			vector<vector<Direction>> temp = generateCombinations(source, i);
+			vector<Capture> temp = getCombinationsOfSizeN(source, i);
 			combinations.insert(std::end(combinations), std::begin(temp), std::end(temp));
 		}
 		return combinations;

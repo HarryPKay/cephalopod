@@ -14,7 +14,7 @@ class BoardModel
 {
 public:
 	BoardModel();
-	BoardModel(int rowCount, int colCount, vector<vector<Direction>> potentialCaptures);
+	BoardModel(int rowCount, int colCount);
 	~BoardModel();
 	Cell getCell(Position position);
 	Cell* getCellPointer(Position position) ;
@@ -35,11 +35,13 @@ public:
 	Color getMajorityColor();
 	int getTotalColorCount(Color color);
 	string previousAdjacentInfo;
-	vector<vector<Direction>> potentialCaptures;
+	vector<Move> getPossibleMoves(Color playerColor);
+	Color findOpposition(Color playerColor);
 private:
 	int rowCount;
 	int colCount;
 	Matrix<Cell> matrix;
 	vector<Matrix<Cell>> history;
+	vector<Capture> captureCombintions;
 };
 

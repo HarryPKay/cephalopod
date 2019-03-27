@@ -5,7 +5,6 @@
 HardComputer::HardComputer(Color color, BoardModel * board)
 	: Player(color), board(board)
 {
-	boardViewer = new BoardViewer(board);
 }
 
 HardComputer::~HardComputer()
@@ -14,23 +13,23 @@ HardComputer::~HardComputer()
 
 Move HardComputer::getMove()
 {
-	Move move = { Position(0, 0), color, vector<Direction>() };
-	BestMove bestMove = minimax(board, 3, color, move);
+	Move move = { Position(0, 0), color, Capture() };
+	MoveWithScore bestMove = minimax(3, color, move);
 	return bestMove.move;
 }
 
-BestMove HardComputer::minimax(BoardModel * board, int depth, Color playerColor, const Move & prevMove)
+MoveWithScore HardComputer::minimax(int depth, Color playerColor, const Move & prevMove)
 {
-	Color opposition = findOpposition(playerColor);
-	BestMove bestMove = { {Position(0, 0), playerColor, vector<Direction>() }, 0 };
+	Color opposition = board->findOpposition(playerColor);
+	MoveWithScore bestMove = { {Position(0, 0), playerColor, Capture() }, 0 };
 
 	if (playerColor == color)
 	{
-		bestMove.score = pow(board->getRowCount(),3);
+		bestMove.score = INFINITY;
 	}
 	else
 	{
-		bestMove.score = -pow(board->getRowCount(), 3);
+		bestMove.score = -INFINITY;
 	}
 
 	if (depth == 0 || board->isBoardFull())
@@ -39,13 +38,13 @@ BestMove HardComputer::minimax(BoardModel * board, int depth, Color playerColor,
 		return bestMove;
 	}
 
-	vector<Move> moves = generatePossibleMoves(board, playerColor);
+	vector<Move> moves = board->getPossibleMoves(playerColor);
 
 	for (Move move : moves)
 	{
-		int score = 0;
+		float score = 0;
 		board->setMove(move);
-		score = minimax(board, depth - 1, opposition, move).score;
+		score = minimax(depth - 1, opposition, move).score;
 		board->undoMove();
 		if (playerColor == color && score < bestMove.score)
 		{
@@ -62,10 +61,11 @@ BestMove HardComputer::minimax(BoardModel * board, int depth, Color playerColor,
 	return bestMove;
 }
 
-int HardComputer::evaluate(BoardModel * board)
+float HardComputer::evaluate(BoardModel * board)
 {
-	int whiteCount = board->getTotalColorCount(white);
-	int blackCount = board->getTotalColorCount(black);
+	// Should we add points if it can score a six
+	float whiteCount = board->getTotalColorCount(white);
+	float blackCount = board->getTotalColorCount(black);
 
 	if (color == white)
 	{

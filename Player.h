@@ -11,7 +11,5 @@ public:
 	virtual ~Player();
 	Color color;
 	virtual Move getMove() = 0;
-	vector<Move> generatePossibleMoves(BoardModel* board, Color playerColor);
-	vector<vector<Direction>> allPossibleCaptures;
 };
 

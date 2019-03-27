@@ -8,12 +8,10 @@ BoardModel::BoardModel()
 }
 
 
-BoardModel::BoardModel(int rowCount, int colCount, vector<vector<Direction>> potentialCaptures)
+BoardModel::BoardModel(int rowCount, int colCount)
 {
-	assert(colCount >= M_MIN && rowCount <= N_MAX);
 	this->rowCount = rowCount;
 	this->colCount = colCount;
-	this->potentialCaptures = potentialCaptures;
 
 	matrix.resize(rowCount);
 	for (int i = 0; i < rowCount; i++)
@@ -28,6 +26,15 @@ BoardModel::BoardModel(int rowCount, int colCount, vector<vector<Direction>> pot
 			matrix[i][j].setAdjacentCells(getAdjacenctCells(Position(i, j)));
 		}
 	}
+
+	const Capture directions = {
+		Direction::up,
+		Direction::right,
+		Direction::down,
+		Direction::left
+	};
+
+	captureCombintions = getCombinationsOfSizeKToN(directions, 2, 4);
 }
 
 BoardModel::~BoardModel()
@@ -227,9 +234,9 @@ bool BoardModel::mustCapture(Move move)
 	int pipSum = 0;
 	bool mustCapture = false;
 
-	for (int i = 0; i < potentialCaptures.size(); ++i)
+	for (int i = 0; i < captureCombintions.size(); ++i)
 	{
-		vector<Direction> temp = potentialCaptures[i];
+		Capture temp = captureCombintions[i];
 
 		for (int j = 0; j < temp.size(); ++j)
 		{
@@ -311,4 +318,55 @@ int BoardModel::getTotalColorCount(Color color)
 		}
 	}
 	return blackCount;
+}
+
+vector<Move> BoardModel::getPossibleMoves(Color playerColor)
+{
+	vector<Move> potentialMoves;
+	Move move = { Position(0,0), playerColor, Capture() };
+	
+	for (int i = 0; i < rowCount; ++i)
+	{
+		for (int j = 0; j < colCount; ++j)
+		{
+			move.position = Position(i, j);
+
+			if (!isCellVacant(move.position))
+			{
+				continue;
+			}
+
+			move.captureTargets.clear();
+
+			if (isMoveValid(move))
+			{
+				potentialMoves.push_back(move);
+			}
+
+			if (getAdjacenctCells(move.position).size() < 2) {
+				continue;
+			}
+
+			for (int i = 0; i < captureCombintions.size(); ++i)
+			{
+				move.captureTargets = captureCombintions[i];
+
+				if (isMoveValid(move))
+				{
+					potentialMoves.push_back(move);
+				}
+			}
+		}
+	}
+
+	return potentialMoves;
+}
+
+Color BoardModel::findOpposition(Color playerColor)
+{
+	if (playerColor == white)
+	{
+		return black;
+	}
+	return white;
 }

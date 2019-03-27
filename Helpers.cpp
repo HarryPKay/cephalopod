@@ -3,6 +3,7 @@
 namespace cephalopod
 {
 	using namespace std;
+
 	string directionEnumToString(Direction direction)
 	{
 		switch (direction)
@@ -17,14 +18,5 @@ namespace cephalopod
 			return "left";
 		}
 		return "";
-	}
-
-	Color findOpposition(Color playerColor)
-	{
-		if (playerColor == white)
-		{
-			return black;
-		}
-		return white;
 	}
 }

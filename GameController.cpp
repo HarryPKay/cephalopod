@@ -40,7 +40,7 @@ void GameController::initBoard()
 	cout << "Enter board column count\n>";
 	cin >> colCount;
 
-	board = new BoardModel(rowCount, colCount, generateCombinationsVaryingSize(directions, 2, 4));
+	board = new BoardModel(rowCount, colCount);
 }
 
 void GameController::initBoardView()

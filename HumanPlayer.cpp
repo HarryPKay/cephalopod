@@ -22,7 +22,7 @@ Move HumanPlayer::getMove()
 	--col;
 
 	char captureTarget = ' ';
-	vector<Direction> captureTargets;
+	Capture captureTargets;
 	cout << "Enter capture targets>\n";
 
 	while (captureTarget !=  'f')
