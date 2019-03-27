@@ -15,7 +15,7 @@ public:
 	~HardComputer();
 private:
 	Move getMove();
-	MoveWithScore minimax(int depth, Color playerColor, const Move & prevMove);
+	float minimax(int depth, Color playerColor, Move & bestMove, bool isFirstIteration);
 	BoardModel *board;
 	float evaluate(BoardModel* board);
 };

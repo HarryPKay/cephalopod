@@ -14,51 +14,54 @@ HardComputer::~HardComputer()
 Move HardComputer::getMove()
 {
 	Move move = { Position(0, 0), color, Capture() };
-	MoveWithScore bestMove = minimax(3, color, move);
-	return bestMove.move;
+	minimax(3, color, move, true);
+	return move;
 }
 
-MoveWithScore HardComputer::minimax(int depth, Color playerColor, const Move & prevMove)
+float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool isFirstIteration)
 {
+	map<float, Move> evaluatedMoves;
 	Color opposition = board->findOpposition(playerColor);
-	MoveWithScore bestMove = { {Position(0, 0), playerColor, Capture() }, 0 };
-
-	if (playerColor == color)
-	{
-		bestMove.score = INFINITY;
-	}
-	else
-	{
-		bestMove.score = -INFINITY;
-	}
-
+	
 	if (depth == 0 || board->isBoardFull())
 	{
-		bestMove.score = evaluate(board);
-		return bestMove;
+		return evaluate(board);
 	}
 
 	vector<Move> moves = board->getPossibleMoves(playerColor);
 
-	for (Move move : moves)
+	if (playerColor == color)
 	{
-		float score = 0;
-		board->setMove(move);
-		score = minimax(depth - 1, opposition, move).score;
-		board->undoMove();
-		if (playerColor == color && score < bestMove.score)
-		{
-			bestMove.score = score;
-			bestMove.move = move;	
-		}
-		else if (playerColor != color && score > bestMove.score)
-		{
-			bestMove.score = score;
-			bestMove.move = move;
-		}	
-	}
+		float score = -1 * board->getRowCount() * board->getColCount();
 
-	return bestMove;
+		for (Move move : moves)
+		{
+			board->setMove(move);
+			float temp = minimax(depth - 1, opposition, bestMove, false);
+
+			if (isFirstIteration && temp > score)
+			{
+				score = temp;
+				bestMove = move;
+			}
+			board->undoMove();
+		}
+
+		return score;
+	}
+	else
+	{
+		float score = board->getRowCount() * board->getColCount();
+
+		for (Move move : moves)
+		{
+			board->setMove(move);
+			score = max(minimax(depth - 1, opposition, bestMove, false), score);
+			board->undoMove();
+		}
+
+		return score;
+	}
 }
 
 float HardComputer::evaluate(BoardModel * board)
