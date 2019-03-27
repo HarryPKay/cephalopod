@@ -14,7 +14,8 @@ HardComputer::~HardComputer()
 Move HardComputer::getMove()
 {
 	Move move = { Position(0, 0), color, Capture() };
-	minimax(3, color, move, true);
+	//minimax(3, color, move, true);
+	alphabeta(9, -INFINITY, INFINITY, color, move, true);
 	return move;
 }
 
@@ -32,17 +33,20 @@ float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool 
 
 	if (playerColor == color)
 	{
-		float score = -1 * board->getRowCount() * board->getColCount();
+		float score = -INFINITY;
 
 		for (Move move : moves)
 		{
 			board->setMove(move);
 			float temp = minimax(depth - 1, opposition, bestMove, false);
 
-			if (isFirstIteration && temp > score)
+			if (temp > score)
 			{
 				score = temp;
-				bestMove = move;
+				if (isFirstIteration)
+				{
+					bestMove = move;
+				}
 			}
 			board->undoMove();
 		}
@@ -51,7 +55,7 @@ float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool 
 	}
 	else
 	{
-		float score = board->getRowCount() * board->getColCount();
+		float score = INFINITY;
 
 		for (Move move : moves)
 		{
@@ -63,6 +67,71 @@ float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool 
 		return score;
 	}
 }
+
+float HardComputer::alphabeta(int depth, float alpha, float beta, Color playerColor, Move & bestMove, bool isFirstIteration)
+{
+	map<float, Move> evaluatedMoves;
+	Color opposition = board->findOpposition(playerColor);
+
+	if (depth == 0 || board->isBoardFull())
+	{
+		return evaluate(board);
+	}
+
+	vector<Move> moves = board->getPossibleMoves(playerColor);
+
+	if (playerColor == color)
+	{
+		float score = -INFINITY;
+
+		for (Move move : moves)
+		{
+			board->setMove(move);
+			float temp = alphabeta(depth - 1, alpha, beta, opposition, bestMove, false);
+			board->undoMove();
+
+			alpha = max(alpha, score);
+
+			if (alpha >= beta)
+			{
+				return score;
+			}
+
+			if (temp > score)
+			{
+				score = temp;
+				if (isFirstIteration)
+				{
+					bestMove = move;
+				}
+			}
+		}
+
+		return score;
+	}
+	else
+	{
+		float score = INFINITY;
+
+		for (Move move : moves)
+		{
+			board->setMove(move);
+			score = alphabeta(depth - 1, alpha, beta, opposition, bestMove, false);
+			board->undoMove();
+
+			beta = min(beta, score);
+
+			if (alpha >= beta)
+			{
+				return score;
+			}
+		}
+
+		return score;
+	}
+}
+
+
 
 float HardComputer::evaluate(BoardModel * board)
 {

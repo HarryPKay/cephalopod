@@ -1,11 +1,11 @@
-﻿  HardComputer.cpp
-c:\projects\cephalopod\hardcomputer.cpp(35): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\projects\cephalopod\hardcomputer.cpp(54): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\projects\cephalopod\hardcomputer.cpp(70): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\projects\cephalopod\hardcomputer.cpp(71): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+﻿  GameController.cpp
+c:\projects\cephalopod\gamecontroller.cpp(28): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  HardComputer.cpp
+c:\projects\cephalopod\hardcomputer.cpp(139): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\projects\cephalopod\hardcomputer.cpp(140): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Generating code
-  2 of 1092 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+  12 of 1095 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   cephalopod.vcxproj -> C:\projects\cephalopod\x64\Release\cephalopod.exe

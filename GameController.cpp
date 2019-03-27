@@ -56,9 +56,9 @@ void GameController::initPlayers()
 	//cout << "row in initplayers: " << board->getRowCount() << endl;
 	//players.push_back(new HumanPlayer(white));
 	//players.push_back(new HumanPlayer(black));
-	//players.push_back(new EasyComputer(white, board));
+	players.push_back(new EasyComputer(white, board));
 	
-	players.push_back(new HardComputer(white, board));
+	//players.push_back(new HardComputer(white, board));
 	players.push_back(new HardComputer(black, board));
 	//players.push_back(new EasyComputer(black, board));
 }
