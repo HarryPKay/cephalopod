@@ -22,7 +22,7 @@ public:
 	BoardModel(int rowCount, int colCount);
 	~BoardModel();
 	Cell getCell(Position position);
-	Cell* getCellPointer(Position position) ;
+	Cell* getCellPointer(Position position);
 	int getColCount();
 	int getRowCount();
 	Grid* getGrid();
@@ -49,5 +49,6 @@ private:
 	Grid grid;
 	vector<Grid> history;
 	vector<Capture> captureCombintions;
+	map<Position, Neighbours> positionToNeighboursMap;
 };
 

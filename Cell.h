@@ -18,12 +18,9 @@ public:
 	void setPip(int value);
 	Color getColor();
 	void setColor(Color value);
-	Neighbours getNeighbours();
-	void setNeighbors(Neighbours value);
 	void capture();
 private:
 	int pip = NO_DICE;
-	Neighbours adjacentCells;
 	Color occupant = noColor;
 };
 

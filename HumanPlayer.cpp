@@ -22,7 +22,7 @@ Move HumanPlayer::getMove()
 	--col;
 
 	char captureTarget = ' ';
-	Capture captures;
+	Capture captureDirections;
 	cout << "Enter capture targets>\n";
 
 	while (captureTarget !=  'f')
@@ -31,21 +31,21 @@ Move HumanPlayer::getMove()
 		switch (captureTarget)
 		{
 		case 'u':
-			captures.push_back(Direction::up);
+			captureDirections.push_back(Direction::up);
 			break;
 		case 'r':
-			captures.push_back(Direction::right);
+			captureDirections.push_back(Direction::right);
 			break;
 		case 'd':
-			captures.push_back(Direction::down);
+			captureDirections.push_back(Direction::down);
 			break;
 		case 'l':
-			captures.push_back(Direction::left);
+			captureDirections.push_back(Direction::left);
 			break;
 		}
 	}
 
 	// TODO: have this prompt only if there are captures available;
 
-	return { Position(row,col), color, captures };
+	return { Position(row,col), color, captureDirections };
 }

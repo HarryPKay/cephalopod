@@ -30,16 +30,6 @@ void Cell::setColor(Color value)
 	occupant = value;
 }
 
-Cell::Neighbours Cell::getNeighbours()
-{
-	return  adjacentCells;
-}
-
-void Cell::setNeighbors(Neighbours value)
-{
-	this->adjacentCells = value;
-}
-
 void Cell::capture()
 {
 	occupant = noColor;

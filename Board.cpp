@@ -194,9 +194,9 @@ bool Board::setMove(Move move)
 	Cell& cell = grid[move.position.row][move.position.col];
 	Neighbours adjacentCells = cell.getNeighbours();
 
-	for (int i = 0; i < move.captures.size(); ++i)
+	for (int i = 0; i < move.captureDirections.size(); ++i)
 	{
-		adjacentCells[move.captures[i]]->capture();
+		adjacentCells[move.captureDirections[i]]->capture();
 	}
 
 	cell.setColor(move.color);
@@ -220,8 +220,8 @@ bool Board::isMoveValid(Move move)
 
 bool Board::isCaptureValid(Move move, int & pipSum)
 {
-	if (move.captures.size() > 4
-		|| move.captures.size() == 1)
+	if (move.captureDirections.size() > 4
+		|| move.captureDirections.size() == 1)
 	{
 		return false;
 	}
@@ -230,9 +230,9 @@ bool Board::isCaptureValid(Move move, int & pipSum)
 	Neighbours adjacentCells = cell.getNeighbours();
 
 	pipSum = 0;
-	for (int i = 0; i < move.captures.size(); ++i)
+	for (int i = 0; i < move.captureDirections.size(); ++i)
 	{
-		Cell* adjacentCell = adjacentCells[move.captures[i]];
+		Cell* adjacentCell = adjacentCells[move.captureDirections[i]];
 		if (adjacentCell != nullptr &&
 			adjacentCell->getColor() != move.color)
 		{
@@ -252,9 +252,9 @@ bool Board::isCaptureValid(Move move, int & pipSum)
 
 	bool isAllOpponentsCells = true;
 
-	for (int i = 0; i < move.captures.size(); ++i) {
+	for (int i = 0; i < move.captureDirections.size(); ++i) {
 		
-		Cell* adjacentCell = adjacentCells[move.captures[i]];
+		Cell* adjacentCell = adjacentCells[move.captureDirections[i]];
 
 		if (adjacentCell == nullptr)
 		{

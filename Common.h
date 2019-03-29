@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <map>
+#include "Position.h"
 
 namespace cephalopod
 {
@@ -41,21 +42,13 @@ namespace cephalopod
 		human, easyComputer, hardComputer
 	};
 
-	struct Position
-	{
-		Position(int row, int col)
-			: row(row), col(col) {};
-		int row;
-		int col;
-	};
-
 	typedef vector<Direction> Capture;
 	struct Move
 	{
-		Move(Position position, Color color, Capture captures)
-			: position(position), color(color), captures(captures) {};
+		Move(Position position, Color color, Capture captureDirections)
+			: position(position), color(color), captureDirections(captureDirections) {};
 		Position position;
 		Color color;
-		Capture captures;
+		Capture captureDirections;
 	};
 }
