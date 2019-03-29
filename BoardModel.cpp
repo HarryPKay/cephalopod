@@ -7,23 +7,22 @@ BoardModel::BoardModel()
 	colCount = 0;
 }
 
-
 BoardModel::BoardModel(int rowCount, int colCount)
 {
 	this->rowCount = rowCount;
 	this->colCount = colCount;
 
-	matrix.resize(rowCount);
+	grid.resize(rowCount);
 	for (int i = 0; i < rowCount; i++)
 	{
-		matrix[i].resize(colCount, Cell());
+		grid[i].resize(colCount, Cell());
 	}
 
 	for (int i = 0; i < rowCount; ++i)
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			matrix[i][j].setNeighbors(getNeighbors(Position(i, j)));
+			grid[i][j].setNeighbors(getNeighbors(Position(i, j)));
 		}
 	}
 
@@ -44,14 +43,14 @@ BoardModel::~BoardModel()
 Cell BoardModel::getCell(const Position position)
 {
 	assert(isWithinBounds(position));
-	return matrix[position.row][position.col];
+	return grid[position.row][position.col];
 }
 
 Cell* BoardModel::getCellPointer(const Position position)
 {
 	if (isWithinBounds(position)) 
 	{
-		return &matrix[position.row][position.col];
+		return &grid[position.row][position.col];
 	}
 
 	return nullptr;
@@ -67,9 +66,9 @@ int BoardModel::getRowCount()
 	return rowCount;
 }
 
-Matrix<Cell>* BoardModel::getMatrix()
+BoardModel::Grid* BoardModel::getGrid()
 {
-	return &matrix;
+	return &grid;
 }
 
 bool BoardModel::isWithinBounds(const Position position) const
@@ -78,9 +77,9 @@ bool BoardModel::isWithinBounds(const Position position) const
 		&& position.col >= 0 && position.col < colCount);
 }
 
-map<Direction, Cell*> BoardModel::getNeighbors(const Position origin)
+BoardModel::Neighbours BoardModel::getNeighbors(const Position origin)
 {
-	map<Direction, Cell*> neighbors;
+	Neighbours neighbors;
 
 	neighbors[Direction::up] = getCellPointer(Position(origin.row - 1, origin.col));
 	neighbors[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
@@ -90,9 +89,9 @@ map<Direction, Cell*> BoardModel::getNeighbors(const Position origin)
 	return neighbors;
 }
 
-string BoardModel::getAdjacentInfo(Position position)
+string BoardModel::getNeighboursInfo(Position position)
 {
-	map<Direction, Cell*> adjacentCells = matrix[position.row][position.col].getAdjacentCells();
+	Neighbours adjacentCells = grid[position.row][position.col].getNeighbours();
 
 	int pipSum = 0;
 	string info = "";
@@ -138,15 +137,15 @@ bool BoardModel::setMove(Move move)
 		return false;
 	}
 
-	history.push_back(matrix);
-	previousAdjacentInfo = getAdjacentInfo(move.position);
+	history.push_back(grid);
+	previousNeighbourInfo = getNeighboursInfo(move.position);
 
-	Cell& cell = matrix[move.position.row][move.position.col];
-	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+	Cell& cell = grid[move.position.row][move.position.col];
+	Neighbours adjacentCells = cell.getNeighbours();
 
-	for (int i = 0; i < move.captureTargets.size(); ++i)
+	for (int i = 0; i < move.captures.size(); ++i)
 	{
-		adjacentCells[move.captureTargets[i]]->capture();
+		adjacentCells[move.captures[i]]->capture();
 	}
 
 	cell.setColor(move.color);
@@ -157,7 +156,7 @@ bool BoardModel::setMove(Move move)
 
 void BoardModel::undoMove()
 {
-	matrix = history[history.size() - 1];
+	grid = history[history.size() - 1];
 	history.pop_back();
 }
 
@@ -165,7 +164,7 @@ void BoardModel::undoMove()
 bool BoardModel::isMoveValid(Move move, int& pipSum)
 {
 	// _ true
-	if (mustCapture(move) && move.captureTargets.size() < 2) 
+	if (mustCapture(move) && move.captures.size() < 2) 
 	{
 		return false;
 	}
@@ -183,25 +182,25 @@ bool BoardModel::isMoveValid(Move move)
 
 bool BoardModel::isCaptureValid(Move move, int & pipSum)
 {
-	if (move.captureTargets.size() == 0)
+	if (move.captures.size() == 0)
 	{
 		pipSum = 1;
 		return true;
 	}
 
-	if (move.captureTargets.size() > 4
-		|| move.captureTargets.size() == 1)
+	if (move.captures.size() > 4
+		|| move.captures.size() == 1)
 	{
 		return false;
 	}
 
 	pipSum = 0;
-	Cell& cell = matrix[move.position.row][move.position.col];
-	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+	Cell& cell = grid[move.position.row][move.position.col];
+	Neighbours adjacentCells = cell.getNeighbours();
 
-	for (int i = 0; i < move.captureTargets.size(); ++i) {
+	for (int i = 0; i < move.captures.size(); ++i) {
 
-		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
+		Cell* adjacentCell = adjacentCells[move.captures[i]];
 
 		if (adjacentCell == nullptr
 			|| adjacentCell->getColor() == noColor)
@@ -210,9 +209,9 @@ bool BoardModel::isCaptureValid(Move move, int & pipSum)
 		}
 	}
 
-	for (int i = 0; i < move.captureTargets.size(); ++i)
+	for (int i = 0; i < move.captures.size(); ++i)
 	{
-		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
+		Cell* adjacentCell = adjacentCells[move.captures[i]];
 		pipSum += adjacentCell->getPip();
 	}
 
@@ -227,8 +226,8 @@ bool BoardModel::isCaptureValid(Move move, int & pipSum)
 
 bool BoardModel::mustCapture(Move move)
 {
-	Cell& cell = matrix[move.position.row][move.position.col];
-	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+	Cell& cell = grid[move.position.row][move.position.col];
+	Neighbours adjacentCells = cell.getNeighbours();
 
 	int occupiedCellCount = 0;
 	int pipSum = 0;
@@ -267,7 +266,7 @@ bool BoardModel::mustCapture(Move move)
 
 bool BoardModel::isCellVacant(Position position)
 {
-	return matrix[position.row][position.col].getColor() == noColor;
+	return grid[position.row][position.col].getColor() == noColor;
 }
 
 bool BoardModel::isBoardFull()
@@ -276,7 +275,7 @@ bool BoardModel::isBoardFull()
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			if (matrix[i][j].getColor() == noColor)
+			if (grid[i][j].getColor() == noColor)
 			{
 				return false;
 			}
@@ -311,7 +310,7 @@ int BoardModel::getTotalColorCount(Color color)
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			if (matrix[i][j].getColor() == color)
+			if (grid[i][j].getColor() == color)
 			{
 				++blackCount;
 			}
@@ -336,7 +335,7 @@ vector<Move> BoardModel::getPossibleMoves(Color playerColor)
 				continue;
 			}
 
-			move.captureTargets.clear();
+			move.captures.clear();
 
 			if (isMoveValid(move))
 			{
@@ -349,7 +348,7 @@ vector<Move> BoardModel::getPossibleMoves(Color playerColor)
 
 			for (int i = 0; i < captureCombintions.size(); ++i)
 			{
-				move.captureTargets = captureCombintions[i];
+				move.captures = captureCombintions[i];
 
 				if (isMoveValid(move))
 				{

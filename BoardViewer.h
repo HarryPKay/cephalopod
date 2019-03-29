@@ -8,8 +8,6 @@ using namespace std;
 
 class BoardViewer
 {
-	//TODO: list possible moves for given coordinates.
-	// listener that prints on change with update function
 public:
 	BoardViewer();
 	BoardViewer(BoardModel* board)

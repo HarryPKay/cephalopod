@@ -21,14 +21,14 @@ public:
 	int getColCount();
 	int getRowCount();
 	Matrix<Cell>* getMatrix();
-	map<Direction, Cell*> getAdjacenctCells(const Position origin);
+	Neighbours getAdjacenctCells(const Position origin);
 	bool isWithinBounds(Position position) const;
 	void refreshPage() const;
 	void print();
 	void printColumnNumbers();
 	void printRows();
 	void printRowSeparator();
-	string getAdjacentInfo(Position position);
+	string getNeighboursInfo(Position position);
 	bool setMove(Move move);
 	bool isMoveValid(Move move, int& pipSum);
 	bool isMoveValid(Move move);
@@ -40,7 +40,7 @@ public:
 private:
 	int rowCount;
 	int colCount;
-	Matrix<Cell> matrix;
-	string previousAdjacentInfo;
+	Matrix<Cell> grid;
+	string previousNeighbourInfo;
 };
 

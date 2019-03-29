@@ -7,17 +7,17 @@ Board::Board(int rowCount, int colCount)
 	this->rowCount = rowCount;
 	this->colCount = colCount;
 
-	matrix.resize(rowCount);
+	grid.resize(rowCount);
 	for (int i = 0; i < rowCount; i++)
 	{
-		matrix[i].resize(colCount, Cell());
+		grid[i].resize(colCount, Cell());
 	}
 
 	for (int i = 0; i < rowCount; ++i)
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			matrix[i][j].setAdjacentCells(getAdjacenctCells(Position(i, j)));
+			grid[i][j].setAdjacentCells(getAdjacenctCells(Position(i, j)));
 		}
 	}
 }
@@ -29,13 +29,13 @@ Board::~Board()
 Cell Board::getCell(const Position position)
 {
 	assert(isWithinBounds(position));
-	return matrix[position.row][position.col];
+	return grid[position.row][position.col];
 }
 
 Cell* Board::getCellPointer(const Position position)
 {
 	if (isWithinBounds(position)) {
-		return &matrix[position.row][position.col];
+		return &grid[position.row][position.col];
 	}
 
 	return nullptr;
@@ -53,7 +53,7 @@ int Board::getRowCount()
 
 Matrix<Cell>* Board::getMatrix()
 {
-	return &matrix;
+	return &grid;
 }
 
 bool Board::isWithinBounds(const Position position) const
@@ -62,9 +62,9 @@ bool Board::isWithinBounds(const Position position) const
 		&& position.col >= 0 && position.col < colCount);
 }
 
-map<Direction, Cell*> Board::getAdjacenctCells(const Position origin)
+Neighbours Board::getAdjacenctCells(const Position origin)
 {
-	map<Direction, Cell*> adjacentCells;
+	Neighbours adjacentCells;
 	adjacentCells[Direction::up] = getCellPointer(Position(origin.row - 1, origin.col));
 	adjacentCells[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
 	adjacentCells[Direction::down] = getCellPointer(Position(origin.row + 1, origin.col));
@@ -87,7 +87,7 @@ void Board::print()
 	printColumnNumbers();
 	printRowSeparator();
 	printRows();
-	cout << previousAdjacentInfo << endl;
+	cout << previousNeighbourInfo << endl;
 }
 
 void Board::printColumnNumbers()
@@ -106,8 +106,8 @@ void Board::printRows()
 		std::cout << (i + 1) << " |";
 		for (int j = 0; j < colCount; ++j)
 		{
-			Color color = matrix[i][j].getColor();
-			int pip = matrix[i][j].getPip();
+			Color color = grid[i][j].getColor();
+			int pip = grid[i][j].getPip();
 
 			if (color == noColor)
 			{
@@ -141,9 +141,9 @@ void Board::printRowSeparator()
 	std::cout << std::endl;
 }
 
-string Board::getAdjacentInfo(Position position)
+string Board::getNeighboursInfo(Position position)
 {
-	map<Direction, Cell*> adjacentCells = matrix[position.row][position.col].getAdjacentCells();
+	Neighbours adjacentCells = grid[position.row][position.col].getNeighbours();
 
 	int pipSum = 0;
 	string info = "";
@@ -189,14 +189,14 @@ bool Board::setMove(Move move)
 		return false;
 	}
 
-	previousAdjacentInfo = getAdjacentInfo(move.position);
+	previousNeighbourInfo = getNeighboursInfo(move.position);
 
-	Cell& cell = matrix[move.position.row][move.position.col];
-	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+	Cell& cell = grid[move.position.row][move.position.col];
+	Neighbours adjacentCells = cell.getNeighbours();
 
-	for (int i = 0; i < move.captureTargets.size(); ++i)
+	for (int i = 0; i < move.captures.size(); ++i)
 	{
-		adjacentCells[move.captureTargets[i]]->capture();
+		adjacentCells[move.captures[i]]->capture();
 	}
 
 	cell.setColor(move.color);
@@ -220,19 +220,19 @@ bool Board::isMoveValid(Move move)
 
 bool Board::isCaptureValid(Move move, int & pipSum)
 {
-	if (move.captureTargets.size() > 4
-		|| move.captureTargets.size() == 1)
+	if (move.captures.size() > 4
+		|| move.captures.size() == 1)
 	{
 		return false;
 	}
 
-	Cell& cell = matrix[move.position.row][move.position.col];
-	map<Direction, Cell*> adjacentCells = cell.getAdjacentCells();
+	Cell& cell = grid[move.position.row][move.position.col];
+	Neighbours adjacentCells = cell.getNeighbours();
 
 	pipSum = 0;
-	for (int i = 0; i < move.captureTargets.size(); ++i)
+	for (int i = 0; i < move.captures.size(); ++i)
 	{
-		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
+		Cell* adjacentCell = adjacentCells[move.captures[i]];
 		if (adjacentCell != nullptr &&
 			adjacentCell->getColor() != move.color)
 		{
@@ -252,9 +252,9 @@ bool Board::isCaptureValid(Move move, int & pipSum)
 
 	bool isAllOpponentsCells = true;
 
-	for (int i = 0; i < move.captureTargets.size(); ++i) {
+	for (int i = 0; i < move.captures.size(); ++i) {
 		
-		Cell* adjacentCell = adjacentCells[move.captureTargets[i]];
+		Cell* adjacentCell = adjacentCells[move.captures[i]];
 
 		if (adjacentCell == nullptr)
 		{
@@ -272,7 +272,7 @@ bool Board::isCaptureValid(Move move, int & pipSum)
 
 bool Board::isCellVacant(Position position)
 {
-	return matrix[position.row][position.col].getColor() == noColor;
+	return grid[position.row][position.col].getColor() == noColor;
 }
 
 bool Board::isBoardFull()
@@ -281,7 +281,7 @@ bool Board::isBoardFull()
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			if (matrix[i][j].getColor() == noColor)
+			if (grid[i][j].getColor() == noColor)
 			{
 				return false;
 			}
@@ -300,11 +300,11 @@ Color Board::getMajorityColor()
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			if (matrix[i][j].getColor() == black)
+			if (grid[i][j].getColor() == black)
 			{
 				++blackCount;
 			}
-			if (matrix[i][j].getColor() == white)
+			if (grid[i][j].getColor() == white)
 			{
 				++whiteCount;
 			}

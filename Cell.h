@@ -9,18 +9,21 @@ using namespace std;
 class Cell
 {
 public:
+
+	typedef map<Direction, Cell*> Neighbours;
+
 	Cell();
 	~Cell();
 	int getPip();
 	void setPip(int value);
 	Color getColor();
 	void setColor(Color value);
-	map<Direction, Cell*> getAdjacentCells();
-	void setNeighbors(map<Direction, Cell*> value);
+	Neighbours getNeighbours();
+	void setNeighbors(Neighbours value);
 	void capture();
 private:
 	int pip = NO_DICE;
-	map<Direction, Cell*> adjacentCells;
+	Neighbours adjacentCells;
 	Color occupant = noColor;
 };
 

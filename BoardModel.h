@@ -13,6 +13,11 @@ using namespace cephalopod;
 class BoardModel
 {
 public:
+
+	typedef vector<vector<Cell>> Grid;
+	typedef vector<Direction> Capture;
+	typedef map<Direction, Cell*> Neighbours;
+
 	BoardModel();
 	BoardModel(int rowCount, int colCount);
 	~BoardModel();
@@ -20,9 +25,9 @@ public:
 	Cell* getCellPointer(Position position) ;
 	int getColCount();
 	int getRowCount();
-	Matrix<Cell>* getMatrix();
-	map<Direction, Cell*> getNeighbors(const Position origin);
-	string getAdjacentInfo(Position position);
+	Grid* getGrid();
+	Neighbours getNeighbors(const Position origin);
+	string getNeighboursInfo(Position position);
 	bool isWithinBounds(Position position) const;
 	bool setMove(Move move);
 	void undoMove();
@@ -34,14 +39,15 @@ public:
 	bool isBoardFull();
 	Color getMajorityColor();
 	int getTotalColorCount(Color color);
-	string previousAdjacentInfo;
+	string previousNeighbourInfo;
 	vector<Move> getPossibleMoves(Color playerColor);
 	Color findOpposition(Color playerColor);
 private:
+
 	int rowCount;
 	int colCount;
-	Matrix<Cell> matrix;
-	vector<Matrix<Cell>> history;
+	Grid grid;
+	vector<Grid> history;
 	vector<Capture> captureCombintions;
 };
 

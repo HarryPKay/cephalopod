@@ -25,7 +25,7 @@ void BoardViewer::renderBoardToConsole()
 	printColumnNumbers();
 	printRowSeparator();
 	printRows();
-	cout << board->previousAdjacentInfo;
+	cout << board->previousNeighbourInfo;
 }
 
 void BoardViewer::printColumnNumbers()
@@ -44,8 +44,8 @@ void BoardViewer::printRows()
 		std::cout << (i + 1) << " |";
 		for (int j = 0; j < board->getColCount(); ++j)
 		{
-			Color color = (*board->getMatrix())[i][j].getColor();
-			int pip = (*board->getMatrix())[i][j].getPip();
+			Color color = (*board->getGrid())[i][j].getColor();
+			int pip = (*board->getGrid())[i][j].getPip();
 
 			if (color == noColor)
 			{

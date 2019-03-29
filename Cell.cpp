@@ -30,12 +30,12 @@ void Cell::setColor(Color value)
 	occupant = value;
 }
 
-map<Direction, Cell*> Cell::getAdjacentCells()
+Cell::Neighbours Cell::getNeighbours()
 {
 	return  adjacentCells;
 }
 
-void Cell::setNeighbors(map<Direction, Cell*> value)
+void Cell::setNeighbors(Neighbours value)
 {
 	this->adjacentCells = value;
 }

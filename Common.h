@@ -5,10 +5,7 @@
 namespace cephalopod
 {
 	using namespace std;
-
-	template <typename T>
-	using Matrix = vector<vector<T>>;
-
+	
 	const int N_MAX = 9;
 	const int M_MIN = 3;
 	const int MIN_PIP = 1;
@@ -28,8 +25,6 @@ namespace cephalopod
 	{
 		up, right, down, left, size
 	};
-
-	using Capture = vector<Direction>;
 
 	enum GameState
 	{
@@ -54,20 +49,13 @@ namespace cephalopod
 		int col;
 	};
 
+	typedef vector<Direction> Capture;
 	struct Move
 	{
-		Move(Position position, Color color, Capture captureTargets)
-			: position(position), color(color), captureTargets(captureTargets) {};
+		Move(Position position, Color color, Capture captures)
+			: position(position), color(color), captures(captures) {};
 		Position position;
 		Color color;
-		Capture captureTargets;
-	};
-
-	struct MoveWithScore
-	{
-		MoveWithScore(Move move, float score)
-			: move(move), score(score) {};
-		Move move;
-		float score;
+		Capture captures;
 	};
 }
