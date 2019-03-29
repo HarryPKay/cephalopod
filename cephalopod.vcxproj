@@ -123,6 +123,7 @@
     <ClInclude Include="HardComputer.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="Move.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="EasyComputer.h" />
     <ClInclude Include="Position.h" />

@@ -5,6 +5,7 @@
 #include "Cell.h"
 #include "Common.h"
 #include "Helpers.h"
+#include "Move.h"
 //#define NDEBUG
 
 //TODO: separate out gameViewer/gameController

@@ -1,6 +1,7 @@
 #pragma once
 #include "BoardModel.h"
 #include "Common.h"
+#include "Move.h"
 
 using namespace cephalopod;
 

@@ -6,7 +6,8 @@
 
 namespace cephalopod
 {
-	
+	typedef vector<Direction> Capture;
+
 	using namespace std;
 	string directionEnumToString(Direction direction);
 	string colorEnumToString(Color color);

@@ -15,7 +15,6 @@ namespace cephalopod
 	const int NO_DICE = 0;
 	const int REFRESH_PAGE_SIZE = 1;
 	const int PLAYER_COUNT = 2;
-	//const char MOVE_SEPARATOR = ' ';
 
 	enum Color
 	{
@@ -40,15 +39,5 @@ namespace cephalopod
 	enum PlayerType
 	{
 		human, easyComputer, hardComputer
-	};
-
-	typedef vector<Direction> Capture;
-	struct Move
-	{
-		Move(Position position, Color color, Capture captureDirections)
-			: position(position), color(color), captureDirections(captureDirections) {};
-		Position position;
-		Color color;
-		Capture captureDirections;
 	};
 }
