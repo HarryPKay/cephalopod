@@ -319,42 +319,49 @@ int BoardModel::getTotalColorCount(Color color)
 	return blackCount;
 }
 
-vector<Move> BoardModel::getPossibleMoves(Color playerColor)
+
+vector<Move> BoardModel::getPossibleMoves(Color playerColor, Position position)
 {
 	vector<Move> potentialMoves;
-	Move move = { Position(0,0), playerColor, Capture() };
+	Move move = { position, playerColor, Capture() };
+
+	if (!isCellVacant(move.position))
+	{
+		return potentialMoves;
+	}
+
+	if (isMoveValid(move))
+	{
+		potentialMoves.push_back(move);
+	}
+
+	if (getNeighbors(move.position).size() < MIN_CAPTURE_SIZE) {
+		return potentialMoves;
+	}
+
+	for (int i = 0; i < captureCombintions.size(); ++i)
+	{
+		move.captureDirections = captureCombintions[i];
+
+		if (isMoveValid(move))
+		{
+			potentialMoves.push_back(move);
+		}
+	}
+
+	return potentialMoves;
+}
+
+vector<Move> BoardModel::getAllPossibleMoves(Color playerColor)
+{
+	vector<Move> potentialMoves;
 
 	for (int i = 0; i < rowCount; ++i)
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			move.position = Position(i, j);
-
-			if (!isCellVacant(move.position))
-			{
-				continue;
-			}
-
-			move.captureDirections.clear();
-
-			if (isMoveValid(move))
-			{
-				potentialMoves.push_back(move);
-			}
-
-			if (getNeighbors(move.position).size() < 2) {
-				continue;
-			}
-
-			for (int i = 0; i < captureCombintions.size(); ++i)
-			{
-				move.captureDirections = captureCombintions[i];
-
-				if (isMoveValid(move))
-				{
-					potentialMoves.push_back(move);
-				}
-			}
+			vector<Move> temp = getPossibleMoves(playerColor, Position(i, j));
+			potentialMoves.insert(potentialMoves.end(), temp.begin(), temp.end());
 		}
 	}
 

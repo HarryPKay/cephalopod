@@ -1,18 +1,19 @@
 ﻿  BoardModel.cpp
+  BoardViewer.cpp
+  Cell.cpp
+  EasyComputer.cpp
   GameController.cpp
 c:\projects\cephalopod\gamecontroller.cpp(28): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  BoardViewer.cpp
   HardComputer.cpp
 c:\projects\cephalopod\hardcomputer.cpp(148): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 c:\projects\cephalopod\hardcomputer.cpp(149): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Helpers.cpp
   HumanPlayer.cpp
-  main.cpp
   Player.cpp
-  EasyComputer.cpp
+  main.cpp
   Generating code
-  161 of 1218 functions (13.2%) were compiled, the rest were copied from previous compilation.
-    148 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+  142 of 1246 functions (11.4%) were compiled, the rest were copied from previous compilation.
+    29 functions were new in current compilation
+    84 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   cephalopod.vcxproj -> C:\projects\cephalopod\x64\Release\cephalopod.exe

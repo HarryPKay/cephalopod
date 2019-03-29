@@ -38,7 +38,7 @@ float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool 
 		return evaluate(board);
 	}
 
-	vector<Move> moves = board->getPossibleMoves(playerColor);
+	vector<Move> moves = board->getAllPossibleMoves(playerColor);
 
 	if (playerColor == color)
 	{
@@ -87,7 +87,7 @@ float HardComputer::alphabeta(int depth, float alpha, float beta, Color playerCo
 		return evaluate(board);
 	}
 
-	vector<Move> moves = board->getPossibleMoves(playerColor);
+	vector<Move> moves = board->getAllPossibleMoves(playerColor);
 
 	if (playerColor == color)
 	{

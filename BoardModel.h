@@ -6,9 +6,7 @@
 #include "Common.h"
 #include "Helpers.h"
 #include "Move.h"
-//#define NDEBUG
 
-//TODO: separate out gameViewer/gameController
 using namespace cephalopod;
 
 class BoardModel
@@ -41,7 +39,8 @@ public:
 	Color getMajorityColor();
 	int getTotalColorCount(Color color);
 	string previousNeighbourInfo;
-	vector<Move> getPossibleMoves(Color playerColor);
+	vector<Move> getPossibleMoves(Color playerColor, Position position);
+	vector<Move> getAllPossibleMoves(Color playerColor);
 	Color findOpposition(Color playerColor);
 private:
 

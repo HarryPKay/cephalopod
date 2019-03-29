@@ -8,6 +8,6 @@ EasyComputer::~EasyComputer()
 
 Move EasyComputer::getMove()
 {
-	vector<Move> potentialMoves = board->getPossibleMoves(color);
+	vector<Move> potentialMoves = board->getAllPossibleMoves(color);
 	return potentialMoves[rand() % potentialMoves.size()];
 }
