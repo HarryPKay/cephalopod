@@ -19,4 +19,17 @@ namespace cephalopod
 		}
 		return "";
 	}
+
+	string colorEnumToString(Color color)
+	{
+		switch (color)
+		{
+		case white:
+			return "white";
+		case black:
+			return "black";
+		case noColor:
+			return "no color";
+		}
+	}
 }

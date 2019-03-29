@@ -21,7 +21,7 @@ public:
 	int getColCount();
 	int getRowCount();
 	Matrix<Cell>* getMatrix();
-	map<Direction, Cell*> getAdjacenctCells(const Position origin);
+	map<Direction, Cell*> getNeighbors(const Position origin);
 	string getAdjacentInfo(Position position);
 	bool isWithinBounds(Position position) const;
 	bool setMove(Move move);

@@ -23,7 +23,7 @@ BoardModel::BoardModel(int rowCount, int colCount)
 	{
 		for (int j = 0; j < colCount; ++j)
 		{
-			matrix[i][j].setAdjacentCells(getAdjacenctCells(Position(i, j)));
+			matrix[i][j].setNeighbors(getNeighbors(Position(i, j)));
 		}
 	}
 
@@ -78,16 +78,16 @@ bool BoardModel::isWithinBounds(const Position position) const
 		&& position.col >= 0 && position.col < colCount);
 }
 
-map<Direction, Cell*> BoardModel::getAdjacenctCells(const Position origin)
+map<Direction, Cell*> BoardModel::getNeighbors(const Position origin)
 {
-	map<Direction, Cell*> adjacentCells;
+	map<Direction, Cell*> neighbors;
 
-	adjacentCells[Direction::up] = getCellPointer(Position(origin.row - 1, origin.col));
-	adjacentCells[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
-	adjacentCells[Direction::down] = getCellPointer(Position(origin.row + 1, origin.col));
-	adjacentCells[Direction::left] = getCellPointer(Position(origin.row, origin.col -1));
+	neighbors[Direction::up] = getCellPointer(Position(origin.row - 1, origin.col));
+	neighbors[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
+	neighbors[Direction::down] = getCellPointer(Position(origin.row + 1, origin.col));
+	neighbors[Direction::left] = getCellPointer(Position(origin.row, origin.col -1));
 
-	return adjacentCells;
+	return neighbors;
 }
 
 string BoardModel::getAdjacentInfo(Position position)
@@ -343,7 +343,7 @@ vector<Move> BoardModel::getPossibleMoves(Color playerColor)
 				potentialMoves.push_back(move);
 			}
 
-			if (getAdjacenctCells(move.position).size() < 2) {
+			if (getNeighbors(move.position).size() < 2) {
 				continue;
 			}
 

@@ -33,14 +33,38 @@ void GameController::init()
 
 void GameController::initBoard()
 {
-	//TODO: validation
+	// TODO: validation
+	int selection = 0;
 	int rowCount, colCount;
-	cout << "Enter board row count\n>";
-	cin >> rowCount;
-	cout << "Enter board column count\n>";
-	cin >> colCount;
 
-	board = new BoardModel(rowCount, colCount);
+	cout << "Select a board size\n\n";
+	cout << "1) 3 by 3\n";
+	cout << "2) 3 by 5\n";
+	cout << "3) 5 by 5\n";
+	cout << "4) custom\n>";
+	cin >> selection;
+
+	switch (--selection)
+	{
+	case 0:
+		board = new BoardModel(3,3);
+		break;
+	case 1:
+		board = new BoardModel(3,5);
+		break;
+	case 2:
+		board = new BoardModel(5,5);
+		break;
+	case 3:
+		cout << "Enter board row count\n>";
+		cin >> rowCount;
+		cout << "Enter board column count\n\n>";
+		cin >> colCount;
+		board = new BoardModel(rowCount, colCount);
+	default:
+		cout << "Invalid selection\n\n";
+		initPlayers();
+	}
 }
 
 void GameController::initBoardView()
@@ -50,17 +74,37 @@ void GameController::initBoardView()
 
 void GameController::initPlayers()
 {
-	//TODO: implement prompt
-	//cout << "Enter white player's Type\n>";
-	//cout << "Enter black player's Type\n>";
-	//cout << "row in initplayers: " << board->getRowCount() << endl;
-	//players.push_back(new HumanPlayer(white));
-	//players.push_back(new HumanPlayer(black));
-	players.push_back(new EasyComputer(white, board));
-	
-	//players.push_back(new HardComputer(white, board));
-	players.push_back(new HardComputer(black, board));
-	//players.push_back(new EasyComputer(black, board));
+	// TODO: validation
+	for (int i = 0; i < PLAYER_COUNT; ++i)
+	{
+		int selection = 0;
+		cout << "Select player type for color: " << colorEnumToString((Color)i) << endl << endl;
+		cout << "1) Human Player\n";
+		cout << "2) Easy Computer\n";
+		cout << "3) Hard Computer\n>";
+		cin >> selection;
+		initPlayer((Color)i, (PlayerType)--selection);
+	}
+}
+
+void GameController::initPlayer(Color playerColor, PlayerType playerType)
+{
+	int depth = 0;
+	AIAlgorithm algorithmType;
+
+	switch (playerType)
+	{
+	case human:
+		players.push_back(new HumanPlayer(playerColor));
+		break;
+	case hardComputer:
+		promptForAISettings(algorithmType, depth);
+		players.push_back(new HardComputer(playerColor, board, algorithmType, depth));
+		break;
+	case easyComputer:
+		players.push_back(new EasyComputer(playerColor, board));
+		break;
+	}
 }
 
 void GameController::play()
@@ -112,4 +156,24 @@ void GameController::displayWinner()
 	{
 		cout << "DRAW\n";
 	}
+}
+
+void GameController::promptForAISettings(AIAlgorithm & algorithmType, int & depth)
+{
+	cout << "Select algorithm:\n\n";
+	cout << "1) alphabeta\n";
+	cout << "2) minimax\n\n>";
+	int selection;
+	cin >> selection;
+
+	if (selection > 2)
+	{
+		cout << "Invalid selection\n\n";
+		promptForAISettings(algorithmType, depth);
+	}
+
+	algorithmType = (AIAlgorithm)--selection;
+
+	cout << "Enter depth of search\n>";
+	cin >> depth;
 }

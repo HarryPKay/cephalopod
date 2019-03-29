@@ -16,6 +16,7 @@ namespace cephalopod
 	const int MIN_CAPTURE_PIP = 2;
 	const int NO_DICE = 0;
 	const int REFRESH_PAGE_SIZE = 1;
+	const int PLAYER_COUNT = 2;
 	//const char MOVE_SEPARATOR = ' ';
 
 	enum Color
@@ -33,6 +34,16 @@ namespace cephalopod
 	enum GameState
 	{
 		settings, inProgress, end
+	};
+
+	enum AIAlgorithm
+	{
+		minimax, alphabeta
+	};
+
+	enum PlayerType
+	{
+		human, easyComputer, hardComputer
 	};
 
 	struct Position

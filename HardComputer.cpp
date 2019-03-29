@@ -2,8 +2,8 @@
 
 
 
-HardComputer::HardComputer(Color color, BoardModel * board)
-	: Player(color), board(board)
+HardComputer::HardComputer(Color color, BoardModel * board, AIAlgorithm algorithmType, int depth)
+	: Player(color), board(board), algorithmType(algorithmType), depth(depth)
 {
 }
 
@@ -14,8 +14,17 @@ HardComputer::~HardComputer()
 Move HardComputer::getMove()
 {
 	Move move = { Position(0, 0), color, Capture() };
-	//minimax(3, color, move, true);
-	alphabeta(9, -INFINITY, INFINITY, color, move, true);
+
+	switch (algorithmType)
+	{
+	case AIAlgorithm::minimax:
+		minimax(depth, color, move, true);
+		break;
+	case AIAlgorithm::alphabeta:
+		alphabeta(depth, -INFINITY, INFINITY, color, move, true);
+		break;
+	}
+
 	return move;
 }
 

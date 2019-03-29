@@ -16,7 +16,7 @@ public:
 	Color getColor();
 	void setColor(Color value);
 	map<Direction, Cell*> getAdjacentCells();
-	void setAdjacentCells(map<Direction, Cell*> value);
+	void setNeighbors(map<Direction, Cell*> value);
 	void capture();
 private:
 	int pip = NO_DICE;

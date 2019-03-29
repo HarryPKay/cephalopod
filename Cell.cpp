@@ -35,7 +35,7 @@ map<Direction, Cell*> Cell::getAdjacentCells()
 	return  adjacentCells;
 }
 
-void Cell::setAdjacentCells(map<Direction, Cell*> value)
+void Cell::setNeighbors(map<Direction, Cell*> value)
 {
 	this->adjacentCells = value;
 }

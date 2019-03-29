@@ -20,10 +20,12 @@ private:
 	void initBoard();
 	void initBoardView();
 	void initPlayers();
+	void initPlayer(Color playerColor, PlayerType playerType);
 	void play();
 	void delegateTurn(Player* player);
 	void cycleTurns();
 	void displayWinner();
+	void promptForAISettings(AIAlgorithm& algorithmType, int& depth);
 	GameState gameState = settings;
 	vector<Player*> players;
 };

@@ -9,6 +9,7 @@ namespace cephalopod
 	
 	using namespace std;
 	string directionEnumToString(Direction direction);
+	string colorEnumToString(Color color);
 
 	template<typename T>
 	vector<vector<T>> getCombinationsOfSizeN(const vector<T> & source, int n)
