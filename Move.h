@@ -5,10 +5,10 @@ using namespace cephalopod;
 
 struct Move
 {
-	typedef vector<Direction> Capture;
-	Move(Position position, Color color, Capture captureDirections)
+	typedef vector<Direction> Captures;
+	Move(Position position, Color color, Captures captureDirections)
 		: position(position), color(color), captureDirections(captureDirections) {};
 	Position position;
 	Color color;
-	Capture captureDirections;
+	Captures captureDirections;
 };

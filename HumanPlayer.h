@@ -1,4 +1,5 @@
 #pragma once
+#include <iomanip>
 #include <iostream>
 #include <stdint.h>
 #include <string>
@@ -10,9 +11,14 @@ class HumanPlayer :
 	public Player
 {
 public:
-	HumanPlayer(Color color)
-		:Player(color) {};
+
+	typedef map<Direction, Cell*> Neighbours;
+
+	HumanPlayer(Color color, BoardModel* board);
 	~HumanPlayer();
+	void displayCaptureSelections(const vector<Move>& moves);
+	Position promptForPosition();
+	Move promptForMove();
 	Move getMove();
 };
 

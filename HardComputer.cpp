@@ -3,7 +3,7 @@
 
 
 HardComputer::HardComputer(Color color, BoardModel * board, AIAlgorithm algorithmType, int depth)
-	: Player(color), board(board), algorithmType(algorithmType), depth(depth)
+	: Player(color, board), algorithmType(algorithmType), depth(depth)
 {
 }
 
@@ -13,7 +13,7 @@ HardComputer::~HardComputer()
 
 Move HardComputer::getMove()
 {
-	Move move = { Position(0, 0), color, Capture() };
+	Move move = { Position(0, 0), color, Captures() };
 
 	switch (algorithmType)
 	{
@@ -31,7 +31,7 @@ Move HardComputer::getMove()
 float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool isFirstIteration)
 {
 	map<float, Move> evaluatedMoves;
-	Color opposition = board->findOpposition(playerColor);
+	Color opposition = findOpposition(playerColor);
 	
 	if (depth == 0 || board->isBoardFull())
 	{
@@ -80,7 +80,7 @@ float HardComputer::minimax(int depth, Color playerColor, Move & bestMove, bool 
 float HardComputer::alphabeta(int depth, float alpha, float beta, Color playerColor, Move & bestMove, bool isFirstIteration)
 {
 	map<float, Move> evaluatedMoves;
-	Color opposition = board->findOpposition(playerColor);
+	Color opposition = findOpposition(playerColor);
 
 	if (depth == 0 || board->isBoardFull())
 	{

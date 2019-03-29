@@ -25,9 +25,9 @@ Color Cell::getColor()
 	return occupant;
 }
 
-void Cell::setColor(Color value)
+void Cell::setOccupant(Color occupant)
 {
-	occupant = value;
+	this->occupant = occupant;
 }
 
 void Cell::capture()

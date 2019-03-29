@@ -14,12 +14,14 @@ public:
 
 	Cell();
 	~Cell();
-	int getPip();
 	void setPip(int value);
-	Color getColor();
-	void setColor(Color value);
+	void setOccupant(Color occupant);
 	void capture();
+	int getPip();
+	Color getColor();
+
 private:
+
 	int pip = NO_DICE;
 	Color occupant = noColor;
 };

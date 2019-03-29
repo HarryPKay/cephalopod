@@ -6,11 +6,12 @@
 
 namespace cephalopod
 {
-	typedef vector<Direction> Capture;
+	typedef vector<Direction> Captures;
 
 	using namespace std;
 	string directionEnumToString(Direction direction);
 	string colorEnumToString(Color color);
+	Color findOpposition(Color playerColor);
 
 	template<typename T>
 	vector<vector<T>> getCombinationsOfSizeN(const vector<T> & source, int n)
@@ -42,7 +43,7 @@ namespace cephalopod
 		vector<vector<T>> combinations;
 		for (int i = k; i <= n; ++i)
 		{
-			vector<Capture> temp = getCombinationsOfSizeN(source, i);
+			vector<Captures> temp = getCombinationsOfSizeN(source, i);
 			combinations.insert(std::end(combinations), std::begin(temp), std::end(temp));
 		}
 		return combinations;

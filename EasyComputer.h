@@ -9,10 +9,9 @@ class EasyComputer :
 	public Player
 {
 public:
-	EasyComputer(Color color, BoardModel* board)
-		: Player(color), board(board) {};
+
+	EasyComputer(Color color, BoardModel* board);
 	~EasyComputer();
-	BoardModel* board;
 	Move getMove();
 };
 

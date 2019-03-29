@@ -6,6 +6,11 @@ BoardViewer::BoardViewer()
 {
 }
 
+BoardViewer::BoardViewer(BoardModel * board)
+	: board(board)
+{
+}
+
 BoardViewer::~BoardViewer()
 {
 }

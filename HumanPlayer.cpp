@@ -2,50 +2,98 @@
 
 
 
+HumanPlayer::HumanPlayer(Color color, BoardModel * board)
+	: Player(color, board)
+{
+}
+
 HumanPlayer::~HumanPlayer()
 {
 }
 
-Move HumanPlayer::getMove()
+void HumanPlayer::displayCaptureSelections(const vector<Move>& moves)
 {
-	//TODO: validate
-	cout << color << "'s turn\n";
-
-	int row;
-	cout << "Enter in row coordinate\n>";
-	cin >> row;
-	--row;
-
-	int col;
-	cout << "Enter in column coordinate\n>";
-	cin >> col;
-	--col;
-
-	char captureTarget = ' ';
-	Capture captureDirections;
-	cout << "Enter capture targets>\n";
-
-	while (captureTarget !=  'f')
+	// Nothing to do as there is only one selection.
+	if (moves.size() == 1)
 	{
-		cin >> captureTarget;
-		switch (captureTarget)
+		return;
+	}
+
+	Neighbours neighbours = board->getNeighbors(moves[0].position);
+
+	cout << "\nSelect one of the following capture options\n\n";
+
+	for (int i = 0; i < moves.size(); ++i)
+	{
+		cout << std::setw(2) << i + 1 << ") Neighbours: ";
+
+		Move move = moves[i];
+
+		int pipSum = 0;
+		for (int j = 0; j < move.captureDirections.size(); ++j)
 		{
-		case 'u':
-			captureDirections.push_back(Direction::up);
-			break;
-		case 'r':
-			captureDirections.push_back(Direction::right);
-			break;
-		case 'd':
-			captureDirections.push_back(Direction::down);
-			break;
-		case 'l':
-			captureDirections.push_back(Direction::left);
-			break;
+			Direction captureDirection = move.captureDirections[j];
+			Cell* neighbour = neighbours[captureDirection];
+
+			cout << directionEnumToString(captureDirection) << "("
+				<< neighbour->getPip() << "), ";
+			pipSum += neighbour->getPip();
+		}
+
+		cout << "Pip Sum = " << pipSum << "\n";
+	}
+	cout << "\n> ";
+}
+
+Position HumanPlayer::promptForPosition()
+{
+	Position position = { -1,-1 };
+
+	do
+	{
+		cout << "Enter in row and col. e.g: \"1 2\"\n> ";
+		cin >> position.row >> position.col;
+		--position.row;
+		--position.col;
+	} while (!board->isCellVacant(position));
+
+	return position;
+}
+
+Move HumanPlayer::promptForMove()
+{
+	Position position = promptForPosition();
+	vector<Move> moves = board->getPossibleMoves(color, position);
+
+	// There is only one possible move, no need to prompt for selection;
+	if (moves.size() == 1)
+	{
+		return moves[0];
+	}
+
+	bool isValidInput = false;
+	int selection = 0;
+
+	while (!isValidInput)
+	{
+		displayCaptureSelections(moves);
+		cin >> selection;
+		--selection;
+
+		if (selection < 0 || selection >= moves.size())
+		{
+			cout << "Invalid selection\n";
+		}
+		else
+		{
+			isValidInput = true;
 		}
 	}
 
-	// TODO: have this prompt only if there are captures available;
+	return moves[selection];
+}
 
-	return { Position(row,col), color, captureDirections };
+Move HumanPlayer::getMove()
+{
+	return promptForMove();
 }

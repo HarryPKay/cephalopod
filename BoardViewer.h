@@ -9,13 +9,14 @@ using namespace std;
 class BoardViewer
 {
 public:
+
 	BoardViewer();
-	BoardViewer(BoardModel* board)
-		: board(board) {};
+	BoardViewer(BoardModel* board);
 	~BoardViewer();
 	void renderBoardToConsole();
 	void refreshConsole() const;
 private:
+
 	BoardModel* board;
 	void printColumnNumbers();
 	void printRows();

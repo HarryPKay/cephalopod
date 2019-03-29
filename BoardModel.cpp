@@ -28,7 +28,7 @@ BoardModel::BoardModel(int rowCount, int colCount)
 		}
 	}
 
-	const Capture directions = {
+	const Captures directions = {
 		Direction::up,
 		Direction::right,
 		Direction::down,
@@ -97,7 +97,7 @@ string BoardModel::getNeighboursInfo(Position position)
 
 	int pipSum = 0;
 	string info = "";
-	info.append("\nAdjacent info for last move at " +
+	info.append("\nNeighbour information for position: " +
 		to_string(position.row + 1) + "," + to_string(position.col + 1) + ":\n\n");
 
 	for (int i = 0; i < (int)Direction::size; ++i)
@@ -125,7 +125,12 @@ string BoardModel::getNeighboursInfo(Position position)
 		info.append(directionEnumToString((Direction)i) + ": ");
 		info.append(to_string(pip) + "\n");
 	}
-	info.append("Total pip counts: " + to_string(pipSum) + "\n");
+	info.append("Total pip counts: " + to_string(pipSum) + "\n\n");
+
+	// If there wasn't actually any neighbours occupied, nothing to print.
+	if (pipSum == 0) {
+		info = "\nNo neighbours occupied for position: " + to_string(position.row + 1) + "," + to_string(position.col + 1) + ":\n\n";
+	}
 
 	return info;
 }
@@ -150,7 +155,7 @@ bool BoardModel::setMove(Move move)
 	}
 
 	Cell& cell = grid[move.position.row][move.position.col];
-	cell.setColor(move.color);
+	cell.setOccupant(move.color);
 	cell.setPip(pipSum);
 
 	return true;
@@ -235,7 +240,7 @@ bool BoardModel::mustCapture(Move move)
 
 	for (int i = 0; i < captureCombintions.size(); ++i)
 	{
-		Capture temp = captureCombintions[i];
+		Captures temp = captureCombintions[i];
 
 		for (int j = 0; j < temp.size(); ++j)
 		{
@@ -266,6 +271,11 @@ bool BoardModel::mustCapture(Move move)
 
 bool BoardModel::isCellVacant(Position position)
 {
+	if (!isWithinBounds(position))
+	{
+		return false;
+	}
+
 	return grid[position.row][position.col].getColor() == noColor;
 }
 
@@ -323,7 +333,7 @@ int BoardModel::getTotalColorCount(Color color)
 vector<Move> BoardModel::getPossibleMoves(Color playerColor, Position position)
 {
 	vector<Move> potentialMoves;
-	Move move = { position, playerColor, Capture() };
+	Move move = { position, playerColor, Captures() };
 
 	if (!isCellVacant(move.position))
 	{
@@ -335,9 +345,9 @@ vector<Move> BoardModel::getPossibleMoves(Color playerColor, Position position)
 		potentialMoves.push_back(move);
 	}
 
-	if (getNeighbors(move.position).size() < MIN_CAPTURE_SIZE) {
-		return potentialMoves;
-	}
+	//if (getNeighbors(move.position).size() < MIN_CAPTURE_SIZE) {
+	//	return potentialMoves;
+	//}
 
 	for (int i = 0; i < captureCombintions.size(); ++i)
 	{
@@ -366,13 +376,4 @@ vector<Move> BoardModel::getAllPossibleMoves(Color playerColor)
 	}
 
 	return potentialMoves;
-}
-
-Color BoardModel::findOpposition(Color playerColor)
-{
-	if (playerColor == white)
-	{
-		return black;
-	}
-	return white;
 }

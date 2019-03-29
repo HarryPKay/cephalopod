@@ -2,6 +2,11 @@
 
 
 
+EasyComputer::EasyComputer(Color color, BoardModel * board)
+	: Player(color, board)
+{
+}
+
 EasyComputer::~EasyComputer()
 {
 }
@@ -9,5 +14,6 @@ EasyComputer::~EasyComputer()
 Move EasyComputer::getMove()
 {
 	vector<Move> potentialMoves = board->getAllPossibleMoves(color);
-	return potentialMoves[rand() % potentialMoves.size()];
+	int index = rand() % potentialMoves.size();
+	return potentialMoves[index];
 }

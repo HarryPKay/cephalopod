@@ -32,4 +32,13 @@ namespace cephalopod
 			return "no color";
 		}
 	}
+
+	Color findOpposition(Color playerColor)
+	{
+		if (playerColor == white)
+		{
+			return black;
+		}
+		return white;
+	}
 }

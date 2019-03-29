@@ -33,7 +33,7 @@ void GameController::init()
 
 void GameController::initBoard()
 {
-	// TODO: validation
+	// TOOD validation
 	int selection = 0;
 	int rowCount, colCount;
 
@@ -41,7 +41,7 @@ void GameController::initBoard()
 	cout << "1) 3 by 3\n";
 	cout << "2) 3 by 5\n";
 	cout << "3) 5 by 5\n";
-	cout << "4) custom\n>";
+	cout << "4) custom\n\n> ";
 	cin >> selection;
 
 	switch (--selection)
@@ -56,10 +56,9 @@ void GameController::initBoard()
 		board = new BoardModel(5,5);
 		break;
 	case 3:
-		cout << "Enter board row count\n>";
-		cin >> rowCount;
-		cout << "Enter board column count\n\n>";
-		cin >> colCount;
+		cout << "Enter board row and col count e.g: 1 3\n> ";
+		cin >> rowCount >> colCount;
+		// TOOD validation
 		board = new BoardModel(rowCount, colCount);
 	default:
 		cout << "Invalid selection\n\n";
@@ -81,7 +80,7 @@ void GameController::initPlayers()
 		cout << "Select player type for color: " << colorEnumToString((Color)i) << endl << endl;
 		cout << "1) Human Player\n";
 		cout << "2) Easy Computer\n";
-		cout << "3) Hard Computer\n>";
+		cout << "3) Hard Computer\n\n> ";
 		cin >> selection;
 		initPlayer((Color)i, (PlayerType)--selection);
 	}
@@ -95,7 +94,7 @@ void GameController::initPlayer(Color playerColor, PlayerType playerType)
 	switch (playerType)
 	{
 	case human:
-		players.push_back(new HumanPlayer(playerColor));
+		players.push_back(new HumanPlayer(playerColor, board));
 		break;
 	case hardComputer:
 		promptForAISettings(algorithmType, depth);
@@ -130,7 +129,7 @@ void GameController::delegateTurn(Player * player)
 void GameController::cycleTurns()
 {
 	for (Player* player : players) {
-
+		cout << "\n" << colorEnumToString(player->getColor()) << "'s turn\n";
 		delegateTurn(player);
 		boardViewer->renderBoardToConsole();
 
@@ -146,15 +145,15 @@ void GameController::displayWinner()
 {
 	if (board->getMajorityColor() == black)
 	{
-		cout << "BLACK WINS\n";
+		cout << "\nBLACK WINS\n";
 	}
 	else if (board->getMajorityColor() == white)
 	{
-		cout << "WHITE WINS\n";
+		cout << "\nWHITE WINS\n";
 	}
 	else
 	{
-		cout << "DRAW\n";
+		cout << "\nDRAW\n";
 	}
 }
 
@@ -162,7 +161,7 @@ void GameController::promptForAISettings(AIAlgorithm & algorithmType, int & dept
 {
 	cout << "Select algorithm:\n\n";
 	cout << "1) alphabeta\n";
-	cout << "2) minimax\n\n>";
+	cout << "2) minimax\n\n> ";
 	int selection;
 	cin >> selection;
 

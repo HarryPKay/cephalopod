@@ -9,6 +9,7 @@
 class GameController
 {
 public:
+
 	GameController();
 	~GameController();
 	BoardModel* board;
@@ -16,6 +17,7 @@ public:
 	void run();
 
 private:
+
 	void init();
 	void initBoard();
 	void initBoardView();

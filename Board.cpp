@@ -199,7 +199,7 @@ bool Board::setMove(Move move)
 		adjacentCells[move.captureDirections[i]]->capture();
 	}
 
-	cell.setColor(move.color);
+	cell.setOccupant(move.color);
 	cell.setPip(pipSum);
 
 	return true;

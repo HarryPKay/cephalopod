@@ -14,41 +14,41 @@ class BoardModel
 public:
 
 	typedef vector<vector<Cell>> Grid;
-	typedef vector<Direction> Capture;
+	typedef vector<Direction> Captures;
 	typedef map<Direction, Cell*> Neighbours;
 
 	BoardModel();
 	BoardModel(int rowCount, int colCount);
 	~BoardModel();
-	Cell getCell(Position position);
-	Cell* getCellPointer(Position position);
+	void undoMove();
 	int getColCount();
 	int getRowCount();
-	Grid* getGrid();
-	Neighbours getNeighbors(const Position origin);
-	string getNeighboursInfo(Position position);
+	int getTotalColorCount(Color color);
 	bool isWithinBounds(Position position) const;
-	bool setMove(Move move);
-	void undoMove();
 	bool isMoveValid(Move move, int& pipSum);
 	bool isMoveValid(Move move);
 	bool isCaptureValid(Move move, int & pipSum);
 	bool mustCapture(Move move);
 	bool isCellVacant(Position position);
 	bool isBoardFull();
+	bool setMove(Move move);
+	string getNeighboursInfo(Position position);
+	Neighbours getNeighbors(const Position origin);
 	Color getMajorityColor();
-	int getTotalColorCount(Color color);
-	string previousNeighbourInfo;
+	Cell getCell(Position position);
+	Cell* getCellPointer(Position position);
 	vector<Move> getPossibleMoves(Color playerColor, Position position);
 	vector<Move> getAllPossibleMoves(Color playerColor);
-	Color findOpposition(Color playerColor);
+	Grid* getGrid();
+	string previousNeighbourInfo;
+
 private:
 
 	int rowCount;
 	int colCount;
 	Grid grid;
 	vector<Grid> history;
-	vector<Capture> captureCombintions;
+	vector<Captures> captureCombintions;
 	map<Position, Neighbours> positionToNeighboursMap;
 };
 
