@@ -144,7 +144,8 @@ bool BoardModel::setMove(Move move)
 		return false;
 	}
 
-	history.push_back(grid);
+	//history.push_back(grid);
+	gridHistory.push(grid);
 	previousNeighbourInfo = getNeighboursInfo(move.position);
 
 	Neighbours neighbours = positionToNeighboursMap[move.position];
@@ -163,8 +164,10 @@ bool BoardModel::setMove(Move move)
 
 void BoardModel::undoMove()
 {
-	grid = history[history.size() - 1];
-	history.pop_back();
+	grid = gridHistory.top();
+	gridHistory.pop();
+	//grid = history[history.size() - 1];
+	//history.pop_back();
 }
 
 

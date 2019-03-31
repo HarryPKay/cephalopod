@@ -1,6 +1,7 @@
 #pragma once
 #include <assert.h>
 #include <iostream>
+#include <stack>
 #include <string>
 #include "Cell.h"
 #include "Common.h"
@@ -47,7 +48,7 @@ private:
 	int rowCount;
 	int colCount;
 	Grid grid;
-	vector<Grid> history;
+	stack<Grid> gridHistory;
 	vector<Captures> captureCombintions;
 	map<Position, Neighbours> positionToNeighboursMap;
 };

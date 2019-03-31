@@ -7,9 +7,17 @@
 
 int main()
 {
-	GameController game;
-	game.run();
-
+	int selection = 0;
+	while (selection == 0)
+	{
+		GameController game;
+		game.run();
+		cout << "Play again?.\n\n";
+		cout << "1) Yes\n\n> ";
+		std::cin >> selection;
+		--selection;
+	}
+	
 	//vector<Captures> potentialTargets = generateCombinationsVaryingSize(directions, 2, 4);
 
 	//for (int i = 0; i < potentialTargets.size(); ++i)
@@ -22,8 +30,5 @@ int main()
 	//	cout << endl;
 	//}
 
-	cout << "Enter in any input to exit.\n>";
-	char keepOpen;
-	std::cin >> keepOpen;
 	return 0;
 }
