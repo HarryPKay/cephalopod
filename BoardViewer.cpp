@@ -18,10 +18,7 @@ BoardViewer::~BoardViewer()
 
 void BoardViewer::refreshConsole() const
 {
-	for (int i = 0; i < REFRESH_PAGE_SIZE; ++i)
-	{
-		cout << endl;
-	}
+	cout << string('\n', REFRESH_PAGE_SIZE);
 }
 
 void BoardViewer::renderBoardToConsole()

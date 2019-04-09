@@ -7,6 +7,7 @@ Board::Board(int rowCount, int colCount)
 	this->rowCount = rowCount;
 	this->colCount = colCount;
 
+    // Create a 
 	grid.resize(rowCount);
 	for (int i = 0; i < rowCount; i++)
 	{

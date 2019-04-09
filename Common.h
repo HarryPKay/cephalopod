@@ -13,7 +13,7 @@ namespace cephalopod
 	const int MAX_PIP = 6;
 	const int MIN_CAPTURE_PIP = 2;
 	const int NO_DICE = 0;
-	const int REFRESH_PAGE_SIZE = 1;
+	const int REFRESH_PAGE_SIZE = 20;
 	const int PLAYER_COUNT = 2;
 	const int MIN_CAPTURE_SIZE = 2;
 

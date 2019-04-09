@@ -22,6 +22,7 @@ public:
 	BoardModel(int rowCount, int colCount);
 	~BoardModel();
 	void undoMove();
+	void initializePositionToNeighbourMapping();
 	int getColCount();
 	int getRowCount();
 	int getTotalColorCount(Color color);

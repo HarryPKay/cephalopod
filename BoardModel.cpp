@@ -18,15 +18,7 @@ BoardModel::BoardModel(int rowCount, int colCount)
 		grid[i].resize(colCount, Cell());
 	}
 
-	for (int i = 0; i < rowCount; ++i)
-	{
-		for (int j = 0; j < colCount; ++j)
-		{
-			Position key = Position(i, j);
-			Neighbours value = getNeighbors(key);
-			positionToNeighboursMap[key] = value;
-		}
-	}
+	initializePositionToNeighbourMapping();
 
 	const Captures directions = {
 		Direction::up,
@@ -166,8 +158,21 @@ void BoardModel::undoMove()
 {
 	grid = gridHistory.top();
 	gridHistory.pop();
-	//grid = history[history.size() - 1];
-	//history.pop_back();
+	initializePositionToNeighbourMapping();
+}
+
+void BoardModel::initializePositionToNeighbourMapping()
+{
+	// possible issue with stack and pointers
+	for (int i = 0; i < rowCount; ++i)
+	{
+		for (int j = 0; j < colCount; ++j)
+		{
+			Position key = Position(i, j);
+			Neighbours value = getNeighbors(key);
+			positionToNeighboursMap[key] = value;
+		}
+	}
 }
 
 
@@ -329,6 +334,7 @@ int BoardModel::getTotalColorCount(Color color)
 			}
 		}
 	}
+
 	return blackCount;
 }
 
@@ -338,6 +344,7 @@ vector<Move> BoardModel::getPossibleMoves(Color playerColor, Position position)
 	vector<Move> potentialMoves;
 	Move move = { position, playerColor, Captures() };
 
+	// Nothing to do.
 	if (!isCellVacant(move.position))
 	{
 		return potentialMoves;
@@ -347,10 +354,6 @@ vector<Move> BoardModel::getPossibleMoves(Color playerColor, Position position)
 	{
 		potentialMoves.push_back(move);
 	}
-
-	//if (getNeighbors(move.position).size() < MIN_CAPTURE_SIZE) {
-	//	return potentialMoves;
-	//}
 
 	for (int i = 0; i < captureCombintions.size(); ++i)
 	{
