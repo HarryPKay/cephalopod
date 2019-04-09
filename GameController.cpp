@@ -105,14 +105,14 @@ void GameController::initBoardView()
  *         Name:  initPlayers
  *  Description:  Prompts for the type of each player and initializes those
  *                players.
- *           pre: Board has been initialized.
+ *          pre:  Board has been initialized.
  *                Type belongs to PlayerType enum.
  * =====================================================================================
  */
 void GameController::initPlayers()
 {
     assert(board != nullptr);
-    // TODO: validation
+    //TODO: validation
     for (int i = 0; i < PLAYER_COUNT; ++i) {
         int selection = 0;
         cout << "Select player type for color: " << colorEnumToString((Color)i) << endl
@@ -123,6 +123,8 @@ void GameController::initPlayers()
         cin >> selection;
         initPlayer((Color)i, (PlayerType)--selection);
     }
+	//initPlayer(white, hardComputer);
+	//initPlayer(black, easyComputer);
 }
 
 
@@ -145,6 +147,7 @@ void GameController::initPlayer(Color playerColor, PlayerType playerType)
     case hardComputer:
         promptForAISettings(algorithmType, depth);
         players.push_back(new HardComputer(playerColor, board, algorithmType, depth));
+        //players.push_back(new HardComputer(playerColor, board, alphabeta, 3));
         break;
     case easyComputer:
         players.push_back(new EasyComputer(playerColor, board));
@@ -236,12 +239,12 @@ void GameController::displayWinner()
 void GameController::promptForAISettings(AIAlgorithm& algorithmType, int& depth)
 {
     cout << "Select algorithm:\n\n";
-    cout << "1) alphabeta\n";
-    cout << "2) minimax\n\n> ";
+    cout << "1) minimax\n";
+    cout << "2) alphabeta\n\n> ";
     int selection;
     cin >> selection;
 
-    if (selection > 2) {
+    if (selection > 2 || selection < 1) {
         cout << "Invalid selection\n\n";
         promptForAISettings(algorithmType, depth);
     }

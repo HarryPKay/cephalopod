@@ -11,16 +11,17 @@ class HardComputer :
 	public Player
 {
 public:
-
 	HardComputer(Color color, BoardModel* board, AIAlgorithm algorithmType, int depth);
 	~HardComputer();
-
 private:
-
 	Move getMove();
-	float minimax(int depth, Color playerColor, Move & bestMove, bool isFirstIteration);
-	float alphabeta(int depth, float alpha, float beta, Color playerColor, Move & bestMove, bool isFirstIteration);
-	float evaluate(BoardModel* board);
+	Move minimax();
+	Move alphaBeta();
+	float minValue(int depth);
+	float maxValue(int depth);
+	float minValue(int depth, float alpha, float beta);
+	float maxValue(int depth, float alpha, float beta);
+	float evaluate();
 	AIAlgorithm algorithmType;
 	int depth;
 };
