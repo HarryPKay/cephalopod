@@ -63,7 +63,7 @@ Position HumanPlayer::promptForPosition()
 Move HumanPlayer::promptForMove()
 {
 	Position position = promptForPosition();
-	vector<Move> moves = board->getPossibleMoves(color, position);
+	vector<Move> moves = board->findPossibleMoves(color, position);
 
 	// There is only one possible move, no need to prompt for selection;
 	if (moves.size() == 1)

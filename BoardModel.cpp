@@ -337,7 +337,7 @@ int BoardModel::sumPipForMove(Move move)
 }
 
 
-auto BoardModel::getPossibleMoves(const Color playerColor, const Position position) -> vector<Move>
+vector<Move> BoardModel::findPossibleMoves(const Color playerColor, const Position position)
 {
 	vector<Move> potentialMoves;
 	Move move = { position, playerColor, Captures() };
@@ -366,7 +366,7 @@ auto BoardModel::getPossibleMoves(const Color playerColor, const Position positi
 	return potentialMoves;
 }
 
-vector<Move> BoardModel::getAllPossibleMoves(const Color playerColor)
+vector<Move> BoardModel::findAllPossibleMoves(const Color playerColor)
 {
 	vector<Move> potentialMoves;
 
@@ -374,7 +374,7 @@ vector<Move> BoardModel::getAllPossibleMoves(const Color playerColor)
 	{
 		for (auto j = 0; j < colCount_; ++j)
 		{
-			auto temp = getPossibleMoves(playerColor, Position(i, j));
+			auto temp = findPossibleMoves(playerColor, Position(i, j));
 			potentialMoves.insert(potentialMoves.end(), temp.begin(), temp.end());
 		}
 	}

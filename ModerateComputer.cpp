@@ -14,7 +14,7 @@ ModerateComputer::~ModerateComputer()
 
 Move ModerateComputer::getMove()
 {
-	vector<Move> moves = board->getAllPossibleMoves(color);
+	vector<Move> moves = board->findAllPossibleMoves(color);
 	map<int, Move> pipMoveMap;
 
 	// Assign the capture pip value for each move.

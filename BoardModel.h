@@ -63,10 +63,11 @@ class BoardModel final
         /* ====================  METHODS       ======================================= */
 		int sumCellsWithColor(Color color);
 		int sumPipForMove(Move move);
-		
 		Color findMajorityColor();
-		vector<Move> getPossibleMoves(Color playerColor, Position position);
-		vector<Move> getAllPossibleMoves(Color playerColor);
+
+		//TODO: Move the following into rules (maybe)
+		vector<Move> findPossibleMoves(Color playerColor, Position position);
+		vector<Move> findAllPossibleMoves(Color playerColor);
 
     private:
         /* ====================  DATA MEMBERS  ======================================= */

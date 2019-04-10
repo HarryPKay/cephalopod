@@ -6,20 +6,39 @@
 using namespace cephalopod;
 using namespace std;
 
-class BoardViewer
+/*
+ * =====================================================================================
+ *        Class:  BoardViewer
+ *  Description:  
+ * =====================================================================================
+ */
+class BoardViewer final
 {
-public:
+    public:
+        /* ====================  LIFECYCLE     ======================================= */
+		BoardViewer() = default;								/* constructor */
+		BoardViewer(BoardModel* board);
+        ~BoardViewer() = default;                       /* destructor */
 
-	BoardViewer();
-	BoardViewer(BoardModel* board);
-	~BoardViewer();
-	void renderBoardToConsole();
-	void refreshConsole() const;
-private:
+        /* ====================  SPECIAL       ======================================= */
+        BoardViewer(const BoardViewer&) = delete;              /* copy */
+        BoardViewer(BoardViewer&&) = delete;                   /* move */
 
-	BoardModel* board;
-	void printColumnNumbers();
-	void printRows();
-	void printRowSeparator();
-};
+        /* ====================  OPERATORS     ======================================= */
+        BoardViewer& operator=(const BoardViewer&) = delete;   /* copy assignment */
+        BoardViewer& operator=(BoardViewer&&) = delete;        /* move assignment */
 
+        /* ====================  METHODS       ======================================= */
+		void renderBoardToConsole() const;
+
+    private:
+        /* ====================  METHODS       ======================================= */
+		void printColumnNumbers() const;
+		void printRows() const;
+		void printRowSeparator() const;
+		void refreshConsole() const;
+
+        /* ====================  DATA MEMBERS  ======================================= */
+		BoardModel* board_;
+
+}; /* -----  end of class BoardViewer  ----- */

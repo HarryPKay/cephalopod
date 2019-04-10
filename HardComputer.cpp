@@ -24,7 +24,7 @@ Move HardComputer::getMove()
 Move HardComputer::minimax()
 {
 	map<float, Move> valueMoveMap;
-	vector<Move> moves = board->getAllPossibleMoves(color);
+	vector<Move> moves = board->findAllPossibleMoves(color);
 
 	for (Move move : moves)
 	{
@@ -42,7 +42,7 @@ Move HardComputer::minimax()
 Move HardComputer::alphaBeta()
 {
 	map<float, Move> valueMoveMap;
-	vector<Move> moves = board->getAllPossibleMoves(color);
+	vector<Move> moves = board->findAllPossibleMoves(color);
 
 	for (Move move : moves)
 	{
@@ -67,7 +67,7 @@ float HardComputer::minValue(int depth)
 
 	// general case: there are board states to search.
 	float value = INFINITY;
-	vector<Move> moves = board->getAllPossibleMoves(findOpposition(color));
+	vector<Move> moves = board->findAllPossibleMoves(findOpposition(color));
 
 	for (Move move : moves)
 	{
@@ -89,7 +89,7 @@ float HardComputer::minValue(int depth, float alpha, float beta)
 
 	// general case: there are board states to search.
 	float value = INFINITY;
-	vector<Move> moves = board->getAllPossibleMoves(findOpposition(color));
+	vector<Move> moves = board->findAllPossibleMoves(findOpposition(color));
 
 	for (Move move : moves)
 	{
@@ -118,7 +118,7 @@ float HardComputer::maxValue(int depth)
 
 	// general case: there are board states to search.
 	float value = -INFINITY;
-	vector<Move> moves = board->getAllPossibleMoves(color); // This computer's color
+	vector<Move> moves = board->findAllPossibleMoves(color); // This computer's color
 
 	for (Move move : moves)
 	{
@@ -140,7 +140,7 @@ float HardComputer::maxValue(int depth, float alpha, float beta)
 
 	// general case: there are board states to search.
 	float value = -INFINITY;
-	vector<Move> moves = board->getAllPossibleMoves(color); // This computer's color
+	vector<Move> moves = board->findAllPossibleMoves(color); // This computer's color
 
 	for (Move move : moves)
 	{
