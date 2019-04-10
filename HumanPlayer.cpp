@@ -1,5 +1,5 @@
 #include "HumanPlayer.h"
-
+#include "Helpers.h"
 
 
 HumanPlayer::HumanPlayer(Color color, BoardModel * board)
@@ -19,13 +19,13 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves)
 		return;
 	}
 
-	Neighbours neighbours = board->getNeighbors(moves[0].position);
+	Neighbors neighbors = board->getNeighbors(moves[0].position);
 
 	cout << "\nSelect one of the following capture options\n\n";
 
 	for (int i = 0; i < moves.size(); ++i)
 	{
-		cout << std::setw(2) << i + 1 << ") Neighbours: ";
+		cout << std::setw(2) << i + 1 << ") Neighbors: ";
 
 		Move move = moves[i];
 
@@ -33,7 +33,7 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves)
 		for (int j = 0; j < move.captureDirections.size(); ++j)
 		{
 			Direction captureDirection = move.captureDirections[j];
-			Cell* neighbour = neighbours[captureDirection];
+			Cell* neighbour = neighbors[captureDirection];
 
 			cout << directionEnumToString(captureDirection) << "("
 				<< neighbour->getPip() << "), ";

@@ -20,6 +20,8 @@
 #include "GameController.h"
 #include <iostream>
 
+
+//TODO: maybe have a rule checker to abstract from model
 int main()
 {
     int selection = 0;

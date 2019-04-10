@@ -27,7 +27,7 @@ void BoardViewer::renderBoardToConsole()
 	printColumnNumbers();
 	printRowSeparator();
 	printRows();
-	cout << board->previousNeighbourInfo;
+	cout << board->getNeighborsInfo();
 }
 
 void BoardViewer::printColumnNumbers()

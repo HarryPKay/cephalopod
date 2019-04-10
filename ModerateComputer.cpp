@@ -20,7 +20,7 @@ Move ModerateComputer::getMove()
 	// Assign the capture pip value for each move.
 	for (Move move : moves)
 	{
-		int key = board->getCapturePipSum(move);
+		int key = board->sumPipForMove(move);
 		pipMoveMap[key] = move;
 	}
 

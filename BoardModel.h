@@ -1,56 +1,81 @@
 #pragma once
-#include <assert.h>
-#include <iostream>
+
 #include <stack>
 #include <string>
 #include "Cell.h"
 #include "Common.h"
-#include "Helpers.h"
 #include "Move.h"
 
 using namespace cephalopod;
 
-class BoardModel
+/*
+ * =====================================================================================
+ *        Class:  BoardModel
+ *  Description:  
+ *
+ * =====================================================================================
+ */
+class BoardModel final
 {
-public:
-
 	typedef vector<vector<Cell>> Grid;
 	typedef vector<Direction> Captures;
-	typedef map<Direction, Cell*> Neighbours;
+	typedef map<Direction, Cell*> Neighbors;
 
-	BoardModel();
-	BoardModel(int rowCount, int colCount);
-	~BoardModel();
-	void undoMove();
-	void initializePositionToNeighbourMapping();
-	int getColCount();
-	int getRowCount();
-	int getTotalColorCount(Color color);
-	int getCapturePipSum(Move move);
-	bool isWithinBounds(Position position) const;
-	bool isMoveValid(Move move);
-	bool isCaptureValid(Move move);
-	bool mustCapture(Move move);
-	bool isCellVacant(Position position);
-	bool isBoardFull();
-	bool setMove(Move move);
-	string getNeighboursInfo(Position position);
-	Neighbours getNeighbors(const Position origin);
-	Color getMajorityColor();
-	Cell getCell(Position position);
-	Cell* getCellPointer(Position position);
-	vector<Move> getPossibleMoves(Color playerColor, Position position);
-	vector<Move> getAllPossibleMoves(Color playerColor);
-	Grid* getGrid();
-	string previousNeighbourInfo;
+    public:
+        /* ====================  LIFECYCLE     ======================================= */
+        BoardModel();                                          /* constructor */
+        BoardModel(int rowCount, int colCount);
+        ~BoardModel() = default;							   /* destructor */
 
-private:
+        /* ====================  SPECIAL       ======================================= */
+        BoardModel(const BoardModel&) = delete;               /* copy */
+        BoardModel(BoardModel&&) = delete;                    /* move */
 
-	int rowCount;
-	int colCount;
-	Grid grid;
-	stack<Grid> gridHistory;
-	vector<Captures> captureCombintions;
-	map<Position, Neighbours> positionToNeighboursMap;
-};
+        /* ====================  ACCESSORS     ======================================= */
+		int getColCount() const;
+		int getRowCount() const;
+		Cell getCell(Position position);
+		Cell* getCellPointer(Position position);
+		Grid* getGrid();
+		Neighbors getNeighbors(Position origin);
+		string getNeighborsInfo() const;
 
+        /* ====================  MUTATORS      ======================================= */
+		bool setMove(Move move);
+		void undoMove();
+		void initializePositionToNeighborMapping();
+		void setNeighborsInfo(Position position);
+
+        /* ====================  OPERATORS     ======================================= */
+        BoardModel& operator=(const BoardModel&) = delete;    /* copy assignment */
+        BoardModel& operator=(BoardModel&&) = delete;         /* move assignment */
+
+		/* ====================  VALIDATORS    ======================================= */
+		bool isWithinBounds(Position position) const;
+		bool isCellVacant(Position position);
+		bool isBoardFull();
+
+		//TODO: Move the following into rules (maybe)
+		bool isMoveValid(Move move);
+		bool isCaptureValid(Move move);
+		bool mustCapture(Move move);
+
+        /* ====================  METHODS       ======================================= */
+		int sumCellsWithColor(Color color);
+		int sumPipForMove(Move move);
+		
+		Color findMajorityColor();
+		vector<Move> getPossibleMoves(Color playerColor, Position position);
+		vector<Move> getAllPossibleMoves(Color playerColor);
+
+    private:
+        /* ====================  DATA MEMBERS  ======================================= */
+		int rowCount_;
+		int colCount_;
+		Grid grid_;
+		stack<Grid> gridHistory_;
+		vector<Captures> captureCombinations_;
+		map<Position, Neighbors> positionToNeighborsMap_;
+		string neighborInfo_;
+
+}; /* -----  end of class BoardModel  ----- */

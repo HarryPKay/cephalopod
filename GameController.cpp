@@ -1,4 +1,6 @@
 #include "GameController.h"
+#include <cassert>
+#include "Helpers.h"
 
 GameController::GameController()
 {
@@ -220,9 +222,9 @@ void GameController::cycleTurns()
  */
 void GameController::displayWinner()
 {
-    if (board->getMajorityColor() == black) {
+    if (board->findMajorityColor() == black) {
         cout << "\nBLACK WINS\n";
-    } else if (board->getMajorityColor() == white) {
+    } else if (board->findMajorityColor() == white) {
         cout << "\nWHITE WINS\n";
     } else {
         cout << "\nDRAW\n";

@@ -1,4 +1,5 @@
 #include "HardComputer.h"
+#include "Helpers.h"
 
 HardComputer::HardComputer(Color color, BoardModel * board, AIAlgorithm algorithmType, int depth)
 	: Player(color, board), algorithmType(algorithmType), depth(depth)
@@ -161,8 +162,8 @@ float HardComputer::maxValue(int depth, float alpha, float beta)
 float HardComputer::evaluate() const
 {
 	// Should we add points if it can score a six
-	const auto whiteCount = static_cast<float>(board->getTotalColorCount(white));
-	const auto blackCount = static_cast<float>(board->getTotalColorCount(black));
+	const auto whiteCount = static_cast<float>(board->sumCellsWithColor(white));
+	const auto blackCount = static_cast<float>(board->sumCellsWithColor(black));
 
 	if (color == white)
 	{

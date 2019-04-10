@@ -10,7 +10,7 @@ class Cell
 {
 public:
 
-	typedef map<Direction, Cell*> Neighbours;
+	typedef map<Direction, Cell*> Neighbors;
 
 	Cell();
 	~Cell();

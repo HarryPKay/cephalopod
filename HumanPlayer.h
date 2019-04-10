@@ -12,7 +12,7 @@ class HumanPlayer :
 {
 public:
 
-	typedef map<Direction, Cell*> Neighbours;
+	typedef map<Direction, Cell*> Neighbors;
 
 	HumanPlayer(Color color, BoardModel* board);
 	~HumanPlayer();
