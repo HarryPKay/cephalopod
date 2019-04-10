@@ -28,9 +28,8 @@ public:
 	int getTotalColorCount(Color color);
 	int getCapturePipSum(Move move);
 	bool isWithinBounds(Position position) const;
-	bool isMoveValid(Move move, int& pipSum);
 	bool isMoveValid(Move move);
-	bool isCaptureValid(Move move, int & pipSum);
+	bool isCaptureValid(Move move);
 	bool mustCapture(Move move);
 	bool isCellVacant(Position position);
 	bool isBoardFull();

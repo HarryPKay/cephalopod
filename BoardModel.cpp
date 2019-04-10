@@ -129,9 +129,7 @@ string BoardModel::getNeighboursInfo(Position position)
 
 bool BoardModel::setMove(Move move)
 {
-	int pipSum = 0;
-
-	if (!isMoveValid(move, pipSum))
+	if (!isMoveValid(move))
 	{
 		return false;
 	}
@@ -142,14 +140,14 @@ bool BoardModel::setMove(Move move)
 
 	Neighbours neighbours = positionToNeighboursMap[move.position];
 
+	Cell& cell = grid[move.position.row][move.position.col];
+	cell.setOccupant(move.color);
+	cell.setPip(getCapturePipSum(move));
+
 	for (int i = 0; i < move.captureDirections.size(); ++i)
 	{
 		neighbours[move.captureDirections[i]]->capture();
 	}
-
-	Cell& cell = grid[move.position.row][move.position.col];
-	cell.setOccupant(move.color);
-	cell.setPip(pipSum);
 
 	return true;
 }
@@ -176,42 +174,37 @@ void BoardModel::initializePositionToNeighbourMapping()
 }
 
 
-bool BoardModel::isMoveValid(Move move, int& pipSum)
+bool BoardModel::isMoveValid(Move move)
 {
-	// _ true
 	if (mustCapture(move) && move.captureDirections.size() < MIN_CAPTURE_PIP)
 	{
 		return false;
 	}
 
-	return isWithinBounds(move.position)
-		&& isCaptureValid(move, pipSum)
-		&& isCellVacant(move.position);
+	return isCellVacant(move.position)
+		&& isWithinBounds(move.position)
+		&& isCaptureValid(move);
+		
 }
 
-bool BoardModel::isMoveValid(Move move)
+bool BoardModel::isCaptureValid(Move move)
 {
-	int temp;
-	return isMoveValid(move, temp);
-}
-
-bool BoardModel::isCaptureValid(Move move, int & pipSum)
-{
-	if (move.captureDirections.size() == 0)
+	// Nothing to validate if there is no capture.
+	if (move.captureDirections.empty())
 	{
-		pipSum = 1;
 		return true;
 	}
 
+	// Capture size is within the valid range of 2 and max.
 	if (move.captureDirections.size() > (int)Direction::size
 		|| move.captureDirections.size() == 1)
 	{
 		return false;
 	}
 
-	pipSum = 0;
 	Neighbours neighbours = positionToNeighboursMap[move.position];
 
+	// There is actually something to capture.
 	for (int i = 0; i < move.captureDirections.size(); ++i) {
 
 		Cell* neighbour = neighbours[move.captureDirections[i]];
@@ -223,32 +216,22 @@ bool BoardModel::isCaptureValid(Move move, int & pipSum)
 		}
 	}
 
-	for (int i = 0; i < move.captureDirections.size(); ++i)
-	{
-		Cell* neighbour = neighbours[move.captureDirections[i]];
-		pipSum += neighbour->getPip();
-	}
-
-	if (pipSum > MAX_PIP)
-	{
-		pipSum = 1;
-		return false;
-	}
-
-	return true;
+	// Capture's pip sum does not exceed maximum.
+	int pipSum = getCapturePipSum(move);
+	return pipSum <= MAX_PIP;
 }
 
 bool BoardModel::mustCapture(Move move)
 {
 	Neighbours neighbours = positionToNeighboursMap[move.position];
 
-	int occupiedCellCount = 0;
-	int pipSum = 0;
 	bool mustCapture = false;
 
 	for (int i = 0; i < captureCombintions.size(); ++i)
 	{
 		Captures temp = captureCombintions[i];
+		int occupiedCellCount = 0;
+		int pipSum = 0;
 
 		for (int j = 0; j < temp.size(); ++j)
 		{
@@ -269,9 +252,6 @@ bool BoardModel::mustCapture(Move move)
 		{
 			mustCapture = true;
 		}
-
-		pipSum = 0;
-		occupiedCellCount = 0;
 	}
 
 	return mustCapture;
@@ -347,6 +327,11 @@ int BoardModel::getCapturePipSum(Move move)
 	{
 		Cell* neighbour = neighbours[move.captureDirections[i]];
 		pipSum += neighbour->getPip();
+	}
+
+	if (pipSum == 0)
+	{
+		pipSum = 1;
 	}
 
 	return pipSum;
