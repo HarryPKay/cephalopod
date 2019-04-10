@@ -1,11 +1,10 @@
 #pragma once
-#include <assert.h>
-#include <time.h>
 #include "BoardModel.h"
 #include "BoardViewer.h"
 #include "HumanPlayer.h"
 #include "EasyComputer.h"
 #include "HardComputer.h"
+#include "ModerateComputer.h"
 
 
 /*

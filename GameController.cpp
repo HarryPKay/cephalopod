@@ -119,12 +119,11 @@ void GameController::initPlayers()
              << endl;
         cout << "1) Human Player\n";
         cout << "2) Easy Computer\n";
-        cout << "3) Hard Computer\n\n> ";
+		cout << "3) Moderate Computer\n";
+        cout << "4) Hard Computer\n\n> ";
         cin >> selection;
         initPlayer((Color)i, (PlayerType)--selection);
     }
-	//initPlayer(white, hardComputer);
-	//initPlayer(black, easyComputer);
 }
 
 
@@ -147,8 +146,10 @@ void GameController::initPlayer(Color playerColor, PlayerType playerType)
     case hardComputer:
         promptForAISettings(algorithmType, depth);
         players.push_back(new HardComputer(playerColor, board, algorithmType, depth));
-        //players.push_back(new HardComputer(playerColor, board, alphabeta, 3));
         break;
+	case moderateComputer:
+		players.push_back(new ModerateComputer(playerColor, board));
+		break;
     case easyComputer:
         players.push_back(new EasyComputer(playerColor, board));
         break;

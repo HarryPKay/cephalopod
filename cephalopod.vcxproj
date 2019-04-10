@@ -123,6 +123,7 @@
     <ClInclude Include="HardComputer.h" />
     <ClInclude Include="Helpers.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="ModerateComputer.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="EasyComputer.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ModerateComputer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="EasyComputer.cpp" />
     <ClCompile Include="Position.cpp" />

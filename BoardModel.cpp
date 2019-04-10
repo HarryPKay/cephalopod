@@ -338,6 +338,20 @@ int BoardModel::getTotalColorCount(Color color)
 	return blackCount;
 }
 
+int BoardModel::getCapturePipSum(Move move)
+{
+	int pipSum = 0;
+	Neighbours neighbours = getNeighbors(move.position);
+
+	for (int i = 0; i < move.captureDirections.size(); ++i)
+	{
+		Cell* neighbour = neighbours[move.captureDirections[i]];
+		pipSum += neighbour->getPip();
+	}
+
+	return pipSum;
+}
+
 
 vector<Move> BoardModel::getPossibleMoves(Color playerColor, Position position)
 {

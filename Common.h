@@ -39,6 +39,6 @@ namespace cephalopod
 
 	enum PlayerType
 	{
-		human, easyComputer, hardComputer
+		human, easyComputer, moderateComputer, hardComputer
 	};
 }

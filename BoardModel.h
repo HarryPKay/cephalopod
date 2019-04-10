@@ -26,6 +26,7 @@ public:
 	int getColCount();
 	int getRowCount();
 	int getTotalColorCount(Color color);
+	int getCapturePipSum(Move move);
 	bool isWithinBounds(Position position) const;
 	bool isMoveValid(Move move, int& pipSum);
 	bool isMoveValid(Move move);
