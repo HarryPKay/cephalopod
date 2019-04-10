@@ -1,11 +1,8 @@
 #pragma once
+#include <vector>
 #include "BoardModel.h"
 #include "BoardViewer.h"
-#include "HumanPlayer.h"
-#include "EasyComputer.h"
-#include "HardComputer.h"
-#include "ModerateComputer.h"
-
+#include "Player.h"
 
 /*
  * =====================================================================================
@@ -13,42 +10,40 @@
  *  Description:  
  * =====================================================================================
  */
-class GameController
+class GameController final
 {
     public:
         /* ====================  LIFECYCLE     ======================================= */
-        GameController ();                             /* constructor */
-		~GameController ();							   /* destructor */
+		GameController() = default;                             /* constructor */
+		~GameController();										/* destructor */
 
-        /* ====================  ACCESSORS     ======================================= */
+		/* ====================  SPECIAL       ======================================= */
+		GameController(const GameController&) = delete;              /* copy */
+		GameController(GameController&&) = delete;                   /* move */
 
-        /* ====================  MUTATORS      ======================================= */
-
-        /* ====================  OPERATORS     ======================================= */
+		/* ====================  OPERATORS     ======================================= */
+		GameController& operator=(const GameController&) = delete;   /* copy assignment */
+		GameController& operator=(GameController&&) = delete;        /* move assignment */
 
         /* ====================  METHODS       ======================================= */
+		void play();
         void run();
-
-        /* ====================  DATA MEMBERS  ======================================= */
-
-    private:
-        /* ====================  METHODS       ======================================= */
+		void cycleTurns();
+		void delegateTurn(Player* player) const;
+		void displayWinner() const;
+		void promptForAiSettings(AIAlgorithm& algorithmType, int& depth) const;
 		void init();
 		void initBoard();
 		void initBoardView();
 		void initPlayers();
 		void initPlayer(Color playerColor, PlayerType playerType);
-		void play();
-		void delegateTurn(Player* player);
-		void cycleTurns();
-		void displayWinner();
-		void promptForAISettings(AIAlgorithm& algorithmType, int& depth);
 
+    private:
         /* ====================  DATA MEMBERS  ======================================= */
-		BoardModel* board;
-		BoardViewer* boardViewer;
-		GameState gameState = settings;
-		vector<Player*> players;
+		BoardModel* board_{};
+		BoardViewer* boardViewer_{};
+		GameState gameState_ = settings;
+		vector<Player*> players_;
 
 }; /* -----  end of class GameController  ----- */
 

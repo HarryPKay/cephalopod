@@ -1,24 +1,39 @@
 #pragma once
-#include <iomanip>
-#include <iostream>
-#include <stdint.h>
-#include <string>
 #include "Player.h"
 
 using namespace cephalopod;
 
-class HumanPlayer :
-	public Player
+/*
+ * =====================================================================================
+ *        Class:  HumanPlayer
+ *  Description:  
+ *
+ * =====================================================================================
+ */
+class HumanPlayer final : public Player
 {
-public:
-
 	typedef map<Direction, Cell*> Neighbors;
 
-	HumanPlayer(Color color, BoardModel* board);
-	~HumanPlayer();
-	void displayCaptureSelections(const vector<Move>& moves);
-	Position promptForPosition();
-	Move promptForMove();
-	Move getMove();
-};
+    public:
+        /* ====================  LIFECYCLE     ======================================= */
+        HumanPlayer() = delete;                                /* constructor */
+		HumanPlayer(Color color, BoardModel* board);
+        ~HumanPlayer() = default;                       /* destructor */
 
+        /* ====================  SPECIAL       ======================================= */
+        HumanPlayer(const HumanPlayer&) = delete;              /* copy */
+        HumanPlayer(HumanPlayer&&) = delete;                   /* move */
+
+        /* ====================  OPERATORS     ======================================= */
+        HumanPlayer& operator=(const HumanPlayer&) = delete;   /* copy assignment */
+        HumanPlayer& operator=(HumanPlayer&&) = delete;        /* move assignment */
+
+        /* ====================  METHODS       ======================================= */
+		Move promptForMove() override;
+
+    private:
+        /* ====================  METHODS       ======================================= */
+		void displayCaptureSelections(const vector<Move>& moves) const;
+		Position promptForPosition() const;
+
+}; /* -----  end of class HumanPlayer  ----- */

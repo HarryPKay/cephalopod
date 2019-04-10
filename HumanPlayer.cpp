@@ -1,17 +1,15 @@
 #include "HumanPlayer.h"
 #include "Helpers.h"
-
+#include <iomanip>
+#include <iostream>
 
 HumanPlayer::HumanPlayer(Color color, BoardModel * board)
 	: Player(color, board)
 {
 }
 
-HumanPlayer::~HumanPlayer()
-{
-}
 
-void HumanPlayer::displayCaptureSelections(const vector<Move>& moves)
+void HumanPlayer::displayCaptureSelections(const vector<Move>& moves) const
 {
 	// Nothing to do as there is only one selection.
 	if (moves.size() == 1)
@@ -19,25 +17,24 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves)
 		return;
 	}
 
-	Neighbors neighbors = board->getNeighbors(moves[0].position);
+	auto neighbors = board_->getNeighbors(moves[0].position);
 
 	cout << "\nSelect one of the following capture options\n\n";
-
-	for (int i = 0; i < moves.size(); ++i)
+	
+	for (auto i = 0; i < moves.size(); ++i)
 	{
 		cout << std::setw(2) << i + 1 << ") Neighbors: ";
 
-		Move move = moves[i];
+		auto move = moves[i];
 
-		int pipSum = 0;
-		for (int j = 0; j < move.captureDirections.size(); ++j)
+		auto pipSum = 0;
+		for (auto captureDirection : move.captureDirections)
 		{
-			Direction captureDirection = move.captureDirections[j];
-			Cell* neighbour = neighbors[captureDirection];
+			const auto neighbor = neighbors[captureDirection];
 
 			cout << directionEnumToString(captureDirection) << "("
-				<< neighbour->getPip() << "), ";
-			pipSum += neighbour->getPip();
+				<< neighbor->getPip() << "), ";
+			pipSum += neighbor->getPip();
 		}
 
 		cout << "Pip Sum = " << pipSum << "\n";
@@ -45,7 +42,7 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves)
 	cout << "\n> ";
 }
 
-Position HumanPlayer::promptForPosition()
+Position HumanPlayer::promptForPosition() const
 {
 	Position position = { -1,-1 };
 
@@ -55,15 +52,15 @@ Position HumanPlayer::promptForPosition()
 		cin >> position.row >> position.col;
 		--position.row;
 		--position.col;
-	} while (!board->isCellVacant(position));
+	} while (!board_->isCellVacant(position));
 
 	return position;
 }
 
 Move HumanPlayer::promptForMove()
 {
-	Position position = promptForPosition();
-	vector<Move> moves = board->findPossibleMoves(color, position);
+	const auto position = promptForPosition();
+	auto moves = board_->findPossibleMoves(color_, position);
 
 	// There is only one possible move, no need to prompt for selection;
 	if (moves.size() == 1)
@@ -71,8 +68,8 @@ Move HumanPlayer::promptForMove()
 		return moves[0];
 	}
 
-	bool isValidInput = false;
-	int selection = 0;
+	auto isValidInput = false;
+	auto selection = 0;
 
 	while (!isValidInput)
 	{
@@ -91,9 +88,4 @@ Move HumanPlayer::promptForMove()
 	}
 
 	return moves[selection];
-}
-
-Move HumanPlayer::getMove()
-{
-	return promptForMove();
 }

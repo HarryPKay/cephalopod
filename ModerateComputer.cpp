@@ -8,29 +8,25 @@ ModerateComputer::ModerateComputer(Color color, BoardModel * board)
 }
 
 
-ModerateComputer::~ModerateComputer()
+Move ModerateComputer::promptForMove()
 {
-}
-
-Move ModerateComputer::getMove()
-{
-	vector<Move> moves = board->findAllPossibleMoves(color);
+	auto moves = board_->findAllPossibleMoves(color_);
 	map<int, Move> pipMoveMap;
 
 	// Assign the capture pip value for each move.
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		int key = board->sumPipForMove(move);
+		int key = board_->sumPipForMove(move);
 		pipMoveMap[key] = move;
 	}
 
 	// Prioritize the highest pip value.
-	int key = pipMoveMap.rbegin()->first;
+	const auto key = pipMoveMap.rbegin()->first;
 
 	// If there are no captures, move randomly
 	if (key == 0)
 	{
-		int index = rand() % moves.size();
+		const int index = rand() % moves.size();
 		return moves[index];
 	}
 

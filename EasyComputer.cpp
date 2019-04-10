@@ -1,19 +1,14 @@
 #include "EasyComputer.h"
 
 
-
-EasyComputer::EasyComputer(Color color, BoardModel * board)
-	: Player(color, board)
+EasyComputer::EasyComputer(const Color color, BoardModel* board)
+	:Player(color, board)
 {
 }
 
-EasyComputer::~EasyComputer()
+Move EasyComputer::promptForMove()
 {
-}
-
-Move EasyComputer::getMove()
-{
-	vector<Move> potentialMoves = board->findAllPossibleMoves(color);
-	int index = rand() % potentialMoves.size();
+	auto potentialMoves = board_->findAllPossibleMoves(color_);
+	const int index = rand() % potentialMoves.size();
 	return potentialMoves[index];
 }

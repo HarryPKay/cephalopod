@@ -1,17 +1,19 @@
 #include "GameController.h"
 #include <cassert>
+#include <ctime>
+#include <iostream>
 #include "Helpers.h"
-
-GameController::GameController()
-{
-}
+#include "HumanPlayer.h"
+#include "EasyComputer.h"
+#include "HardComputer.h"
+#include "ModerateComputer.h"
 
 GameController::~GameController()
 {
-    delete boardViewer;
-    delete board;
+    delete boardViewer_;
+    delete board_;
 
-    for (Player* player : players) {
+    for (auto player : players_) {
         delete player;
     }
 }
@@ -39,7 +41,7 @@ void GameController::run()
  */
 void GameController::init()
 {
-    srand(time(0));
+	srand(clock());
     initBoard();
     initBoardView();
     initPlayers();
@@ -68,22 +70,22 @@ void GameController::initBoard()
 
     switch (--selection) {
     case 0:
-        board = new BoardModel(3, 3);
+        board_ = new BoardModel(3, 3);
         break;
     case 1:
-        board = new BoardModel(3, 5);
+        board_ = new BoardModel(3, 5);
         break;
     case 2:
-        board = new BoardModel(5, 5);
+        board_ = new BoardModel(5, 5);
         break;
     case 3:
         cout << "Enter board row and col count e.g: 1 3\n> ";
         cin >> rowCount >> colCount;
         // TOOD validation
-        board = new BoardModel(rowCount, colCount);
+        board_ = new BoardModel(rowCount, colCount);
     default:
         cout << "Invalid selection\n\n";
-        initPlayers();
+		initBoard();
     }
 }
 
@@ -97,8 +99,8 @@ void GameController::initBoard()
  */
 void GameController::initBoardView()
 {
-	assert(board != nullptr);
-    boardViewer = new BoardViewer(board);
+	assert(board_ != nullptr);
+    boardViewer_ = new BoardViewer(board_);
 }
 
 
@@ -113,18 +115,18 @@ void GameController::initBoardView()
  */
 void GameController::initPlayers()
 {
-    assert(board != nullptr);
+    assert(board_ != nullptr);
     //TODO: validation
-    for (int i = 0; i < PLAYER_COUNT; ++i) {
-        int selection = 0;
-        cout << "Select player type for color: " << colorEnumToString((Color)i) << endl
+    for (auto i = 0; i < PLAYER_COUNT; ++i) {
+	    auto selection = 0;
+        cout << "Select player type for color: " << colorEnumToString(static_cast<Color>(i)) << endl
              << endl;
         cout << "1) Human Player\n";
         cout << "2) Easy Computer\n";
 		cout << "3) Moderate Computer\n";
         cout << "4) Hard Computer\n\n> ";
         cin >> selection;
-        initPlayer((Color)i, (PlayerType)--selection);
+        initPlayer(static_cast<Color>(i), static_cast<PlayerType>(--selection));
     }
 }
 
@@ -136,26 +138,27 @@ void GameController::initPlayers()
  *                then initializes the player.
  * =====================================================================================
  */
-void GameController::initPlayer(Color playerColor, PlayerType playerType)
+void GameController::initPlayer(const Color playerColor, const PlayerType playerType)
 {
-    int depth = 0;
+	auto depth = 0;
     AIAlgorithm algorithmType;
 
     switch (playerType) {
-    case human:
-        players.push_back(new HumanPlayer(playerColor, board));
+    case human_player:
+        players_.push_back(new HumanPlayer(playerColor, board_));
         break;
-    case hardComputer:
-        promptForAISettings(algorithmType, depth);
-        players.push_back(new HardComputer(playerColor, board, algorithmType, depth));
+    case hard_computer:
+        promptForAiSettings(algorithmType, depth);
+        players_.push_back(new HardComputer(playerColor, board_, algorithmType, depth));
         break;
-	case moderateComputer:
-		players.push_back(new ModerateComputer(playerColor, board));
+	case moderate_computer:
+		players_.push_back(new ModerateComputer(playerColor, board_));
 		break;
-    case easyComputer:
-        players.push_back(new EasyComputer(playerColor, board));
+    case easy_computer:
+        players_.push_back(new EasyComputer(playerColor, board_));
         break;
     }
+	
 }
 
 /* 
@@ -167,9 +170,9 @@ void GameController::initPlayer(Color playerColor, PlayerType playerType)
  */
 void GameController::play()
 {
-    gameState = inProgress;
-    boardViewer->renderBoardToConsole();
-    while (gameState == GameState::inProgress) {
+    gameState_ = in_progress;
+    boardViewer_->renderBoardToConsole();
+    while (gameState_ == GameState::in_progress) {
         cycleTurns();
     }
     displayWinner();
@@ -181,10 +184,10 @@ void GameController::play()
  *  Description:  Hands control over to the player so that a move can be 
  * =====================================================================================
  */
-void GameController::delegateTurn(Player* player)
+void GameController::delegateTurn(Player* player) const
 {
-    while (!board->setMove(player->getMove())) {
-        boardViewer->renderBoardToConsole();
+    while (!board_->setMove(player->promptForMove())) {
+        boardViewer_->renderBoardToConsole();
         cout << "Invalid move.\n";
     };
 }
@@ -199,14 +202,14 @@ void GameController::delegateTurn(Player* player)
  */
 void GameController::cycleTurns()
 {
-    for (Player* player : players) {
+    for (auto player : players_) {
         cout << "\n"
              << colorEnumToString(player->getColor()) << "'s turn\n";
         delegateTurn(player);
-        boardViewer->renderBoardToConsole();
+        boardViewer_->renderBoardToConsole();
 
-        if (board->isBoardFull()) {
-            gameState = GameState::end;
+        if (board_->isBoardFull()) {
+            gameState_ = GameState::end;
             break;
         }
     }
@@ -220,11 +223,11 @@ void GameController::cycleTurns()
  *                board, printing out the result.
  * =====================================================================================
  */
-void GameController::displayWinner()
+void GameController::displayWinner() const
 {
-    if (board->findMajorityColor() == black) {
+    if (board_->findMajorityColor() == black) {
         cout << "\nBLACK WINS\n";
-    } else if (board->findMajorityColor() == white) {
+    } else if (board_->findMajorityColor() == white) {
         cout << "\nWHITE WINS\n";
     } else {
         cout << "\nDRAW\n";
@@ -239,7 +242,7 @@ void GameController::displayWinner()
  *                in determining how it decides where to place it's moves.
  * =====================================================================================
  */
-void GameController::promptForAISettings(AIAlgorithm& algorithmType, int& depth)
+void GameController::promptForAiSettings(AIAlgorithm& algorithmType, int& depth) const
 {
     cout << "Select algorithm:\n\n";
     cout << "1) minimax\n";
@@ -249,10 +252,10 @@ void GameController::promptForAISettings(AIAlgorithm& algorithmType, int& depth)
 
     if (selection > 2 || selection < 1) {
         cout << "Invalid selection\n\n";
-        promptForAISettings(algorithmType, depth);
+        promptForAiSettings(algorithmType, depth);
     }
 
-    algorithmType = (AIAlgorithm)--selection;
+    algorithmType = static_cast<AIAlgorithm>(--selection);
 
     cout << "Enter depth of search\n>";
     cin >> depth;

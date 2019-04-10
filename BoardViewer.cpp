@@ -9,7 +9,12 @@ BoardViewer::BoardViewer(BoardModel * board)
 //TODO: figure out why this wants to be static
 void BoardViewer::refreshConsole() const
 {
-	cout << string("\n", REFRESH_PAGE_SIZE);
+	string buffer;
+	for (auto i = 0; i < REFRESH_PAGE_SIZE; ++i)
+	{
+		buffer.append("\n");
+	}
+	cout << buffer;
 }
 
 void BoardViewer::renderBoardToConsole() const
@@ -40,7 +45,7 @@ void BoardViewer::printRows() const
 			const auto color = (*board_->getGrid())[i][j].getColor();
 			const auto pip = (*board_->getGrid())[i][j].getPip();
 
-			if (color == noColor)
+			if (color == no_color)
 			{
 				std::cout << "   |";
 			}

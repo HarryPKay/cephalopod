@@ -1,17 +1,32 @@
 #pragma once
 #include "Common.h"
-#include "Helpers.h"
 #include "Player.h"
 
 using namespace cephalopod;
 
-class EasyComputer :
-	public Player
+/*
+ * =====================================================================================
+ *        Class:  EasyComputer
+ *  Description:  
+ *
+ * =====================================================================================
+ */
+class EasyComputer final : public Player
 {
-public:
+    public:
+        /* ====================  LIFECYCLE     ======================================= */
+        EasyComputer() = delete;                                /* constructor */
+		EasyComputer(Color color, BoardModel* board);
+        ~EasyComputer() = default;                       /* destructor */
 
-	EasyComputer(Color color, BoardModel* board);
-	~EasyComputer();
-	Move getMove();
-};
+        /* ====================  SPECIAL       ======================================= */
+        EasyComputer(const EasyComputer&) = delete;              /* copy */
+        EasyComputer(EasyComputer&&) = delete;                   /* move */
 
+        /* ====================  OPERATORS     ======================================= */
+        EasyComputer& operator=(const EasyComputer&) = delete;   /* copy assignment */
+        EasyComputer& operator=(EasyComputer&&) = delete;        /* move assignment */
+
+        /* ====================  METHODS       ======================================= */
+		Move promptForMove() override;
+}; /* -----  end of class EasyComputer  ----- */

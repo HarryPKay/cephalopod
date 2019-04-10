@@ -1,16 +1,13 @@
 #include "Player.h"
 
 
-Player::Player(Color color, BoardModel* board)
-	: color(color), board(board)
+Player::Player(const Color color, BoardModel* board)
+	: color_(color), board_(board)
 {
 }
 
-Player::~Player()
-{
-}
 
-Color Player::getColor()
+Color Player::getColor() const
 {
-	return color;
+	return color_;
 }

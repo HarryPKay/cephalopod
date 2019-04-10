@@ -1,7 +1,4 @@
 #pragma once
-#include <vector>
-#include <map>
-#include "Position.h"
 
 namespace cephalopod
 {
@@ -19,7 +16,7 @@ namespace cephalopod
 
 	enum Color
 	{
-		white, black, noColor
+		white, black, no_color
 	};
 
 	enum Direction
@@ -29,7 +26,7 @@ namespace cephalopod
 
 	enum GameState
 	{
-		settings, inProgress, end
+		settings, in_progress, end
 	};
 
 	enum AIAlgorithm
@@ -39,6 +36,6 @@ namespace cephalopod
 
 	enum PlayerType
 	{
-		human, easyComputer, moderateComputer, hardComputer
+		human_player, easy_computer, moderate_computer, hard_computer
 	};
 }

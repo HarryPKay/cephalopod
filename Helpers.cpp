@@ -4,7 +4,7 @@ namespace cephalopod
 {
 	using namespace std;
 
-	string directionEnumToString(Direction direction)
+	string directionEnumToString(const Direction direction)
 	{
 		switch (direction)
 		{
@@ -16,11 +16,12 @@ namespace cephalopod
 			return "down";
 		case cephalopod::left:
 			return "left";
+		default:;
 		}
 		return "";
 	}
 
-	string colorEnumToString(Color color)
+	string colorEnumToString(const Color color)
 	{
 		switch (color)
 		{
@@ -28,12 +29,13 @@ namespace cephalopod
 			return "white";
 		case black:
 			return "black";
-		case noColor:
+		case no_color:
 			return "no color";
 		}
+		return {};
 	}
 
-	Color findOpposition(Color playerColor)
+	Color findOpposition(const Color playerColor)
 	{
 		if (playerColor == white)
 		{

@@ -1,18 +1,19 @@
 #include "HardComputer.h"
 #include "Helpers.h"
 
-HardComputer::HardComputer(Color color, BoardModel * board, AIAlgorithm algorithmType, int depth)
-	: Player(color, board), algorithmType(algorithmType), depth(depth)
+HardComputer::HardComputer(
+	const Color color,
+	BoardModel * board,
+	const AIAlgorithm algorithmType,
+	const int depth
+)
+	: Player(color, board), algorithmType_(algorithmType), depth_(depth)
 {
 }
 
-HardComputer::~HardComputer()
+Move HardComputer::promptForMove()
 {
-}
-
-Move HardComputer::getMove()
-{
-	switch (algorithmType)
+	switch (algorithmType_)
 	{
 	case AIAlgorithm::minimax:
 		return minimax();
@@ -24,78 +25,78 @@ Move HardComputer::getMove()
 Move HardComputer::minimax()
 {
 	map<float, Move> valueMoveMap;
-	vector<Move> moves = board->findAllPossibleMoves(color);
+	auto moves = board_->findAllPossibleMoves(color_);
 
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		board->setMove(move);
-		float value = minValue(depth - 1);
+		board_->setMove(move);
+		auto value = minValue(depth_ - 1);
 		valueMoveMap[value] = move;
-		board->undoMove();
+		board_->undoMove();
 	}
 
 	// Retrieve the largest key
-	float key = valueMoveMap.rbegin()->first;
+	const float key = valueMoveMap.rbegin()->first;
 	return valueMoveMap[key];
 }
 
 Move HardComputer::alphaBeta()
 {
 	map<float, Move> valueMoveMap;
-	vector<Move> moves = board->findAllPossibleMoves(color);
+	auto moves = board_->findAllPossibleMoves(color_);
 
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		board->setMove(move);
-		float value = minValue(depth - 1, -INFINITY, INFINITY);
+		board_->setMove(move);
+		auto value = minValue(depth_ - 1, -INFINITY, INFINITY);
 		valueMoveMap[value] = move;
-		board->undoMove();
+		board_->undoMove();
 	}
 
 	// Retrieve the largest key
-	float key = valueMoveMap.rbegin()->first;
+	const auto key = valueMoveMap.rbegin()->first;
 	return valueMoveMap[key];
 }
 
-float HardComputer::minValue(int depth)
+float HardComputer::minValue(const int depth)
 {
 	// Base case: board is full or depth of search reaches 0.
-	if (depth == 0 || board->isBoardFull())
+	if (depth == 0 || board_->isBoardFull())
 	{
 		return evaluate();
 	}
 
 	// general case: there are board states to search.
-	float value = INFINITY;
-	vector<Move> moves = board->findAllPossibleMoves(findOpposition(color));
+	auto value = INFINITY;
+	auto moves = board_->findAllPossibleMoves(findOpposition(color_));
 
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		board->setMove(move);
+		board_->setMove(move);
 		value = min(value, maxValue(depth - 1));
-		board->undoMove();
+		board_->undoMove();
 	}
 
 	return value;
 }
 
-float HardComputer::minValue(int depth, float alpha, float beta)
+float HardComputer::minValue(const int depth, const float alpha, float beta)
 {
 	// Base case: board is full or depth of search reaches 0.
-	if (depth == 0 || board->isBoardFull())
+	if (depth == 0 || board_->isBoardFull())
 	{
 		return evaluate();
 	}
 
 	// general case: there are board states to search.
-	float value = INFINITY;
-	vector<Move> moves = board->findAllPossibleMoves(findOpposition(color));
+	auto value = INFINITY;
+	auto moves = board_->findAllPossibleMoves(findOpposition(color_));
 
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		board->setMove(move);
+		board_->setMove(move);
 		value = min(value, maxValue(depth - 1, alpha, beta));
-		board->undoMove();
+		board_->undoMove();
 
 		if (value <= alpha)
 		{
@@ -108,45 +109,45 @@ float HardComputer::minValue(int depth, float alpha, float beta)
 	return value;
 }
 
-float HardComputer::maxValue(int depth)
+float HardComputer::maxValue(const int depth)
 {
 	// Base case: board is full or depth of search reaches 0.
-	if (depth == 0 || board->isBoardFull())
+	if (depth == 0 || board_->isBoardFull())
 	{
 		return evaluate();
 	};
 
 	// general case: there are board states to search.
-	float value = -INFINITY;
-	vector<Move> moves = board->findAllPossibleMoves(color); // This computer's color
+	auto value = -INFINITY;
+	auto moves = board_->findAllPossibleMoves(color_); // This computer's color
 
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		board->setMove(move);
+		board_->setMove(move);
 		value = max(value, minValue(depth - 1));
-		board->undoMove();
+		board_->undoMove();
 	}
 
 	return value;
 }
 
-float HardComputer::maxValue(int depth, float alpha, float beta)
+float HardComputer::maxValue(const int depth, float alpha, const float beta)
 {
 	// Base case: board is full or depth of search reaches 0.
-	if (depth == 0 || board->isBoardFull())
+	if (depth == 0 || board_->isBoardFull())
 	{
 		return evaluate();
 	};
 
 	// general case: there are board states to search.
-	float value = -INFINITY;
-	vector<Move> moves = board->findAllPossibleMoves(color); // This computer's color
+	auto value = -INFINITY;
+	auto moves = board_->findAllPossibleMoves(color_); // This computer's color
 
-	for (Move move : moves)
+	for (const auto& move : moves)
 	{
-		board->setMove(move);
+		board_->setMove(move);
 		value = max(value, minValue(depth - 1, alpha, beta));
-		board->undoMove();
+		board_->undoMove();
 
 		if (value >= beta)
 		{
@@ -162,10 +163,10 @@ float HardComputer::maxValue(int depth, float alpha, float beta)
 float HardComputer::evaluate() const
 {
 	// Should we add points if it can score a six
-	const auto whiteCount = static_cast<float>(board->sumCellsWithColor(white));
-	const auto blackCount = static_cast<float>(board->sumCellsWithColor(black));
+	const auto whiteCount = static_cast<float>(board_->sumCellsWithColor(white));
+	const auto blackCount = static_cast<float>(board_->sumCellsWithColor(black));
 
-	if (color == white)
+	if (color_ == white)
 	{
 		return whiteCount - blackCount;
 	}

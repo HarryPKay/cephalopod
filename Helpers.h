@@ -1,8 +1,7 @@
 #pragma once
 #include <algorithm>
-#include <iostream>
+#include <vector>
 #include "Common.h"
-
 
 namespace cephalopod
 {
@@ -38,10 +37,10 @@ namespace cephalopod
 	}
 
 	template<typename T>
-	vector<vector<T>> getCombinationsOfSizeKToN(const vector<T> & source, int k, int n)
+	vector<vector<T>> getCombinationsOfSizeKtoN(const vector<T> & source, const int k, const int n)
 	{
 		vector<vector<T>> combinations;
-		for (int i = k; i <= n; ++i)
+		for (auto i = k; i <= n; ++i)
 		{
 			vector<Captures> temp = getCombinationsOfSizeN(source, i);
 			combinations.insert(std::end(combinations), std::begin(temp), std::end(temp));

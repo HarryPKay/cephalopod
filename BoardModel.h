@@ -1,10 +1,12 @@
 #pragma once
-
+#include <map>
 #include <stack>
 #include <string>
+#include <vector>
 #include "Cell.h"
 #include "Common.h"
 #include "Move.h"
+#include "Position.h"
 
 using namespace cephalopod;
 

@@ -1,37 +1,29 @@
 #include "Cell.h"
 
 
-Cell::Cell()
+int Cell::getPip() const
 {
+	return pip_;
 }
 
-Cell::~Cell()
-{
-}
-
-int Cell::getPip()
-{
-	return pip;
-}
-
-void Cell::setPip(int value)
+void Cell::setPip(const int value)
 {
 	//TODO: validate pip under 7 above 0
-	pip = value;
+	pip_ = value;
 }
 
-Color Cell::getColor()
+Color Cell::getColor() const
 {
-	return occupant;
+	return occupant_;
 }
 
-void Cell::setOccupant(Color occupant)
+void Cell::setOccupant(const Color occupant)
 {
-	this->occupant = occupant;
+	this->occupant_ = occupant;
 }
 
 void Cell::capture()
 {
-	occupant = noColor;
-	pip = 0;
+	occupant_ = no_color;
+	pip_ = 0;
 }

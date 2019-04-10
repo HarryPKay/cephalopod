@@ -1,28 +1,45 @@
 #pragma once
-#include <iostream>
+#include <map>
 #include "Common.h"
 
 using namespace cephalopod;
 using namespace std;
 
-// TODO: find out if it is ok to init map before occupation.
-class Cell
+/*
+ * =====================================================================================
+ *        Class:  Cell
+ *  Description:  
+ *
+ * =====================================================================================
+ */
+class Cell final
 {
-public:
-
 	typedef map<Direction, Cell*> Neighbors;
 
-	Cell();
-	~Cell();
-	void setPip(int value);
-	void setOccupant(Color occupant);
-	void capture();
-	int getPip();
-	Color getColor();
+    public:
+        /* ====================  LIFECYCLE     ======================================= */
+        Cell() = default;                        /* constructor */
+        ~Cell() = default;                       /* destructor */
 
-private:
+        /* ====================  SPECIAL       ======================================= */
+        Cell(const Cell&) = default;              /* copy */
+        Cell(Cell&&) = default;                   /* move */
 
-	int pip = NO_DICE;
-	Color occupant = noColor;
-};
+        /* ====================  ACCESSORS     ======================================= */
+		int getPip() const;
+		Color getColor() const;
 
+        /* ====================  MUTATORS      ======================================= */
+		void setPip(int value);
+		void setOccupant(Color occupant);
+		void capture();
+
+        /* ====================  OPERATORS     ======================================= */
+        Cell& operator=(const Cell&) = default;   /* copy assignment */
+        Cell& operator=(Cell&&) = default;        /* move assignment */
+
+    private:
+        /* ====================  DATA MEMBERS  ======================================= */
+		int pip_ = NO_DICE;
+		Color occupant_ = no_color;
+}; /* -----  end of class Cell  ----- */

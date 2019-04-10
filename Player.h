@@ -5,15 +5,37 @@
 
 using namespace cephalopod;
 
+/*
+ * =====================================================================================
+ *        Class:  Player
+ *  Description:  
+ *
+ * =====================================================================================
+ */
 class Player
 {
-public:
+    public:
+        /* ====================  LIFECYCLE     ======================================= */
+        Player() = delete;                                 /* constructor */
+		Player(Color color, BoardModel* board);
+        virtual ~Player() = default;                       /* destructor */
 
-	Player(Color color, BoardModel* board);
-	virtual ~Player();
-	Color color;
-	Color getColor();
-	BoardModel* board;
-	virtual Move getMove() = 0;
-};
+        /* ====================  SPECIAL       ======================================= */
+        Player(const Player&) = delete;               /* copy */
+        Player(Player&&) = delete;                   /* move */
 
+        /* ====================  ACCESSORS     ======================================= */
+		Color getColor() const;
+
+        /* ====================  OPERATORS     ======================================= */
+        Player& operator=(const Player&) = delete;   /* copy assignment */
+        Player& operator=(Player&&) = delete;        /* move assignment */
+
+        /* ====================  METHODS       ======================================= */
+		virtual Move promptForMove() = 0;
+
+    protected:
+        /* ====================  DATA MEMBERS  ======================================= */
+		Color color_;
+		BoardModel* board_;
+}; /* -----  end of class Player  ----- */
