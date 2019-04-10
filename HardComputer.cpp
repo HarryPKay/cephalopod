@@ -1,7 +1,5 @@
 #include "HardComputer.h"
 
-
-
 HardComputer::HardComputer(Color color, BoardModel * board, AIAlgorithm algorithmType, int depth)
 	: Player(color, board), algorithmType(algorithmType), depth(depth)
 {
@@ -13,21 +11,13 @@ HardComputer::~HardComputer()
 
 Move HardComputer::getMove()
 {
-	Move move = { Position(0, 0), color, Captures() };
-
 	switch (algorithmType)
 	{
 	case AIAlgorithm::minimax:
-		//minimax(depth, color, move, true);
 		return minimax();
-		break;
-	case AIAlgorithm::alphabeta:
+	default:
 		return alphaBeta();
-		//alphabeta(depth, -INFINITY, INFINITY, color, move, true);
-		break;
 	}
-
-	return move;
 }
 
 Move HardComputer::minimax()
@@ -37,8 +27,10 @@ Move HardComputer::minimax()
 
 	for (Move move : moves)
 	{
-		float value = maxValue(depth);
+		board->setMove(move);
+		float value = minValue(depth - 1);
 		valueMoveMap[value] = move;
+		board->undoMove();
 	}
 
 	// Retrieve the largest key
@@ -53,8 +45,10 @@ Move HardComputer::alphaBeta()
 
 	for (Move move : moves)
 	{
-		float value = maxValue(depth, -INFINITY, INFINITY);
+		board->setMove(move);
+		float value = minValue(depth - 1, -INFINITY, INFINITY);
 		valueMoveMap[value] = move;
+		board->undoMove();
 	}
 
 	// Retrieve the largest key
@@ -164,11 +158,11 @@ float HardComputer::maxValue(int depth, float alpha, float beta)
 	return value;
 }
 
-float HardComputer::evaluate()
+float HardComputer::evaluate() const
 {
 	// Should we add points if it can score a six
-	float whiteCount = (float)board->getTotalColorCount(white);
-	float blackCount = (float)board->getTotalColorCount(black);
+	const auto whiteCount = static_cast<float>(board->getTotalColorCount(white));
+	const auto blackCount = static_cast<float>(board->getTotalColorCount(black));
 
 	if (color == white)
 	{

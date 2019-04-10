@@ -14,14 +14,14 @@ public:
 	HardComputer(Color color, BoardModel* board, AIAlgorithm algorithmType, int depth);
 	~HardComputer();
 private:
-	Move getMove();
+	Move getMove() override;
 	Move minimax();
 	Move alphaBeta();
 	float minValue(int depth);
 	float maxValue(int depth);
 	float minValue(int depth, float alpha, float beta);
 	float maxValue(int depth, float alpha, float beta);
-	float evaluate();
+	float evaluate() const;
 	AIAlgorithm algorithmType;
 	int depth;
 };
