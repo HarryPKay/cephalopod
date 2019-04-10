@@ -14,28 +14,28 @@ using namespace cephalopod;
  */
 class Player
 {
-    public:
-        /* ====================  LIFECYCLE     ======================================= */
-        Player() = delete;                                 /* constructor */
-		Player(Color color, BoardModel* board);
-        virtual ~Player() = default;                       /* destructor */
+public:
+	/* ====================  LIFECYCLE     ======================================= */
+	Player() = delete; /* constructor */
+	Player(Color color, BoardModel* board);
+	virtual ~Player() = default; /* destructor */
 
-        /* ====================  SPECIAL       ======================================= */
-        Player(const Player&) = delete;               /* copy */
-        Player(Player&&) = delete;                   /* move */
+	/* ====================  SPECIAL       ======================================= */
+	Player(const Player&) = delete; /* copy */
+	Player(Player&&) = delete; /* move */
 
-        /* ====================  ACCESSORS     ======================================= */
-		Color getColor() const;
+	/* ====================  ACCESSORS     ======================================= */
+	Color getColor() const;
 
-        /* ====================  OPERATORS     ======================================= */
-        Player& operator=(const Player&) = delete;   /* copy assignment */
-        Player& operator=(Player&&) = delete;        /* move assignment */
+	/* ====================  OPERATORS     ======================================= */
+	Player& operator=(const Player&) = delete; /* copy assignment */
+	Player& operator=(Player&&) = delete; /* move assignment */
 
-        /* ====================  METHODS       ======================================= */
-		virtual Move promptForMove() = 0;
+	/* ====================  METHODS       ======================================= */
+	virtual Move promptForMove() = 0;
 
-    protected:
-        /* ====================  DATA MEMBERS  ======================================= */
-		Color color_;
-		BoardModel* board_;
+protected:
+	/* ====================  DATA MEMBERS  ======================================= */
+	Color color_;
+	BoardModel* board_;
 }; /* -----  end of class Player  ----- */

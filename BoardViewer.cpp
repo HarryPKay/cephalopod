@@ -1,12 +1,11 @@
 #include "BoardViewer.h"
 #include <iostream>
 
-BoardViewer::BoardViewer(BoardModel * board)
+BoardViewer::BoardViewer(BoardModel* board)
 	: board_(board)
 {
 }
 
-//TODO: figure out why this wants to be static
 void BoardViewer::refreshConsole() const
 {
 	string buffer;
@@ -59,7 +58,8 @@ void BoardViewer::printRows() const
 			}
 			else
 			{
-				std::cout << " ?" << " |";
+				std::cout << " ?"
+					<< " |";
 			}
 		}
 
@@ -69,8 +69,9 @@ void BoardViewer::printRows() const
 
 void BoardViewer::printRowSeparator() const
 {
-	std::cout << std::endl << "  ";
-	for (int i = 0; i < board_->getColCount(); ++i)
+	std::cout << std::endl
+		<< "  ";
+	for (auto i = 0; i < board_->getColCount(); ++i)
 	{
 		std::cout << " ---";
 	}

@@ -8,15 +8,15 @@ namespace cephalopod
 	{
 		switch (direction)
 		{
-		case cephalopod::up:
+		case up:
 			return "up";
-		case cephalopod::right:
+		case right:
 			return "right";
-		case cephalopod::down:
+		case down:
 			return "down";
-		case cephalopod::left:
+		case left:
 			return "left";
-		default:;
+		default: ;
 		}
 		return "";
 	}
@@ -33,6 +33,28 @@ namespace cephalopod
 			return "no color";
 		}
 		return {};
+	}
+
+	string playerTypeEnumToString(const PlayerType playerType)
+	{
+		switch (playerType)
+		{
+		case human_player: return "Human Player";
+		case easy_computer: return "Easy Computer";
+		case moderate_computer: return "Moderate Computer";
+		case hard_computer: return "Hard Computer";
+		default: return  "";
+		}
+	}
+
+	string aiAlgorithmEnumToString(const AiAlgorithm aiAlgorithm)
+	{
+		switch (aiAlgorithm)
+		{
+			case minimax: return "MiniMax";
+		case alphabeta: return "AlphaBeta";
+		default: return "";
+		}
 	}
 
 	Color findOpposition(const Color playerColor)

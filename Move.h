@@ -1,7 +1,8 @@
 #pragma once
-#include <utility>
 #include "Common.h"
 #include "Position.h"
+#include <utility>
+#include <vector>
 
 using namespace cephalopod;
 
@@ -11,10 +12,18 @@ struct Move
 
 	/* ==================== LIFE CYCLE     ======================================= */
 	Move()
-		: position(Position(-1, -1)), color(no_color), captureDirections(Captures()) {};
-	
+		: position(Position(-1, -1))
+		  , color(no_color)
+		  , captureDirections(Captures())
+	{
+	};
+
 	Move(const Position position, const Color color, Captures captureDirections)
-		: position(position), color(color), captureDirections(std::move(captureDirections)) {};
+		: position(position)
+		  , color(color)
+		  , captureDirections(std::move(captureDirections))
+	{
+	};
 
 	/* ====================  DATA MEMBERS  ======================================= */
 	Position position;

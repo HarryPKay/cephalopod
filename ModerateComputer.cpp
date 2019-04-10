@@ -1,12 +1,9 @@
 #include "ModerateComputer.h"
 
-
-
-ModerateComputer::ModerateComputer(Color color, BoardModel * board)
+ModerateComputer::ModerateComputer(Color color, BoardModel* board)
 	: Player(color, board)
 {
 }
-
 
 Move ModerateComputer::promptForMove()
 {
@@ -16,7 +13,7 @@ Move ModerateComputer::promptForMove()
 	// Assign the capture pip value for each move.
 	for (const auto& move : moves)
 	{
-		int key = board_->sumPipForMove(move);
+		auto key = board_->sumPipForMove(move);
 		pipMoveMap[key] = move;
 	}
 

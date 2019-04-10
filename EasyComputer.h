@@ -13,20 +13,20 @@ using namespace cephalopod;
  */
 class EasyComputer final : public Player
 {
-    public:
-        /* ====================  LIFECYCLE     ======================================= */
-        EasyComputer() = delete;                                /* constructor */
-		EasyComputer(Color color, BoardModel* board);
-        ~EasyComputer() = default;                       /* destructor */
+public:
+	/* ====================  LIFECYCLE     ======================================= */
+	EasyComputer() = delete; /* constructor */
+	EasyComputer(Color color, BoardModel* board);
+	~EasyComputer() = default; /* destructor */
 
-        /* ====================  SPECIAL       ======================================= */
-        EasyComputer(const EasyComputer&) = delete;              /* copy */
-        EasyComputer(EasyComputer&&) = delete;                   /* move */
+	/* ====================  SPECIAL       ======================================= */
+	EasyComputer(const EasyComputer&) = delete; /* copy */
+	EasyComputer(EasyComputer&&) = delete; /* move */
 
-        /* ====================  OPERATORS     ======================================= */
-        EasyComputer& operator=(const EasyComputer&) = delete;   /* copy assignment */
-        EasyComputer& operator=(EasyComputer&&) = delete;        /* move assignment */
+	/* ====================  OPERATORS     ======================================= */
+	EasyComputer& operator=(const EasyComputer&) = delete; /* copy assignment */
+	EasyComputer& operator=(EasyComputer&&) = delete; /* move assignment */
 
-        /* ====================  METHODS       ======================================= */
-		Move promptForMove() override;
+	/* ====================  METHODS       ======================================= */
+	Move promptForMove() override;
 }; /* -----  end of class EasyComputer  ----- */

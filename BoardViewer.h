@@ -13,31 +13,30 @@ using namespace std;
  */
 class BoardViewer final
 {
-    public:
-        /* ====================  LIFECYCLE     ======================================= */
-		BoardViewer() = default;								/* constructor */
-		BoardViewer(BoardModel* board);
-        ~BoardViewer() = default;                       /* destructor */
+public:
+	/* ====================  LIFECYCLE     ======================================= */
+	BoardViewer() = default; /* constructor */
+	BoardViewer(BoardModel* board);
+	~BoardViewer() = default; /* destructor */
 
-        /* ====================  SPECIAL       ======================================= */
-        BoardViewer(const BoardViewer&) = delete;              /* copy */
-        BoardViewer(BoardViewer&&) = delete;                   /* move */
+	/* ====================  SPECIAL       ======================================= */
+	BoardViewer(const BoardViewer&) = delete; /* copy */
+	BoardViewer(BoardViewer&&) = delete; /* move */
 
-        /* ====================  OPERATORS     ======================================= */
-        BoardViewer& operator=(const BoardViewer&) = delete;   /* copy assignment */
-        BoardViewer& operator=(BoardViewer&&) = delete;        /* move assignment */
+	/* ====================  OPERATORS     ======================================= */
+	BoardViewer& operator=(const BoardViewer&) = delete; /* copy assignment */
+	BoardViewer& operator=(BoardViewer&&) = delete; /* move assignment */
 
-        /* ====================  METHODS       ======================================= */
-		void renderBoardToConsole() const;
+	/* ====================  METHODS       ======================================= */
+	void renderBoardToConsole() const;
 
-    private:
-        /* ====================  METHODS       ======================================= */
-		void printColumnNumbers() const;
-		void printRows() const;
-		void printRowSeparator() const;
-		void refreshConsole() const;
+private:
+	/* ====================  METHODS       ======================================= */
+	void printColumnNumbers() const;
+	void printRows() const;
+	void printRowSeparator() const;
+	void refreshConsole() const;
 
-        /* ====================  DATA MEMBERS  ======================================= */
-		BoardModel* board_;
-
+	/* ====================  DATA MEMBERS  ======================================= */
+	BoardModel* board_;
 }; /* -----  end of class BoardViewer  ----- */

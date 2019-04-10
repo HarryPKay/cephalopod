@@ -1,5 +1,5 @@
 #include "Cell.h"
-
+#include <cassert>
 
 int Cell::getPip() const
 {
@@ -8,7 +8,7 @@ int Cell::getPip() const
 
 void Cell::setPip(const int value)
 {
-	//TODO: validate pip under 7 above 0
+	assert(value >= 0 && value <= MAX_PIP);
 	pip_ = value;
 }
 

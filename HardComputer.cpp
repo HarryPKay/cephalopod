@@ -3,11 +3,12 @@
 
 HardComputer::HardComputer(
 	const Color color,
-	BoardModel * board,
-	const AIAlgorithm algorithmType,
-	const int depth
-)
-	: Player(color, board), algorithmType_(algorithmType), depth_(depth)
+	BoardModel* board,
+	const AiAlgorithm algorithmType,
+	const int depth)
+	: Player(color, board)
+	  , algorithmType_(algorithmType)
+	  , depth_(depth)
 {
 }
 
@@ -15,7 +16,7 @@ Move HardComputer::promptForMove()
 {
 	switch (algorithmType_)
 	{
-	case AIAlgorithm::minimax:
+	case AiAlgorithm::minimax:
 		return minimax();
 	default:
 		return alphaBeta();
@@ -115,7 +116,7 @@ float HardComputer::maxValue(const int depth)
 	if (depth == 0 || board_->isBoardFull())
 	{
 		return evaluate();
-	};
+	}
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
@@ -137,7 +138,7 @@ float HardComputer::maxValue(const int depth, float alpha, const float beta)
 	if (depth == 0 || board_->isBoardFull())
 	{
 		return evaluate();
-	};
+	}
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;

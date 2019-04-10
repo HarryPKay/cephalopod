@@ -1,19 +1,22 @@
 #pragma once
+#include "Common.h"
 #include <algorithm>
 #include <vector>
-#include "Common.h"
 
 namespace cephalopod
 {
+	using namespace std;
+
 	typedef vector<Direction> Captures;
 
-	using namespace std;
 	string directionEnumToString(Direction direction);
 	string colorEnumToString(Color color);
+	string playerTypeEnumToString(PlayerType playerType);
+	string aiAlgorithmEnumToString(AiAlgorithm aiAlgorithm);
 	Color findOpposition(Color playerColor);
 
-	template<typename T>
-	vector<vector<T>> getCombinationsOfSizeN(const vector<T> & source, int n)
+	template <typename T>
+	vector<vector<T>> getCombinationsOfSizeN(const vector<T>& source, int n)
 	{
 		vector<T> combination;
 		vector<vector<T>> combinations;
@@ -22,22 +25,23 @@ namespace cephalopod
 
 		do
 		{
-			for (int i = 0; i < source.size(); ++i)
+			for (auto i = 0; i < source.size(); ++i)
 			{
-				if (bitmask[i] == 1) {
+				if (bitmask[i] == 1)
+				{
 					combination.push_back(source[i]);
 				}
 			}
 			combinations.push_back(combination);
 			combination.clear();
-
-		} while (prev_permutation(bitmask.begin(), bitmask.end()));
+		}
+		while (prev_permutation(bitmask.begin(), bitmask.end()));
 
 		return combinations;
 	}
 
-	template<typename T>
-	vector<vector<T>> getCombinationsOfSizeKtoN(const vector<T> & source, const int k, const int n)
+	template <typename T>
+	vector<vector<T>> getCombinationsOfSizeKtoN(const vector<T>& source, const int k, const int n)
 	{
 		vector<vector<T>> combinations;
 		for (auto i = k; i <= n; ++i)

@@ -1,8 +1,7 @@
 #include "EasyComputer.h"
 
-
 EasyComputer::EasyComputer(const Color color, BoardModel* board)
-	:Player(color, board)
+	: Player(color, board)
 {
 }
 

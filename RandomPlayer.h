@@ -6,14 +6,12 @@
 
 using namespace cephalopod;
 
-class RandomPlayer :
-	public Player
-{
+class RandomPlayer : public Player {
 public:
-	RandomPlayer(Color color, Board* board)
-		: Player(color), board(board) {};
-	~RandomPlayer();
-	Board* board;
-	Move getMove();
+    RandomPlayer(Color color, Board* board)
+        : Player(color)
+        , board(board){};
+    ~RandomPlayer();
+    Board* board;
+    Move getMove();
 };
-

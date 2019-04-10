@@ -1,16 +1,8 @@
-﻿  BoardModel.cpp
-  BoardViewer.cpp
-  EasyComputer.cpp
-  GameController.cpp
-  HardComputer.cpp
+﻿  GameController.cpp
   HumanPlayer.cpp
-  ModerateComputer.cpp
-  Player.cpp
-  Position.cpp
-  main.cpp
   Generating code
-  10 of 1469 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+  1 of 1471 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    19 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   cephalopod.vcxproj -> C:\projects\cephalopod\x64\Release\cephalopod.exe

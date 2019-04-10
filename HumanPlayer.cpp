@@ -3,11 +3,10 @@
 #include <iomanip>
 #include <iostream>
 
-HumanPlayer::HumanPlayer(Color color, BoardModel * board)
+HumanPlayer::HumanPlayer(const Color color, BoardModel* board)
 	: Player(color, board)
 {
 }
-
 
 void HumanPlayer::displayCaptureSelections(const vector<Move>& moves) const
 {
@@ -20,8 +19,8 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves) const
 	auto neighbors = board_->getNeighbors(moves[0].position);
 
 	cout << "\nSelect one of the following capture options\n\n";
-	
-	for (auto i = 0; i < moves.size(); ++i)
+
+	for (uint32_t i = 0; i < moves.size(); ++i)
 	{
 		cout << std::setw(2) << i + 1 << ") Neighbors: ";
 
@@ -44,15 +43,30 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves) const
 
 Position HumanPlayer::promptForPosition() const
 {
-	Position position = { -1,-1 };
+	Position position = {-1, -1};
 
 	do
 	{
-		cout << "Enter in row and col. e.g: \"1 2\"\n> ";
+		cout << "\nEnter in row and column. e.g: \"1 2\"\n> ";
 		cin >> position.row >> position.col;
+
+		while (cin.fail()) {
+			cout << "Integers accepted only" << std::endl;
+			cin.clear();
+			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
+			cout << "> ";
+			cin >> position.row >> position.col;
+		}
+
 		--position.row;
 		--position.col;
-	} while (!board_->isCellVacant(position));
+
+		if (!board_->isCellVacant(position))
+		{
+			cout << "That position is not valid.\n";
+		}
+	}
+	while (!board_->isCellVacant(position));
 
 	return position;
 }
@@ -69,12 +83,22 @@ Move HumanPlayer::promptForMove()
 	}
 
 	auto isValidInput = false;
-	auto selection = 0;
+	uint32_t selection = 0;
 
 	while (!isValidInput)
 	{
 		displayCaptureSelections(moves);
+
 		cin >> selection;
+
+		while (cin.fail()) {
+			cout << "Integers accepted only" << std::endl;
+			cin.clear();
+			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
+			cout << "> ";
+			cin >> selection;
+		}
+		
 		--selection;
 
 		if (selection < 0 || selection >= moves.size())
