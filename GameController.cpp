@@ -225,20 +225,19 @@ void GameController::play()
  */
 void GameController::delegateTurn(Player* player) const
 {
-	auto moveValid = false;
+	auto isMoveValid = false;
 
-	while (!moveValid)
+	while (!isMoveValid)
 	{
 		const auto move = player->promptForMove();
-		moveValid = gameAnalyzer_->isMoveValid(move);
+		isMoveValid = gameAnalyzer_->isMoveValid(move);
 
-		if (!moveValid)
+		if (!isMoveValid)
 		{
 			cout << "Invalid move.\n";
 		}
 		else
 		{
-			boardViewer_->renderBoardToConsole();
 			const auto pipSum = gameAnalyzer_->sumPipForMove(move);
 			board_->setMove(move, pipSum);
 		}
@@ -256,8 +255,7 @@ void GameController::cycleTurns()
 {
 	for (auto player : players_)
 	{
-		cout << "\n"
-			<< playerColorEnumToString(player->getPlayerColor()) << "'s turn\n";
+		cout << "\n" << playerColorEnumToString(player->getPlayerColor()) << "'s turn\n";
 		delegateTurn(player);
 		boardViewer_->renderBoardToConsole();
 
@@ -303,6 +301,8 @@ void GameController::displayWinner() const
  */
 void GameController::promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& depth) const
 {
+	cout << "Select an AI algorithm for the computer to use\n\n";
+
 	uint32_t selection = 0;
 
 	do
