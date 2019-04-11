@@ -46,6 +46,7 @@ namespace cephalopod
 		{
 		case MINIMAX: return "MiniMax";
 		case ALPHABETA: return "AlphaBeta";
+		case MONTECARLO: return "Monte-Carlo";
 		default: return "";
 		}
 	}

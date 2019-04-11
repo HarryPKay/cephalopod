@@ -133,8 +133,8 @@ void GameAnalyzer::printPossibleCaptures(const vector<Move>& moves) const
 		cout << std::setw(2) << i + 1 << ") Neighbors: ";
 
 		auto move = moves[i];
-
 		auto pipSum = 0;
+
 		for (auto captureDirection : move.captureDirections)
 		{
 			const auto neighbor = neighbors[captureDirection];

@@ -1,12 +1,16 @@
 #include "HardComputer.h"
 #include "Helpers.h"
 
+//temp
+#include <iostream>
+
 HardComputer::HardComputer(
 	const PlayerColor playerColor,
 	GameAnalyzer* gameAnalyzer,
 	BoardModel* boardModel,
 	const AiAlgorithm algorithmType,
-	const uint32_t depth)
+	const uint32_t depth
+)
 	: Player(playerColor, gameAnalyzer)
 	  , board_(boardModel)
 	  , algorithmType_(algorithmType)
@@ -19,7 +23,8 @@ Move HardComputer::promptForMove()
 	switch (algorithmType_)
 	{
 	case MINIMAX: return minimax();
-	default: return alphaBeta();
+	case ALPHABETA: return alphaBeta();
+	default: return monteCarlo();
 	}
 }
 
@@ -38,9 +43,7 @@ Move HardComputer::minimax()
 		board_->undoMove();
 	}
 
-	// Retrieve the largest key
-	const auto key = valueMoveMap.rbegin()->first;
-	return valueMoveMap[key];
+	return valueMoveMap.rbegin()->second;
 }
 
 Move HardComputer::alphaBeta()
@@ -57,8 +60,82 @@ Move HardComputer::alphaBeta()
 		board_->undoMove();
 	}
 
-	const auto key = valueMoveMap.rbegin()->first;
-	return valueMoveMap[key];
+	return valueMoveMap.rbegin()->second;
+}
+
+Move HardComputer::monteCarlo() const
+{
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
+	map<float_t, Move> valueMoveMapping;
+
+	for (const auto& move : moves)
+	{
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
+
+		// If this move ends with a win, nothing to do, so return early.
+		if (board_->isBoardFull() && 
+			gameAnalyzer_->findMajorityColor() == playerColor_)
+		{
+			board_->undoMove();
+			return move;
+		}
+
+		auto value = simulation();
+		valueMoveMapping[value] = move;
+
+		board_->undoMove();
+	}
+	
+	auto move = valueMoveMapping.rbegin()->second;
+	board_->setNeighborsInfo(move.position);
+	return move;
+}
+
+float_t HardComputer::simulation() const
+{
+	float_t value = 0;
+
+	for (uint32_t i = 0; i < SIMULATION_COUNT; ++i)
+	{
+		value += expansion(0, oppositionColor_);
+	}
+
+	return value / SIMULATION_COUNT;
+}
+
+float_t HardComputer::expansion(const uint32_t moveCount, const PlayerColor color) const
+{
+	// Base case, the board has reached terminal state.
+	if (board_->isBoardFull())
+	{
+		const auto winner = gameAnalyzer_->findMajorityColor();
+
+		for (uint32_t i = 0; i < moveCount; ++i)
+		{
+			board_->undoMove();
+		}
+
+		if (winner == playerColor_)
+		{
+			return 1.0;
+		}
+		if (winner == oppositionColor_)
+		{
+			return -1.0;
+		}
+		return 0.0;
+	}
+
+	// General case: the board is unfinished.
+	auto moves = gameAnalyzer_->findAllPossibleMoves(color);
+	const auto index = rand() % moves.size();
+	const auto move = moves[index];
+	const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+
+	board_->setMove(move, pipSum);
+
+	return expansion(moveCount + 1, findOpposition(color));
 }
 
 float_t HardComputer::minValue(const uint32_t depth)

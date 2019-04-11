@@ -17,6 +17,7 @@ namespace cephalopod
 	const uint32_t MAX_CAPTURE_SIZE = 4;
 	const uint32_t CIN_IGNORE_BUFFER_SIZE = 256;
 	const uint32_t MIN_DEPTH_SEARCH = 2;
+	const uint32_t SIMULATION_COUNT = 100;
 
 	enum PlayerColor
 	{
@@ -45,6 +46,7 @@ namespace cephalopod
 	{
 		MINIMAX,
 		ALPHABETA,
+		MONTECARLO,
 		AI_ALGORITHM_SIZE
 	};
 

@@ -6,10 +6,10 @@ BoardViewer::BoardViewer(BoardModel* board)
 {
 }
 
-void BoardViewer::refreshConsole() const
+void BoardViewer::refreshConsole()
 {
 	string buffer;
-	for (auto i = 0; i < REFRESH_PAGE_SIZE; ++i)
+	for (uint32_t i = 0; i < REFRESH_PAGE_SIZE; ++i)
 	{
 		buffer.append("\n");
 	}
@@ -18,7 +18,7 @@ void BoardViewer::refreshConsole() const
 
 void BoardViewer::renderBoardToConsole() const
 {
-	refreshConsole();
+	//refreshConsole();
 	printColumnNumbers();
 	printRowSeparator();
 	printRows();

@@ -2,4 +2,5 @@
 	<s:Int64 x:Key="/Default/CodeStyle/Naming/CSharpAutoNaming/AutoNamingCompletedVersion/@EntryValue">2</s:Int64>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=alphabeta/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=cephalopod/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/UserDictionary/Words/=minimax/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=minimax/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=MONTECARLO/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

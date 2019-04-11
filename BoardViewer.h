@@ -35,7 +35,7 @@ private:
 	void printColumnNumbers() const;
 	void printRows() const;
 	void printRowSeparator() const;
-	void refreshConsole() const;
+	static void refreshConsole();
 
 	/* ====================  DATA MEMBERS  ======================================= */
 	BoardModel* board_;

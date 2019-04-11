@@ -66,6 +66,7 @@ void GameController::initBoard()
 	uint32_t selection = 0;
 
 	promptForInteger(selection);
+
 	switch (--selection)
 	{
 	case 0:
@@ -323,6 +324,12 @@ void GameController::promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& d
 	while (selection >= AI_ALGORITHM_SIZE || selection < 0);
 
 	algorithmType = static_cast<AiAlgorithm>(selection);
+
+	if (algorithmType == MONTECARLO)
+	{
+		depth = 0;
+		return;
+	}
 
 	do
 	{

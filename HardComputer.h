@@ -23,7 +23,8 @@ public:
 		GameAnalyzer* gameAnalyzer,
 		BoardModel* boardModel,
 		AiAlgorithm algorithmType,
-		uint32_t depth);
+		uint32_t depth
+	);
 	~HardComputer() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
@@ -37,12 +38,19 @@ public:
 private:
 	/* ====================  METHODS       ======================================= */
 	Move promptForMove() override;
+	
 	Move minimax();
-	Move alphaBeta();
 	float_t minValue(uint32_t depth);
 	float_t maxValue(uint32_t depth);
+
+	Move alphaBeta();
 	float_t minValue(uint32_t depth, float_t alpha, float_t beta);
 	float_t maxValue(uint32_t depth, float_t alpha, float_t beta);
+
+	Move monteCarlo() const;
+	float_t simulation() const;
+	float_t expansion(uint32_t moveCount,PlayerColor color) const;
+
 	float_t evaluate() const;
 
 	/* ====================  DATA MEMBERS  ======================================= */

@@ -32,7 +32,7 @@ public:
 	void cycleTurns();
 	void delegateTurn(Player* player) const;
 	void displayWinner() const;
-	void promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& depth) const;
+	void promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& value) const;
 	void init();
 	void initBoard();
 	void initGameAnalyzer();
