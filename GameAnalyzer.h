@@ -24,7 +24,12 @@ public:
 	GameAnalyzer(const GameAnalyzer&) = delete; /* copy */
 	GameAnalyzer(GameAnalyzer&&) = delete; /* move */
 
+	/* ====================  OPERATORS     ======================================= */
+	GameAnalyzer& operator=(const GameAnalyzer&) = default; /* copy assignment */
+	GameAnalyzer& operator=(GameAnalyzer&&) = default; /* move assignment */
+
 	/* ====================  VALIDATORS    ======================================= */
+	// Game rules checkers
 	bool isMoveValid(Move move);
 	bool isCaptureValid(Move move);
 	bool mustCapture(Move move);
@@ -37,15 +42,7 @@ public:
 	vector<Move> findAllPossibleMoves(PlayerColor playerColor);
 	void printPossibleCaptures(const vector<Move>& moves) const;
 
-	/* ====================  OPERATORS     ======================================= */
-	GameAnalyzer& operator=(const GameAnalyzer&) = default; /* copy assignment */
-	GameAnalyzer& operator=(GameAnalyzer&&) = default; /* move assignment */
-
-	/* ====================  METHODS       ======================================= */
-
 private:
-	/* ====================  METHODS       ======================================= */
-
 	/* ====================  DATA MEMBERS  ======================================= */
 	BoardModel* board_{};
 	vector<Captures> captureCombinations_;

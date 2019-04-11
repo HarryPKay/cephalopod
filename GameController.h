@@ -45,6 +45,6 @@ private:
 	BoardModel* board_{};
 	BoardViewer* boardViewer_{};
 	GameAnalyzer* gameAnalyzer_{};
-	GameState gameState_ = SETTINGS;
 	vector<Player*> players_;
+	GameState gameState_ = SETTINGS;
 }; /* -----  end of class GameController  ----- */

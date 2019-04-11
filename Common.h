@@ -3,10 +3,8 @@
 
 namespace cephalopod
 {
-	const int32_t WHITE_MIN_PIP = 1;
-	const int32_t BLACK_MIN_PIP = 1;
-	const int32_t WHITE_MAX_PIP = 6;
-	const int32_t BLACK_MAX_PIP = -6;
+	const int32_t MIN_PIP = 1;
+	const int32_t MAX_PIP = 6;
 	const int32_t NO_DICE = 0;
 	const uint32_t ROW_MAX = 9;
 	const uint32_t ROW_MIN = 3;

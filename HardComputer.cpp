@@ -18,10 +18,8 @@ Move HardComputer::promptForMove()
 {
 	switch (algorithmType_)
 	{
-	case MINIMAX:
-		return minimax();
-	default:
-		return alphaBeta();
+	case MINIMAX: return minimax();
+	default: return alphaBeta();
 	}
 }
 
@@ -171,7 +169,6 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 
 float_t HardComputer::evaluate() const
 {
-	// Should we add points if it can score a six
 	const auto whiteCount = static_cast<float_t>(gameAnalyzer_->sumCellsWithColor(WHITE));
 	const auto blackCount = static_cast<float_t>(gameAnalyzer_->sumCellsWithColor(BLACK));
 

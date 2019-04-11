@@ -8,7 +8,7 @@ int32_t Cell::getPip() const
 
 void Cell::setPip(const int32_t value)
 {
-	assert(value >= 0 && value <= WHITE_MAX_PIP);
+	assert(value >= 0 && value <= MAX_PIP);
 	pip_ = value;
 }
 

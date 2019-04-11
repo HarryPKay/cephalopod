@@ -192,7 +192,7 @@ bool GameAnalyzer::isCaptureValid(Move move)
 
 	// Capture's pip sum does not exceed maximum.
 	const auto pipSum = sumPipForMove(move);
-	return pipSum <= WHITE_MAX_PIP;
+	return pipSum <= MAX_PIP;
 }
 
 bool GameAnalyzer::mustCapture(const Move move)
@@ -220,7 +220,7 @@ bool GameAnalyzer::mustCapture(const Move move)
 		}
 
 		if (pipSum >= MIN_CAPTURE_PIP
-			&& pipSum <= WHITE_MAX_PIP
+			&& pipSum <= MAX_PIP
 			&& occupiedCellCount >= 2)
 		{
 			mustCapture = true;

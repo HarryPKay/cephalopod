@@ -44,7 +44,7 @@ public:
 
 
 	/* ====================  MUTATORS      ======================================= */
-	bool setMove(Move move, uint32_t pip);
+	bool setMove(Move move, int32_t pip);
 	void undoMove();
 	void initializePositionToNeighborMapping();
 	void setNeighborsInfo(Position position);

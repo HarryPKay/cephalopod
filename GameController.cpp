@@ -66,7 +66,6 @@ void GameController::initBoard()
 	uint32_t selection = 0;
 
 	promptForInteger(selection);
-
 	switch (--selection)
 	{
 	case 0:

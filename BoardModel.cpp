@@ -119,8 +119,10 @@ void BoardModel::setNeighborsInfo(const Position position)
 	neighborInfo_ = info;
 }
 
-bool BoardModel::setMove(Move move, const uint32_t pip)
+bool BoardModel::setMove(Move move, const int32_t pip)
 {
+	assert(pip >= MIN_PIP && pip <= MAX_PIP);
+
 	if (!isCellVacant(move.position) && !isWithinBounds(move.position))
 	{
 		return false;
