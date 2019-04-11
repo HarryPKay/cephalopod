@@ -1,4 +1,5 @@
 #include "Helpers.h"
+#include <iostream>
 
 namespace cephalopod
 {
@@ -8,42 +9,34 @@ namespace cephalopod
 	{
 		switch (direction)
 		{
-		case up:
-			return "up";
-		case right:
-			return "right";
-		case down:
-			return "down";
-		case left:
-			return "left";
-		default: ;
+		case UP: return "up";
+		case RIGHT: return "right";
+		case DOWN: return "down";
+		case LEFT: return "left";
+		default: return "";
 		}
-		return "";
 	}
 
-	string colorEnumToString(const Color color)
+	string playerColorEnumToString(const PlayerColor playerColor)
 	{
-		switch (color)
+		switch (playerColor)
 		{
-		case white:
-			return "white";
-		case black:
-			return "black";
-		case no_color:
-			return "no color";
+		case WHITE: return "white";
+		case BLACK: return "black";
+		case NO_COLOR: return "no playerColor";
+		default: return "";
 		}
-		return {};
 	}
 
 	string playerTypeEnumToString(const PlayerType playerType)
 	{
 		switch (playerType)
 		{
-		case human_player: return "Human Player";
-		case easy_computer: return "Easy Computer";
-		case moderate_computer: return "Moderate Computer";
-		case hard_computer: return "Hard Computer";
-		default: return  "";
+		case HUMAN_PLAYER: return "Human Player";
+		case EASY_COMPUTER: return "Easy Computer";
+		case MODERATE_COMPUTER: return "Moderate Computer";
+		case HARD_COMPUTER: return "Hard Computer";
+		default: return "";
 		}
 	}
 
@@ -51,18 +44,47 @@ namespace cephalopod
 	{
 		switch (aiAlgorithm)
 		{
-			case minimax: return "MiniMax";
-		case alphabeta: return "AlphaBeta";
+		case MINIMAX: return "MiniMax";
+		case ALPHABETA: return "AlphaBeta";
 		default: return "";
 		}
 	}
 
-	Color findOpposition(const Color playerColor)
+	PlayerColor findOpposition(const PlayerColor playerColor)
 	{
-		if (playerColor == white)
+		if (playerColor == WHITE)
 		{
-			return black;
+			return BLACK;
 		}
-		return white;
+		return WHITE;
+	}
+
+
+	void promptForInteger(uint32_t& value)
+	{
+		cin >> value;
+
+		while (cin.fail())
+		{
+			cout << "Integers accepted only." << std::endl;
+			cin.clear();
+			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
+			cout << "> ";
+			cin >> value;
+		}
+	}
+
+	void promptForInteger(uint32_t& valueA, uint32_t& valueB)
+	{
+		cin >> valueA >> valueB;
+
+		while (cin.fail())
+		{
+			cout << "Integers accepted only." << std::endl;
+			cin.clear();
+			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
+			cout << "> ";
+			cin >> valueA >> valueB;
+		}
 	}
 }

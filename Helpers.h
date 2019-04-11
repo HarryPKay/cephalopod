@@ -10,13 +10,15 @@ namespace cephalopod
 	typedef vector<Direction> Captures;
 
 	string directionEnumToString(Direction direction);
-	string colorEnumToString(Color color);
+	string playerColorEnumToString(PlayerColor playerColor);
 	string playerTypeEnumToString(PlayerType playerType);
 	string aiAlgorithmEnumToString(AiAlgorithm aiAlgorithm);
-	Color findOpposition(Color playerColor);
+	PlayerColor findOpposition(PlayerColor playerColor);
+	void promptForInteger(uint32_t& value);
+	void promptForInteger(uint32_t& valueA, uint32_t& valueB);
 
 	template <typename T>
-	vector<vector<T>> getCombinationsOfSizeN(const vector<T>& source, int n)
+	vector<vector<T>> getCombinationsOfSizeN(const vector<T>& source, uint32_t n)
 	{
 		vector<T> combination;
 		vector<vector<T>> combinations;
@@ -41,7 +43,7 @@ namespace cephalopod
 	}
 
 	template <typename T>
-	vector<vector<T>> getCombinationsOfSizeKtoN(const vector<T>& source, const int k, const int n)
+	vector<vector<T>> getCombinationsOfSizeKtoN(const vector<T>& source, const uint32_t k, const uint32_t n)
 	{
 		vector<vector<T>> combinations;
 		for (auto i = k; i <= n; ++i)

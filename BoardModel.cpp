@@ -2,19 +2,13 @@
 #include "Helpers.h"
 #include <cassert>
 
-BoardModel::BoardModel()
-{
-	rowCount_ = 0;
-	colCount_ = 0;
-}
-
-BoardModel::BoardModel(const int rowCount, const int colCount)
+BoardModel::BoardModel(const uint32_t rowCount, const uint32_t colCount)
 {
 	this->rowCount_ = rowCount;
 	this->colCount_ = colCount;
 
 	grid_.resize(rowCount);
-	for (auto i = 0; i < rowCount; i++)
+	for (uint32_t i = 0; i < rowCount; i++)
 	{
 		grid_[i].resize(colCount, Cell());
 	}
@@ -22,13 +16,13 @@ BoardModel::BoardModel(const int rowCount, const int colCount)
 	initializePositionToNeighborMapping();
 
 	const Captures directions = {
-		up,
-		Direction::right,
-		down,
-		Direction::left
+		UP,
+		RIGHT,
+		DOWN,
+		LEFT
 	};
 
-	captureCombinations_ = getCombinationsOfSizeKtoN(directions, 2, 4);
+	captureCombinations_ = getCombinationsOfSizeKtoN(directions, MIN_CAPTURE_SIZE, MAX_CAPTURE_SIZE);
 }
 
 Cell BoardModel::getCell(const Position position)
@@ -47,12 +41,12 @@ Cell* BoardModel::getCellPointer(const Position position)
 	return nullptr;
 }
 
-int BoardModel::getColCount() const
+uint32_t BoardModel::getColCount() const
 {
 	return colCount_;
 }
 
-int BoardModel::getRowCount() const
+uint32_t BoardModel::getRowCount() const
 {
 	return rowCount_;
 }
@@ -72,10 +66,10 @@ BoardModel::Neighbors BoardModel::getNeighbors(const Position origin)
 {
 	Neighbors neighbors;
 
-	neighbors[up] = getCellPointer(Position(origin.row - 1, origin.col));
-	neighbors[Direction::right] = getCellPointer(Position(origin.row, origin.col + 1));
-	neighbors[down] = getCellPointer(Position(origin.row + 1, origin.col));
-	neighbors[Direction::left] = getCellPointer(Position(origin.row, origin.col - 1));
+	neighbors[UP] = getCellPointer(Position(origin.row - 1, origin.col));
+	neighbors[RIGHT] = getCellPointer(Position(origin.row, origin.col + 1));
+	neighbors[DOWN] = getCellPointer(Position(origin.row + 1, origin.col));
+	neighbors[LEFT] = getCellPointer(Position(origin.row, origin.col - 1));
 
 	return neighbors;
 }
@@ -89,13 +83,15 @@ void BoardModel::setNeighborsInfo(const Position position)
 {
 	auto neighbors = positionToNeighborsMap_[position];
 
-	auto pipSum = 0;
+	int32_t pipSum = 0;
 	string info;
 	info.append(
-		"\nNeighbor information for position: " + to_string(position.row + 1) + "," + to_string(position.col + 1) +
+		"\nPrevious neighbor information for position: " + 
+		to_string(position.row + 1) + 
+		"," + to_string(position.col + 1) +
 		":\n\n");
 
-	for (auto i = 0; i < static_cast<int>(Direction::direction_size); ++i)
+	for (auto i = 0; i < DIRECTION_SIZE; ++i)
 	{
 		const auto neighbor = neighbors[static_cast<Direction>(i)];
 
@@ -107,7 +103,7 @@ void BoardModel::setNeighborsInfo(const Position position)
 		auto pip = neighbor->getPip();
 		pipSum += pip;
 
-		if (neighbor->getColor() == black)
+		if (neighbor->getOccupantColor() == BLACK)
 		{
 			pip *= -1;
 		}
@@ -145,7 +141,7 @@ bool BoardModel::setMove(Move move)
 	auto neighbors = positionToNeighborsMap_[move.position];
 
 	auto& cell = grid_[move.position.row][move.position.col];
-	cell.setOccupant(move.color);
+	cell.setOccupantColor(move.color);
 	cell.setPip(sumPipForMove(move));
 
 	for (auto captureDirection : move.captureDirections)
@@ -166,9 +162,9 @@ void BoardModel::undoMove()
 void BoardModel::initializePositionToNeighborMapping()
 {
 	// possible issue with stack and pointers
-	for (auto i = 0; i < rowCount_; ++i)
+	for (uint32_t i = 0; i < rowCount_; ++i)
 	{
-		for (auto j = 0; j < colCount_; ++j)
+		for (uint32_t j = 0; j < colCount_; ++j)
 		{
 			auto position = Position(i, j);
 			const auto neighbor = getNeighbors(position);
@@ -184,8 +180,8 @@ bool BoardModel::isMoveValid(Move move)
 		return false;
 	}
 
-	return isCellVacant(move.position)
-		&& isWithinBounds(move.position)
+	return isWithinBounds(move.position)
+		&& isCellVacant(move.position)
 		&& isCaptureValid(move);
 }
 
@@ -198,7 +194,7 @@ bool BoardModel::isCaptureValid(Move move)
 	}
 
 	// Capture direction_size is within the valid range of 2 and max.
-	if (move.captureDirections.size() > static_cast<int>(Direction::direction_size)
+	if (move.captureDirections.size() > static_cast<int>(DIRECTION_SIZE)
 		|| move.captureDirections.size() == 1)
 	{
 		return false;
@@ -212,7 +208,7 @@ bool BoardModel::isCaptureValid(Move move)
 		const auto neighbor = neighbors[captureDirection];
 
 		if (neighbor == nullptr
-			|| neighbor->getColor() == no_color)
+			|| neighbor->getOccupantColor() == NO_COLOR)
 		{
 			return false;
 		}
@@ -220,7 +216,7 @@ bool BoardModel::isCaptureValid(Move move)
 
 	// Capture's pip sum does not exceed maximum.
 	const auto pipSum = sumPipForMove(move);
-	return pipSum <= MAX_PIP;
+	return pipSum <= WHITE_MAX_PIP;
 }
 
 bool BoardModel::mustCapture(const Move move)
@@ -231,8 +227,8 @@ bool BoardModel::mustCapture(const Move move)
 
 	for (const auto& temp : captureCombinations_)
 	{
-		auto occupiedCellCount = 0;
-		auto pipSum = 0;
+		uint32_t occupiedCellCount = 0;
+		int32_t pipSum = 0;
 
 		for (auto j : temp)
 		{
@@ -240,7 +236,7 @@ bool BoardModel::mustCapture(const Move move)
 			{
 				continue;
 			}
-			if (neighbors[j]->getColor() != no_color)
+			if (neighbors[j]->getOccupantColor() != NO_COLOR)
 			{
 				++occupiedCellCount;
 				pipSum += neighbors[j]->getPip();
@@ -248,7 +244,7 @@ bool BoardModel::mustCapture(const Move move)
 		}
 
 		if (pipSum >= MIN_CAPTURE_PIP
-			&& pipSum <= MAX_PIP
+			&& pipSum <= WHITE_MAX_PIP
 			&& occupiedCellCount >= 2)
 		{
 			mustCapture = true;
@@ -265,16 +261,16 @@ bool BoardModel::isCellVacant(const Position position)
 		return false;
 	}
 
-	return grid_[position.row][position.col].getColor() == no_color;
+	return grid_[position.row][position.col].getOccupantColor() == NO_COLOR;
 }
 
 bool BoardModel::isBoardFull()
 {
-	for (auto i = 0; i < rowCount_; ++i)
+	for (uint32_t i = 0; i < rowCount_; ++i)
 	{
-		for (auto j = 0; j < colCount_; ++j)
+		for (uint32_t j = 0; j < colCount_; ++j)
 		{
-			if (grid_[i][j].getColor() == no_color)
+			if (grid_[i][j].getOccupantColor() == NO_COLOR)
 			{
 				return false;
 			}
@@ -284,49 +280,49 @@ bool BoardModel::isBoardFull()
 	return true;
 }
 
-Color BoardModel::findMajorityColor()
+PlayerColor BoardModel::findMajorityColor()
 {
-	const auto whiteCount = sumCellsWithColor(white);
-	const auto blackCount = sumCellsWithColor(black);
+	const auto whiteCount = sumCellsWithColor(WHITE);
+	const auto blackCount = sumCellsWithColor(BLACK);
 
 	if (whiteCount > blackCount)
 	{
-		return white;
+		return WHITE;
 	}
 	if (whiteCount < blackCount)
 	{
-		return black;
+		return BLACK;
 	}
 
-	return no_color;
+	return NO_COLOR;
 }
 
-int BoardModel::sumCellsWithColor(const Color color)
+uint32_t BoardModel::sumCellsWithColor(const PlayerColor color)
 {
-	auto blackCount = 0;
+	uint32_t colorCount = 0;
 
-	for (auto i = 0; i < rowCount_; ++i)
+	for (uint32_t i = 0; i < rowCount_; ++i)
 	{
-		for (auto j = 0; j < colCount_; ++j)
+		for (uint32_t j = 0; j < colCount_; ++j)
 		{
-			if (grid_[i][j].getColor() == color)
+			if (grid_[i][j].getOccupantColor() == color)
 			{
-				++blackCount;
+				++colorCount;
 			}
 		}
 	}
 
-	return blackCount;
+	return colorCount;
 }
 
-int BoardModel::sumPipForMove(Move move)
+uint32_t BoardModel::sumPipForMove(Move move)
 {
-	auto pipSum = 0;
+	int32_t pipSum = 0;
 	auto neighbors = getNeighbors(move.position);
 
 	for (auto captureDirection : move.captureDirections)
 	{
-		auto neighbor = neighbors[captureDirection];
+		const auto neighbor = neighbors[captureDirection];
 		pipSum += neighbor->getPip();
 	}
 
@@ -338,7 +334,7 @@ int BoardModel::sumPipForMove(Move move)
 	return pipSum;
 }
 
-vector<Move> BoardModel::findPossibleMoves(const Color playerColor, const Position position)
+vector<Move> BoardModel::findPossibleMoves(const PlayerColor playerColor, const Position position)
 {
 	vector<Move> potentialMoves;
 	Move move = {position, playerColor, Captures()};
@@ -367,13 +363,13 @@ vector<Move> BoardModel::findPossibleMoves(const Color playerColor, const Positi
 	return potentialMoves;
 }
 
-vector<Move> BoardModel::findAllPossibleMoves(const Color playerColor)
+vector<Move> BoardModel::findAllPossibleMoves(const PlayerColor playerColor)
 {
 	vector<Move> potentialMoves;
 
-	for (auto i = 0; i < rowCount_; ++i)
+	for (uint32_t i = 0; i < rowCount_; ++i)
 	{
-		for (auto j = 0; j < colCount_; ++j)
+		for (uint32_t j = 0; j < colCount_; ++j)
 		{
 			auto temp = findPossibleMoves(playerColor, Position(i, j));
 			potentialMoves.insert(potentialMoves.end(), temp.begin(), temp.end());

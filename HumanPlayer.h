@@ -17,7 +17,7 @@ class HumanPlayer final : public Player
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	HumanPlayer() = delete; /* constructor */
-	HumanPlayer(Color color, BoardModel* board);
+	HumanPlayer(PlayerColor color, BoardModel* board);
 	~HumanPlayer() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */

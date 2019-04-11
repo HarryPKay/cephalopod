@@ -17,7 +17,7 @@ class Player
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	Player() = delete; /* constructor */
-	Player(Color color, BoardModel* board);
+	Player(PlayerColor playerColor, BoardModel* board);
 	virtual ~Player() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
@@ -25,7 +25,7 @@ public:
 	Player(Player&&) = delete; /* move */
 
 	/* ====================  ACCESSORS     ======================================= */
-	Color getColor() const;
+	PlayerColor getPlayerColor() const;
 
 	/* ====================  OPERATORS     ======================================= */
 	Player& operator=(const Player&) = delete; /* copy assignment */
@@ -36,6 +36,7 @@ public:
 
 protected:
 	/* ====================  DATA MEMBERS  ======================================= */
-	Color color_;
+	PlayerColor playerColor_;
+	PlayerColor oppositionColor_;
 	BoardModel* board_;
 }; /* -----  end of class Player  ----- */

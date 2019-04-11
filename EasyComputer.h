@@ -16,7 +16,7 @@ class EasyComputer final : public Player
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	EasyComputer() = delete; /* constructor */
-	EasyComputer(Color color, BoardModel* board);
+	EasyComputer(PlayerColor playerColor, BoardModel* board);
 	~EasyComputer() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */

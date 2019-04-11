@@ -13,7 +13,7 @@ class ModerateComputer final : public Player
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	ModerateComputer() = delete; /* constructor */
-	ModerateComputer(Color color, BoardModel* board);
+	ModerateComputer(PlayerColor playerColor, BoardModel* board);
 	~ModerateComputer() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */

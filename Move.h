@@ -13,12 +13,12 @@ struct Move
 	/* ==================== LIFE CYCLE     ======================================= */
 	Move()
 		: position(Position(-1, -1))
-		  , color(no_color)
+		  , color(NO_COLOR)
 		  , captureDirections(Captures())
 	{
 	};
 
-	Move(const Position position, const Color color, Captures captureDirections)
+	Move(const Position position, const PlayerColor color, Captures captureDirections)
 		: position(position)
 		  , color(color)
 		  , captureDirections(std::move(captureDirections))
@@ -27,6 +27,6 @@ struct Move
 
 	/* ====================  DATA MEMBERS  ======================================= */
 	Position position;
-	Color color;
+	PlayerColor color;
 	Captures captureDirections;
 };

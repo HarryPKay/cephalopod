@@ -1,16 +1,16 @@
 #include "ModerateComputer.h"
 
-ModerateComputer::ModerateComputer(Color color, BoardModel* board)
-	: Player(color, board)
+ModerateComputer::ModerateComputer(PlayerColor playerColor, BoardModel* board)
+	: Player(playerColor, board)
 {
 }
 
 Move ModerateComputer::promptForMove()
 {
-	auto moves = board_->findAllPossibleMoves(color_);
+	auto moves = board_->findAllPossibleMoves(playerColor_);
 	map<int, Move> pipMoveMap;
 
-	// Assign the capture pip value for each move.
+	// Assign the capture pip value for each available move.
 	for (const auto& move : moves)
 	{
 		auto key = board_->sumPipForMove(move);
@@ -23,7 +23,7 @@ Move ModerateComputer::promptForMove()
 	// If there are no captures, move randomly
 	if (key == 0)
 	{
-		const int index = rand() % moves.size();
+		const uint32_t index = rand() % moves.size();
 		return moves[index];
 	}
 

@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <iostream>
 
-HumanPlayer::HumanPlayer(const Color color, BoardModel* board)
+HumanPlayer::HumanPlayer(const PlayerColor color, BoardModel* board)
 	: Player(color, board)
 {
 }
@@ -43,20 +43,13 @@ void HumanPlayer::displayCaptureSelections(const vector<Move>& moves) const
 
 Position HumanPlayer::promptForPosition() const
 {
-	Position position = {-1, -1};
+	Position position = {0, 0};
 
 	do
 	{
 		cout << "\nEnter in row and column. e.g: \"1 2\"\n> ";
-		cin >> position.row >> position.col;
 
-		while (cin.fail()) {
-			cout << "Integers accepted only" << std::endl;
-			cin.clear();
-			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-			cout << "> ";
-			cin >> position.row >> position.col;
-		}
+		promptForInteger(position.row, position.col);
 
 		--position.row;
 		--position.col;
@@ -74,7 +67,7 @@ Position HumanPlayer::promptForPosition() const
 Move HumanPlayer::promptForMove()
 {
 	const auto position = promptForPosition();
-	auto moves = board_->findPossibleMoves(color_, position);
+	auto moves = board_->findPossibleMoves(playerColor_, position);
 
 	// There is only one possible move, no need to prompt for selection;
 	if (moves.size() == 1)
@@ -89,16 +82,8 @@ Move HumanPlayer::promptForMove()
 	{
 		displayCaptureSelections(moves);
 
-		cin >> selection;
+		promptForInteger(selection);
 
-		while (cin.fail()) {
-			cout << "Integers accepted only" << std::endl;
-			cin.clear();
-			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-			cout << "> ";
-			cin >> selection;
-		}
-		
 		--selection;
 
 		if (selection < 0 || selection >= moves.size())

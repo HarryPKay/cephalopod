@@ -18,10 +18,10 @@ public:
 	/* ====================  LIFECYCLE     ======================================= */
 	HardComputer() = delete; /* constructor */
 	HardComputer(
-		Color color,
+		PlayerColor playerColor,
 		BoardModel* board,
 		AiAlgorithm algorithmType,
-		int depth);
+		uint32_t depth);
 	~HardComputer() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
@@ -37,13 +37,13 @@ private:
 	Move promptForMove() override;
 	Move minimax();
 	Move alphaBeta();
-	float minValue(int depth);
-	float maxValue(int depth);
-	float minValue(int depth, float alpha, float beta);
-	float maxValue(int depth, float alpha, float beta);
-	float evaluate() const;
+	float_t minValue(uint32_t depth);
+	float_t maxValue(uint32_t depth);
+	float_t minValue(uint32_t depth, float_t alpha, float_t beta);
+	float_t maxValue(uint32_t depth, float_t alpha, float_t beta);
+	float_t evaluate() const;
 
 	/* ====================  DATA MEMBERS  ======================================= */
 	AiAlgorithm algorithmType_;
-	int depth_;
+	uint32_t depth_;
 }; /* -----  end of class HardComputer  ----- */

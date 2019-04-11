@@ -56,23 +56,15 @@ void GameController::init()
  */
 void GameController::initBoard()
 {
-	int selection = 0;
-	int rowCount, colCount;
-
 	cout << "\nSelect a board size\n\n";
 	cout << "1) 3 by 3\n";
 	cout << "2) 3 by 5\n";
 	cout << "3) 5 by 5\n";
 	cout << "4) custom\n\n> ";
-	cin >> selection;
 
-	while (cin.fail()) {
-		cout << "Integers accepted only" << std::endl;
-		cin.clear();
-		cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-		cout << "> ";
-		cin >> selection;
-	}
+	uint32_t selection = 0;
+
+	promptForInteger(selection);
 
 	switch (--selection)
 	{
@@ -86,6 +78,7 @@ void GameController::initBoard()
 		board_ = new BoardModel(5, 5);
 		break;
 	case 3:
+		uint32_t rowCount, colCount;
 
 		do
 		{
@@ -93,25 +86,17 @@ void GameController::initBoard()
 			cout << "Valid column range: " << COL_MIN << "-" << COL_MAX << endl;
 			cout << "Valid row range: " << ROW_MIN << "-" << ROW_MAX << "\n> ";
 
-			cin >> rowCount >> colCount;
-
-			while (cin.fail()) {
-				cout << "Integers accepted only" << std::endl;
-				cin.clear();
-				cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-				cout << "> ";
-				cin >> rowCount >> colCount;
-			}
+			promptForInteger(rowCount, colCount);
 
 			if (rowCount > ROW_MAX || rowCount < ROW_MIN ||
 				colCount > COL_MAX || colCount < COL_MIN)
 			{
 				cout << "Invalid row or column size.\n";
 			}
-
-		} while (rowCount > ROW_MAX || rowCount < ROW_MIN ||
+		}
+		while (rowCount > ROW_MAX || rowCount < ROW_MIN ||
 			colCount > COL_MAX || colCount < COL_MIN);
-		
+
 		board_ = new BoardModel(rowCount, colCount);
 		break;
 
@@ -146,41 +131,33 @@ void GameController::initBoardView()
 void GameController::initPlayers()
 {
 	assert(board_ != nullptr);
-	
+
 	for (auto i = 0; i < PLAYER_COUNT; ++i)
 	{
-		auto selection = 0;
+		uint32_t selection = 0;
 
 		do
 		{
-			cout << "\nSelect player type for color: " << colorEnumToString(static_cast<Color>(i)) << endl
+			cout << "\nSelect player type for color: " << playerColorEnumToString(static_cast<PlayerColor>(i)) << endl
 				<< endl;
 
-			for (auto j = 0; j < player_type_size; ++j)
+			for (auto j = 0; j < PLAYER_TYPE_SIZE; ++j)
 			{
 				cout << j + 1 << ") " << playerTypeEnumToString(static_cast<PlayerType>(j)) << "\n";
 			}
 
-			cin >> selection;
-
-			while (cin.fail()) {
-				cout << "Integers accepted only." << std::endl;
-				cin.clear();
-				cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-				cout << "> ";
-				cin >> selection;
-			}
+			promptForInteger(selection);
 
 			--selection;
 
-			if (selection < 0 || selection >= player_type_size)
+			if (selection < 0 || selection >= PLAYER_TYPE_SIZE)
 			{
 				cout << "Invalid selection.\n";
 			}
+		}
+		while (selection < 0 || selection >= PLAYER_TYPE_SIZE);
 
-		} while (selection < 0 || selection >= player_type_size);
-		
-		initPlayer(static_cast<Color>(i), static_cast<PlayerType>(selection));
+		initPlayer(static_cast<PlayerColor>(i), static_cast<PlayerType>(selection));
 	}
 }
 
@@ -191,24 +168,24 @@ void GameController::initPlayers()
  *                then initializes the player.
  * =====================================================================================
  */
-void GameController::initPlayer(const Color playerColor, const PlayerType playerType)
+void GameController::initPlayer(const PlayerColor playerColor, const PlayerType playerType)
 {
-	auto depth = 0;
+	uint32_t depth = 0;
 	AiAlgorithm algorithmType;
 
 	switch (playerType)
 	{
-	case human_player:
+	case HUMAN_PLAYER:
 		players_.push_back(new HumanPlayer(playerColor, board_));
 		break;
-	case hard_computer:
+	case HARD_COMPUTER:
 		promptForAiSettings(algorithmType, depth);
 		players_.push_back(new HardComputer(playerColor, board_, algorithmType, depth));
 		break;
-	case moderate_computer:
+	case MODERATE_COMPUTER:
 		players_.push_back(new ModerateComputer(playerColor, board_));
 		break;
-	case easy_computer:
+	case EASY_COMPUTER:
 		players_.push_back(new EasyComputer(playerColor, board_));
 		break;
 	default: ;
@@ -224,9 +201,9 @@ void GameController::initPlayer(const Color playerColor, const PlayerType player
  */
 void GameController::play()
 {
-	gameState_ = in_progress;
+	gameState_ = IN_PROGRESS;
 	boardViewer_->renderBoardToConsole();
-	while (gameState_ == in_progress)
+	while (gameState_ == IN_PROGRESS)
 	{
 		cycleTurns();
 	}
@@ -260,13 +237,13 @@ void GameController::cycleTurns()
 	for (auto player : players_)
 	{
 		cout << "\n"
-			<< colorEnumToString(player->getColor()) << "'s turn\n";
+			<< playerColorEnumToString(player->getPlayerColor()) << "'s turn\n";
 		delegateTurn(player);
 		boardViewer_->renderBoardToConsole();
 
 		if (board_->isBoardFull())
 		{
-			gameState_ = GameState::end;
+			gameState_ = END;
 			break;
 		}
 	}
@@ -281,11 +258,11 @@ void GameController::cycleTurns()
  */
 void GameController::displayWinner() const
 {
-	if (board_->findMajorityColor() == black)
+	if (board_->findMajorityColor() == BLACK)
 	{
 		cout << "\nBLACK WINS\n";
 	}
-	else if (board_->findMajorityColor() == white)
+	else if (board_->findMajorityColor() == WHITE)
 	{
 		cout << "\nWHITE WINS\n";
 	}
@@ -302,54 +279,40 @@ void GameController::displayWinner() const
  *                in determining how it decides where to place it's moves.
  * =====================================================================================
  */
-void GameController::promptForAiSettings(AiAlgorithm& algorithmType, int& depth) const
+void GameController::promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& depth) const
 {
-	auto selection = 0;
+	uint32_t selection = 0;
 
 	do
 	{
-		for (auto i = 0; i < ai_algorithm_size; ++i)
+		for (auto i = 0; i < AI_ALGORITHM_SIZE; ++i)
 		{
 			cout << i + 1 << ") " << aiAlgorithmEnumToString(static_cast<AiAlgorithm>(i)) << "\n";
 		}
-		
-		cin >> selection;
 
-		while (cin.fail()) {
-			cout << "Integers accepted only" << std::endl;
-			cin.clear();
-			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-			cout << "> ";
-			cin >> selection;
-		}
+		promptForInteger(selection);
 
 		--selection;
-		if (selection >= ai_algorithm_size || selection < 0)
+
+		if (selection >= AI_ALGORITHM_SIZE || selection < 0)
 		{
 			cout << "Invalid selection.\n";
 		}
-
-	} while (selection >= ai_algorithm_size || selection < 0);
+	}
+	while (selection >= AI_ALGORITHM_SIZE || selection < 0);
 
 	algorithmType = static_cast<AiAlgorithm>(selection);
 
 	do
 	{
 		cout << "Enter depth of search\n>";
-		cin >> depth;
 
-		while (cin.fail()) {
-			cout << "Integers accepted only" << std::endl;
-			cin.clear();
-			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-			cout << "> ";
-			cin >> selection;
-		}
+		promptForInteger(depth);
 
 		if (depth < 1)
 		{
 			cout << "Depth must be an integer greater than 0.\n";
 		}
-
-	} while (depth < 1);
+	}
+	while (depth < 1);
 }

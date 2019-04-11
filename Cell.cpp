@@ -1,29 +1,29 @@
 #include "Cell.h"
 #include <cassert>
 
-int Cell::getPip() const
+int32_t Cell::getPip() const
 {
 	return pip_;
 }
 
-void Cell::setPip(const int value)
+void Cell::setPip(const int32_t value)
 {
-	assert(value >= 0 && value <= MAX_PIP);
+	assert(value >= 0 && value <= WHITE_MAX_PIP);
 	pip_ = value;
 }
 
-Color Cell::getColor() const
+PlayerColor Cell::getOccupantColor() const
 {
 	return occupant_;
 }
 
-void Cell::setOccupant(const Color occupant)
+void Cell::setOccupantColor(const PlayerColor occupant)
 {
 	this->occupant_ = occupant;
 }
 
 void Cell::capture()
 {
-	occupant_ = no_color;
+	occupant_ = NO_COLOR;
 	pip_ = 0;
 }

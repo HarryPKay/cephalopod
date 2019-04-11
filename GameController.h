@@ -15,7 +15,7 @@ class GameController final
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	GameController() = default; /* constructor */
-	~GameController();	/* destructor */
+	~GameController(); /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
 	GameController(const GameController&) = delete; /* copy */
@@ -31,17 +31,17 @@ public:
 	void cycleTurns();
 	void delegateTurn(Player* player) const;
 	void displayWinner() const;
-	void promptForAiSettings(AiAlgorithm& algorithmType, int& depth) const;
+	void promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& depth) const;
 	void init();
 	void initBoard();
 	void initBoardView();
 	void initPlayers();
-	void initPlayer(Color playerColor, PlayerType playerType);
+	void initPlayer(PlayerColor playerColor, PlayerType playerType);
 
 private:
 	/* ====================  DATA MEMBERS  ======================================= */
 	BoardModel* board_{};
 	BoardViewer* boardViewer_{};
-	GameState gameState_ = settings;
+	GameState gameState_ = SETTINGS;
 	vector<Player*> players_;
 }; /* -----  end of class GameController  ----- */

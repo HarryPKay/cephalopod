@@ -25,8 +25,8 @@ class BoardModel final
 
 public:
 	/* ====================  LIFECYCLE     ======================================= */
-	BoardModel(); /* constructor */
-	BoardModel(int rowCount, int colCount);
+	BoardModel() = delete; /* constructor */
+	BoardModel(uint32_t rowCount, uint32_t colCount);
 	~BoardModel() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
@@ -34,8 +34,8 @@ public:
 	BoardModel(BoardModel&&) = delete; /* move */
 
 	/* ====================  ACCESSORS     ======================================= */
-	int getColCount() const;
-	int getRowCount() const;
+	uint32_t getColCount() const;
+	uint32_t getRowCount() const;
 	Cell getCell(Position position);
 	Cell* getCellPointer(Position position);
 	Grid* getGrid();
@@ -56,25 +56,21 @@ public:
 	bool isWithinBounds(Position position) const;
 	bool isCellVacant(Position position);
 	bool isBoardFull();
-
-	//TODO: Move the following into rules (maybe)
 	bool isMoveValid(Move move);
 	bool isCaptureValid(Move move);
 	bool mustCapture(Move move);
 
 	/* ====================  METHODS       ======================================= */
-	int sumCellsWithColor(Color color);
-	int sumPipForMove(Move move);
-	Color findMajorityColor();
-
-	//TODO: Move the following into rules (maybe)
-	vector<Move> findPossibleMoves(Color playerColor, Position position);
-	vector<Move> findAllPossibleMoves(Color playerColor);
+	uint32_t sumCellsWithColor(PlayerColor color);
+	uint32_t sumPipForMove(Move move);
+	PlayerColor findMajorityColor();
+	vector<Move> findPossibleMoves(PlayerColor playerColor, Position position);
+	vector<Move> findAllPossibleMoves(PlayerColor playerColor);
 
 private:
 	/* ====================  DATA MEMBERS  ======================================= */
-	int rowCount_;
-	int colCount_;
+	uint32_t rowCount_{};
+	uint32_t colCount_{};
 	Grid grid_;
 	stack<Grid> gridHistory_;
 	vector<Captures> captureCombinations_;

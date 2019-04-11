@@ -1,9 +1,10 @@
 #pragma once
+#include <cstdint>
 
 struct Position
 {
 	/* ====================  LIFECYCLE     ======================================= */
-	Position(const int row, const int col)
+	Position(const uint32_t row, const uint32_t col)
 		: row(row)
 		  , col(col)
 	{
@@ -18,6 +19,6 @@ struct Position
 	friend bool operator>=(const Position& left, const Position& right);
 
 	/* ====================  DATA MEMBERS  ======================================= */
-	int row;
-	int col;
+	uint32_t row;
+	uint32_t col;
 };

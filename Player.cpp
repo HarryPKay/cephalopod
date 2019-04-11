@@ -1,12 +1,14 @@
 #include "Player.h"
+#include "Helpers.h"
 
-Player::Player(const Color color, BoardModel* board)
-	: color_(color)
+Player::Player(const PlayerColor playerColor, BoardModel* board)
+	: playerColor_(playerColor)
 	  , board_(board)
 {
+	oppositionColor_ = findOpposition(playerColor);
 }
 
-Color Player::getColor() const
+PlayerColor Player::getPlayerColor() const
 {
-	return color_;
+	return playerColor_;
 }

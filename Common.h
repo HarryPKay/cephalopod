@@ -1,56 +1,61 @@
 #pragma once
+#include <cstdint>
 
 namespace cephalopod
 {
-	const int ROW_MAX = 9;
-	const int ROW_MIN = 3;
-	const int COL_MAX = 9;
-	const int COL_MIN = 3;
-	const int MIN_PIP = 1;
-	const int MAX_PIP = 6;
-	const int MIN_CAPTURE_PIP = 2;
-	const int NO_DICE = 0;
-	const int REFRESH_PAGE_SIZE = 20;
-	const int PLAYER_COUNT = 2;
-	const int MIN_CAPTURE_SIZE = 2;
-	const int CIN_IGNORE_BUFFER_SIZE = 256;
 
-	enum Color
+	const int32_t WHITE_MIN_PIP = 1;
+	const int32_t BLACK_MIN_PIP = 1;
+	const int32_t WHITE_MAX_PIP = 6;
+	const int32_t BLACK_MAX_PIP = -6;
+	const int32_t NO_DICE = 0;
+	const uint32_t ROW_MAX = 9;
+	const uint32_t ROW_MIN = 3;
+	const uint32_t COL_MAX = 9;
+	const uint32_t COL_MIN = 3;
+	const uint32_t MIN_CAPTURE_PIP = 2;
+	const uint32_t REFRESH_PAGE_SIZE = 20;
+	const uint32_t PLAYER_COUNT = 2;
+	const uint32_t MIN_CAPTURE_SIZE = 2;
+	const uint32_t MAX_CAPTURE_SIZE = 4;
+	const uint32_t CIN_IGNORE_BUFFER_SIZE = 256;
+
+	enum PlayerColor
 	{
-		white,
-		black,
-		no_color
+		WHITE,
+		BLACK,
+		NO_COLOR
 	};
 
 	enum Direction
 	{
-		up,
-		right,
-		down,
-		left,
-		direction_size
+		UP,
+		RIGHT,
+		DOWN,
+		LEFT,
+		DIRECTION_SIZE
 	};
 
 	enum GameState
 	{
-		settings,
-		in_progress,
-		end
+		SETTINGS,
+		IN_PROGRESS,
+		END
 	};
 
 	enum AiAlgorithm
 	{
-		minimax,
-		alphabeta,
-		ai_algorithm_size
+		MINIMAX,
+		ALPHABETA,
+		AI_ALGORITHM_SIZE
 	};
 
 	enum PlayerType
 	{
-		human_player,
-		easy_computer,
-		moderate_computer,
-		hard_computer,
-		player_type_size
+		HUMAN_PLAYER,
+		EASY_COMPUTER,
+		MODERATE_COMPUTER,
+		HARD_COMPUTER,
+		PLAYER_TYPE_SIZE
 	};
 }

@@ -28,7 +28,7 @@ void BoardViewer::renderBoardToConsole() const
 void BoardViewer::printColumnNumbers() const
 {
 	std::cout << "    ";
-	for (auto i = 0; i < board_->getColCount(); ++i)
+	for (uint32_t i = 0; i < board_->getColCount(); ++i)
 	{
 		std::cout << (i + 1) << "   ";
 	}
@@ -36,23 +36,23 @@ void BoardViewer::printColumnNumbers() const
 
 void BoardViewer::printRows() const
 {
-	for (auto i = 0; i < board_->getRowCount(); ++i)
+	for (uint32_t i = 0; i < board_->getRowCount(); ++i)
 	{
 		std::cout << (i + 1) << " |";
-		for (auto j = 0; j < board_->getColCount(); ++j)
+		for (uint32_t j = 0; j < board_->getColCount(); ++j)
 		{
-			const auto color = (*board_->getGrid())[i][j].getColor();
+			const auto color = (*board_->getGrid())[i][j].getOccupantColor();
 			const auto pip = (*board_->getGrid())[i][j].getPip();
 
-			if (color == no_color)
+			if (color == NO_COLOR)
 			{
 				std::cout << "   |";
 			}
-			else if (color == white)
+			else if (color == WHITE)
 			{
 				std::cout << " " << pip << " |";
 			}
-			else if (color == black)
+			else if (color == BLACK)
 			{
 				std::cout << "-" << pip << " |";
 			}
@@ -71,7 +71,7 @@ void BoardViewer::printRowSeparator() const
 {
 	std::cout << std::endl
 		<< "  ";
-	for (auto i = 0; i < board_->getColCount(); ++i)
+	for (uint32_t i = 0; i < board_->getColCount(); ++i)
 	{
 		std::cout << " ---";
 	}

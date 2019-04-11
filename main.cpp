@@ -9,6 +9,7 @@ lost or damaged.
 
 #include "GameController.h"
 #include <iostream>
+#include "Helpers.h"
 
 int main(int argc, char* argv[])
 {
@@ -18,9 +19,9 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
-	auto selection = 0;
+	uint32_t selection = 0;
 
-	do 
+	do
 	{
 		GameController game;
 		game.run();
@@ -28,19 +29,12 @@ int main(int argc, char* argv[])
 		cout << "Play again?.\n\n";
 		cout << "1) Yes\n";
 		cout << "Any other number for no.\n\n> ";
-		std::cin >> selection;
 
-		while (std::cin.fail()) {
-			std::cout << "Integers accepted only." << std::endl;
-			std::cin.clear();
-			cin.ignore(CIN_IGNORE_BUFFER_SIZE, '\n');
-			cout << "> ";
-			std::cin >> selection;
-		}
+		promptForInteger(selection);
 
 		--selection;
-
-	} while (selection == 0);
+	}
+	while (selection == 0);
 
 	return EXIT_SUCCESS;
 } /* ----------  end of function main  ---------- */

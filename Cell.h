@@ -26,12 +26,12 @@ public:
 	Cell(Cell&&) = default; /* move */
 
 	/* ====================  ACCESSORS     ======================================= */
-	int getPip() const;
-	Color getColor() const;
+	int32_t getPip() const;
+	PlayerColor getOccupantColor() const;
 
 	/* ====================  MUTATORS      ======================================= */
-	void setPip(int value);
-	void setOccupant(Color occupant);
+	void setPip(int32_t value);
+	void setOccupantColor(PlayerColor occupant);
 	void capture();
 
 	/* ====================  OPERATORS     ======================================= */
@@ -40,6 +40,6 @@ public:
 
 private:
 	/* ====================  DATA MEMBERS  ======================================= */
-	int pip_ = NO_DICE;
-	Color occupant_ = no_color;
+	int32_t pip_ = NO_DICE;
+	PlayerColor occupant_ = NO_COLOR;
 }; /* -----  end of class Cell  ----- */
