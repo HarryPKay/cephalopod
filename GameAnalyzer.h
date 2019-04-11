@@ -38,9 +38,22 @@ public:
 	uint32_t sumCellsWithColor(PlayerColor color) const;
 	uint32_t sumPipForMove(Move move) const;
 	PlayerColor findMajorityColor() const;
+	/*
+	* Finds who has won based on who occupies the majority of the cells.
+	* 
+	* Pre-condition:
+	* - The board is full.
+	*/
+	PlayerColor findWinnersColor() const;
 	vector<Move> findPossibleMoves(PlayerColor playerColor, Position position);
 	vector<Move> findAllPossibleMoves(PlayerColor playerColor);
 	void printPossibleCaptures(const vector<Move>& moves) const;
+
+	/*
+	* Prints out the color of the player who owns the majority of the cells and
+	* therefore is the winner
+	*/
+	void displayWinner() const;
 
 private:
 	/* ====================  DATA MEMBERS  ======================================= */

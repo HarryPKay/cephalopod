@@ -91,10 +91,10 @@ void BoardModel::setNeighborsInfo(const Position position)
 			continue;
 		}
 
-		auto pip = neighbor->getPip();
+		auto pip = neighbor->pip;
 		pipSum += pip;
 
-		if (neighbor->getOccupantColor() == BLACK)
+		if (neighbor->occupant == BLACK)
 		{
 			pip *= -1;
 		}
@@ -134,12 +134,14 @@ bool BoardModel::setMove(Move move, const int32_t pip)
 	auto neighbors = positionToNeighborsMap_[move.position];
 
 	auto& cell = grid_[move.position.row][move.position.col];
-	cell.setOccupantColor(move.color);
-	cell.setPip(pip);
+	cell.occupant = move.color;
+	cell.pip = pip;
 
 	for (auto captureDirection : move.captureDirections)
 	{
-		neighbors[captureDirection]->capture();
+		auto neighbor = neighbors[captureDirection];
+		neighbor->occupant = NO_COLOR;
+		neighbor->pip = NO_DICE;
 	}
 
 	return true;
@@ -173,7 +175,7 @@ bool BoardModel::isCellVacant(const Position position)
 		return false;
 	}
 
-	return grid_[position.row][position.col].getOccupantColor() == NO_COLOR;
+	return grid_[position.row][position.col].occupant == NO_COLOR;
 }
 
 bool BoardModel::isBoardFull()
@@ -182,7 +184,7 @@ bool BoardModel::isBoardFull()
 	{
 		for (uint32_t j = 0; j < colCount_; ++j)
 		{
-			if (grid_[i][j].getOccupantColor() == NO_COLOR)
+			if (grid_[i][j].occupant == NO_COLOR)
 			{
 				return false;
 			}

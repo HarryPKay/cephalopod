@@ -41,8 +41,8 @@ void BoardViewer::printRows() const
 		std::cout << (i + 1) << " |";
 		for (uint32_t j = 0; j < board_->getColCount(); ++j)
 		{
-			const auto color = (*board_->getGrid())[i][j].getOccupantColor();
-			const auto pip = (*board_->getGrid())[i][j].getPip();
+			const auto color = (*board_->getGrid())[i][j].occupant;
+			const auto pip = (*board_->getGrid())[i][j].pip;
 
 			if (color == NO_COLOR)
 			{

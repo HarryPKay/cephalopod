@@ -19,8 +19,8 @@ using namespace cephalopod;
  */
 class BoardModel final
 {
-	typedef vector<vector<Cell>> Grid;
 	typedef vector<Direction> Captures;
+	typedef vector<vector<Cell>> Grid;
 	typedef map<Direction, Cell*> Neighbors;
 
 public:

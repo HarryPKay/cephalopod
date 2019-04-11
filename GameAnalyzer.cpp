@@ -36,6 +36,16 @@ PlayerColor GameAnalyzer::findMajorityColor() const
 	return NO_COLOR;
 }
 
+PlayerColor GameAnalyzer::findWinnersColor() const
+{
+	if (board_->isBoardFull())
+	{
+		return  findMajorityColor();
+	}
+
+	return NO_COLOR;
+}
+
 uint32_t GameAnalyzer::sumCellsWithColor(const PlayerColor color) const
 {
 	uint32_t colorCount = 0;
@@ -44,7 +54,7 @@ uint32_t GameAnalyzer::sumCellsWithColor(const PlayerColor color) const
 	{
 		for (uint32_t j = 0; j < board_->getColCount(); ++j)
 		{
-			if (board_->getCell(Position(i, j)).getOccupantColor() == color)
+			if (board_->getCell(Position(i, j)).occupant == color)
 			{
 				++colorCount;
 			}
@@ -52,6 +62,25 @@ uint32_t GameAnalyzer::sumCellsWithColor(const PlayerColor color) const
 	}
 
 	return colorCount;
+}
+
+void GameAnalyzer::displayWinner() const
+{
+	assert(board_->isBoardFull());
+	const auto color = findMajorityColor();
+
+	if (color == BLACK)
+	{
+		cout << "\nBLACK WINS\n";
+	}
+	else if (color == WHITE)
+	{
+		cout << "\nWHITE WINS\n";
+	}
+	else
+	{
+		cout << "\nDRAW\n";
+	}
 }
 
 uint32_t GameAnalyzer::sumPipForMove(Move move) const
@@ -62,7 +91,7 @@ uint32_t GameAnalyzer::sumPipForMove(Move move) const
 	for (auto captureDirection : move.captureDirections)
 	{
 		const auto neighbor = neighbors[captureDirection];
-		pipSum += neighbor->getPip();
+		pipSum += neighbor->pip;
 	}
 
 	if (pipSum == 0)
@@ -140,8 +169,8 @@ void GameAnalyzer::printPossibleCaptures(const vector<Move>& moves) const
 			const auto neighbor = neighbors[captureDirection];
 
 			cout << directionEnumToString(captureDirection) << "("
-				<< neighbor->getPip() << "), ";
-			pipSum += neighbor->getPip();
+				<< neighbor->pip << "), ";
+			pipSum += neighbor->pip;
 		}
 
 		cout << "Pip Sum = " << pipSum << "\n";
@@ -184,7 +213,7 @@ bool GameAnalyzer::isCaptureValid(Move move)
 		const auto neighbor = neighbors[captureDirection];
 
 		if (neighbor == nullptr
-			|| neighbor->getOccupantColor() == NO_COLOR)
+			|| neighbor->occupant == NO_COLOR)
 		{
 			return false;
 		}
@@ -212,10 +241,10 @@ bool GameAnalyzer::mustCapture(const Move move)
 			{
 				continue;
 			}
-			if (neighbors[j]->getOccupantColor() != NO_COLOR)
+			if (neighbors[j]->occupant != NO_COLOR)
 			{
 				++occupiedCellCount;
-				pipSum += neighbors[j]->getPip();
+				pipSum += neighbors[j]->pip;
 			}
 		}
 

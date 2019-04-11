@@ -74,8 +74,7 @@ Move HardComputer::monteCarlo() const
 		board_->setMove(move, pipSum);
 
 		// If this move ends with a win, nothing to do, so return early.
-		if (board_->isBoardFull() && 
-			gameAnalyzer_->findMajorityColor() == playerColor_)
+		if (gameAnalyzer_->findWinnersColor() == playerColor_)
 		{
 			board_->undoMove();
 			return move;
@@ -86,7 +85,7 @@ Move HardComputer::monteCarlo() const
 
 		board_->undoMove();
 	}
-	
+
 	auto move = valueMoveMapping.rbegin()->second;
 	board_->setNeighborsInfo(move.position);
 	return move;
@@ -109,7 +108,7 @@ float_t HardComputer::expansion(const uint32_t moveCount, const PlayerColor colo
 	// Base case, the board has reached terminal state.
 	if (board_->isBoardFull())
 	{
-		const auto winner = gameAnalyzer_->findMajorityColor();
+		const auto winner = gameAnalyzer_->findWinnersColor();
 
 		for (uint32_t i = 0; i < moveCount; ++i)
 		{

@@ -38,7 +38,7 @@ public:
 private:
 	/* ====================  METHODS       ======================================= */
 	Move promptForMove() override;
-	
+
 	Move minimax();
 	float_t minValue(uint32_t depth);
 	float_t maxValue(uint32_t depth);
@@ -49,7 +49,7 @@ private:
 
 	Move monteCarlo() const;
 	float_t simulation() const;
-	float_t expansion(uint32_t moveCount,PlayerColor color) const;
+	float_t expansion(uint32_t moveCount, PlayerColor color) const;
 
 	float_t evaluate() const;
 

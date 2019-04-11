@@ -7,39 +7,21 @@ using namespace std;
 
 /*
  * =====================================================================================
- *        Class:  Cell
+ *       Struct:  Cell
  *  Description:  
  *
  * =====================================================================================
  */
-class Cell final
+struct Cell
 {
-	typedef map<Direction, Cell*> Neighbors;
-
-public:
 	/* ====================  LIFECYCLE     ======================================= */
-	Cell() = default; /* constructor */
+	Cell()
+		: pip(NO_DICE), occupant(NO_COLOR)
+	{
+	} /* constructor */
 	~Cell() = default; /* destructor */
 
-	/* ====================  SPECIAL       ======================================= */
-	Cell(const Cell&) = default; /* copy */
-	Cell(Cell&&) = default; /* move */
-
-	/* ====================  ACCESSORS     ======================================= */
-	int32_t getPip() const;
-	PlayerColor getOccupantColor() const;
-
-	/* ====================  MUTATORS      ======================================= */
-	void setPip(int32_t value);
-	void setOccupantColor(PlayerColor occupant);
-	void capture();
-
-	/* ====================  OPERATORS     ======================================= */
-	Cell& operator=(const Cell&) = default; /* copy assignment */
-	Cell& operator=(Cell&&) = default; /* move assignment */
-
-private:
 	/* ====================  DATA MEMBERS  ======================================= */
-	int32_t pip_ = NO_DICE;
-	PlayerColor occupant_ = NO_COLOR;
-}; /* -----  end of class Cell  ----- */
+	int32_t pip;
+	PlayerColor occupant;
+};

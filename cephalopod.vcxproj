@@ -132,7 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoardModel.cpp" />
-    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="GameAnalyzer.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="BoardViewer.cpp" />

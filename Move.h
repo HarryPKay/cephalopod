@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 
-using namespace  std;
+using namespace std;
 using namespace cephalopod;
 
 struct Move
