@@ -1,7 +1,7 @@
 #pragma once
-#include "BoardModel.h"
 #include "Common.h"
 #include "Move.h"
+#include "GameAnalyzer.h"
 
 using namespace cephalopod;
 
@@ -17,7 +17,7 @@ class Player
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	Player() = delete; /* constructor */
-	Player(PlayerColor playerColor, BoardModel* board);
+	Player(PlayerColor playerColor, GameAnalyzer* gameAnalyzer);
 	virtual ~Player() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
@@ -38,5 +38,5 @@ protected:
 	/* ====================  DATA MEMBERS  ======================================= */
 	PlayerColor playerColor_;
 	PlayerColor oppositionColor_;
-	BoardModel* board_;
+	GameAnalyzer* gameAnalyzer_;
 }; /* -----  end of class Player  ----- */

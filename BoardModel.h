@@ -42,8 +42,9 @@ public:
 	Neighbors getNeighbors(Position origin);
 	string getNeighborsInfo() const;
 
+
 	/* ====================  MUTATORS      ======================================= */
-	bool setMove(Move move);
+	bool setMove(Move move, uint32_t pip);
 	void undoMove();
 	void initializePositionToNeighborMapping();
 	void setNeighborsInfo(Position position);
@@ -56,16 +57,6 @@ public:
 	bool isWithinBounds(Position position) const;
 	bool isCellVacant(Position position);
 	bool isBoardFull();
-	bool isMoveValid(Move move);
-	bool isCaptureValid(Move move);
-	bool mustCapture(Move move);
-
-	/* ====================  METHODS       ======================================= */
-	uint32_t sumCellsWithColor(PlayerColor color);
-	uint32_t sumPipForMove(Move move);
-	PlayerColor findMajorityColor();
-	vector<Move> findPossibleMoves(PlayerColor playerColor, Position position);
-	vector<Move> findAllPossibleMoves(PlayerColor playerColor);
 
 private:
 	/* ====================  DATA MEMBERS  ======================================= */

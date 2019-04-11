@@ -1,6 +1,7 @@
 #pragma once
 #include "Common.h"
 #include "Player.h"
+#include "GameAnalyzer.h"
 
 using namespace std;
 using namespace cephalopod;
@@ -19,7 +20,8 @@ public:
 	HardComputer() = delete; /* constructor */
 	HardComputer(
 		PlayerColor playerColor,
-		BoardModel* board,
+		GameAnalyzer* gameAnalyzer,
+		BoardModel* boardModel,
 		AiAlgorithm algorithmType,
 		uint32_t depth);
 	~HardComputer() = default; /* destructor */
@@ -44,6 +46,7 @@ private:
 	float_t evaluate() const;
 
 	/* ====================  DATA MEMBERS  ======================================= */
+	BoardModel* board_{};
 	AiAlgorithm algorithmType_;
 	uint32_t depth_;
 }; /* -----  end of class HardComputer  ----- */

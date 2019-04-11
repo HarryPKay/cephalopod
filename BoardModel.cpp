@@ -14,15 +14,6 @@ BoardModel::BoardModel(const uint32_t rowCount, const uint32_t colCount)
 	}
 
 	initializePositionToNeighborMapping();
-
-	const Captures directions = {
-		UP,
-		RIGHT,
-		DOWN,
-		LEFT
-	};
-
-	captureCombinations_ = getCombinationsOfSizeKtoN(directions, MIN_CAPTURE_SIZE, MAX_CAPTURE_SIZE);
 }
 
 Cell BoardModel::getCell(const Position position)
@@ -86,8 +77,8 @@ void BoardModel::setNeighborsInfo(const Position position)
 	int32_t pipSum = 0;
 	string info;
 	info.append(
-		"\nPrevious neighbor information for position: " + 
-		to_string(position.row + 1) + 
+		"\nPrevious neighbor information for position: " +
+		to_string(position.row + 1) +
 		"," + to_string(position.col + 1) +
 		":\n\n");
 
@@ -128,9 +119,9 @@ void BoardModel::setNeighborsInfo(const Position position)
 	neighborInfo_ = info;
 }
 
-bool BoardModel::setMove(Move move)
+bool BoardModel::setMove(Move move, const uint32_t pip)
 {
-	if (!isMoveValid(move))
+	if (!isCellVacant(move.position) && !isWithinBounds(move.position))
 	{
 		return false;
 	}
@@ -142,7 +133,7 @@ bool BoardModel::setMove(Move move)
 
 	auto& cell = grid_[move.position.row][move.position.col];
 	cell.setOccupantColor(move.color);
-	cell.setPip(sumPipForMove(move));
+	cell.setPip(pip);
 
 	for (auto captureDirection : move.captureDirections)
 	{
@@ -173,87 +164,6 @@ void BoardModel::initializePositionToNeighborMapping()
 	}
 }
 
-bool BoardModel::isMoveValid(Move move)
-{
-	if (mustCapture(move) && move.captureDirections.size() < MIN_CAPTURE_PIP)
-	{
-		return false;
-	}
-
-	return isWithinBounds(move.position)
-		&& isCellVacant(move.position)
-		&& isCaptureValid(move);
-}
-
-bool BoardModel::isCaptureValid(Move move)
-{
-	// Nothing to validate if there is no capture.
-	if (move.captureDirections.empty())
-	{
-		return true;
-	}
-
-	// Capture direction_size is within the valid range of 2 and max.
-	if (move.captureDirections.size() > static_cast<int>(DIRECTION_SIZE)
-		|| move.captureDirections.size() == 1)
-	{
-		return false;
-	}
-
-	auto neighbors = positionToNeighborsMap_[move.position];
-
-	// There is actually something to capture.
-	for (auto captureDirection : move.captureDirections)
-	{
-		const auto neighbor = neighbors[captureDirection];
-
-		if (neighbor == nullptr
-			|| neighbor->getOccupantColor() == NO_COLOR)
-		{
-			return false;
-		}
-	}
-
-	// Capture's pip sum does not exceed maximum.
-	const auto pipSum = sumPipForMove(move);
-	return pipSum <= WHITE_MAX_PIP;
-}
-
-bool BoardModel::mustCapture(const Move move)
-{
-	auto neighbors = positionToNeighborsMap_[move.position];
-
-	auto mustCapture = false;
-
-	for (const auto& temp : captureCombinations_)
-	{
-		uint32_t occupiedCellCount = 0;
-		int32_t pipSum = 0;
-
-		for (auto j : temp)
-		{
-			if (neighbors[j] == nullptr)
-			{
-				continue;
-			}
-			if (neighbors[j]->getOccupantColor() != NO_COLOR)
-			{
-				++occupiedCellCount;
-				pipSum += neighbors[j]->getPip();
-			}
-		}
-
-		if (pipSum >= MIN_CAPTURE_PIP
-			&& pipSum <= WHITE_MAX_PIP
-			&& occupiedCellCount >= 2)
-		{
-			mustCapture = true;
-		}
-	}
-
-	return mustCapture;
-}
-
 bool BoardModel::isCellVacant(const Position position)
 {
 	if (!isWithinBounds(position))
@@ -278,103 +188,4 @@ bool BoardModel::isBoardFull()
 	}
 
 	return true;
-}
-
-PlayerColor BoardModel::findMajorityColor()
-{
-	const auto whiteCount = sumCellsWithColor(WHITE);
-	const auto blackCount = sumCellsWithColor(BLACK);
-
-	if (whiteCount > blackCount)
-	{
-		return WHITE;
-	}
-	if (whiteCount < blackCount)
-	{
-		return BLACK;
-	}
-
-	return NO_COLOR;
-}
-
-uint32_t BoardModel::sumCellsWithColor(const PlayerColor color)
-{
-	uint32_t colorCount = 0;
-
-	for (uint32_t i = 0; i < rowCount_; ++i)
-	{
-		for (uint32_t j = 0; j < colCount_; ++j)
-		{
-			if (grid_[i][j].getOccupantColor() == color)
-			{
-				++colorCount;
-			}
-		}
-	}
-
-	return colorCount;
-}
-
-uint32_t BoardModel::sumPipForMove(Move move)
-{
-	int32_t pipSum = 0;
-	auto neighbors = getNeighbors(move.position);
-
-	for (auto captureDirection : move.captureDirections)
-	{
-		const auto neighbor = neighbors[captureDirection];
-		pipSum += neighbor->getPip();
-	}
-
-	if (pipSum == 0)
-	{
-		pipSum = 1;
-	}
-
-	return pipSum;
-}
-
-vector<Move> BoardModel::findPossibleMoves(const PlayerColor playerColor, const Position position)
-{
-	vector<Move> potentialMoves;
-	Move move = {position, playerColor, Captures()};
-
-	// Nothing to do.
-	if (!isCellVacant(move.position))
-	{
-		return potentialMoves;
-	}
-
-	if (isMoveValid(move))
-	{
-		potentialMoves.push_back(move);
-	}
-
-	for (const auto& captureCombination : captureCombinations_)
-	{
-		move.captureDirections = captureCombination;
-
-		if (isMoveValid(move))
-		{
-			potentialMoves.push_back(move);
-		}
-	}
-
-	return potentialMoves;
-}
-
-vector<Move> BoardModel::findAllPossibleMoves(const PlayerColor playerColor)
-{
-	vector<Move> potentialMoves;
-
-	for (uint32_t i = 0; i < rowCount_; ++i)
-	{
-		for (uint32_t j = 0; j < colCount_; ++j)
-		{
-			auto temp = findPossibleMoves(playerColor, Position(i, j));
-			potentialMoves.insert(potentialMoves.end(), temp.begin(), temp.end());
-		}
-	}
-
-	return potentialMoves;
 }

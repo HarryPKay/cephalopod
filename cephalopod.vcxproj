@@ -118,6 +118,7 @@
     <ClInclude Include="BoardModel.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="GameAnalyzer.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="BoardViewer.h" />
     <ClInclude Include="HardComputer.h" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="BoardModel.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="GameAnalyzer.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="BoardViewer.cpp" />
     <ClCompile Include="HardComputer.cpp" />

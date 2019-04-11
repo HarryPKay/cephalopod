@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 
+using namespace  std;
 using namespace cephalopod;
 
 struct Move
@@ -12,7 +13,7 @@ struct Move
 
 	/* ==================== LIFE CYCLE     ======================================= */
 	Move()
-		: position(Position(-1, -1))
+		: position(Position(0, 0))
 		  , color(NO_COLOR)
 		  , captureDirections(Captures())
 	{

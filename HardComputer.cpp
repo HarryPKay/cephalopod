@@ -3,10 +3,12 @@
 
 HardComputer::HardComputer(
 	const PlayerColor playerColor,
-	BoardModel* board,
+	GameAnalyzer* gameAnalyzer,
+	BoardModel* boardModel,
 	const AiAlgorithm algorithmType,
 	const uint32_t depth)
-	: Player(playerColor, board)
+	: Player(playerColor, gameAnalyzer)
+	  , board_(boardModel)
 	  , algorithmType_(algorithmType)
 	  , depth_(depth)
 {
@@ -26,11 +28,12 @@ Move HardComputer::promptForMove()
 Move HardComputer::minimax()
 {
 	map<float_t, Move> valueMoveMap;
-	auto moves = board_->findAllPossibleMoves(playerColor_);
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
 
 	for (const auto& move : moves)
 	{
-		board_->setMove(move);
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
 
 		auto value = minValue(depth_ - 1);
 		valueMoveMap[value] = move;
@@ -45,11 +48,12 @@ Move HardComputer::minimax()
 Move HardComputer::alphaBeta()
 {
 	map<float_t, Move> valueMoveMap;
-	auto moves = board_->findAllPossibleMoves(playerColor_);
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
 
 	for (const auto& move : moves)
 	{
-		board_->setMove(move);
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
 		auto value = minValue(depth_ - 1, -INFINITY, INFINITY);
 		valueMoveMap[value] = move;
 		board_->undoMove();
@@ -69,11 +73,12 @@ float_t HardComputer::minValue(const uint32_t depth)
 
 	// general case: there are board states to search.
 	auto value = INFINITY;
-	auto moves = board_->findAllPossibleMoves(oppositionColor_);
+	auto moves = gameAnalyzer_->findAllPossibleMoves(oppositionColor_);
 
 	for (const auto& move : moves)
 	{
-		board_->setMove(move);
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
 		value = min(value, maxValue(depth - 1));
 		board_->undoMove();
 	}
@@ -91,11 +96,12 @@ float_t HardComputer::minValue(const uint32_t depth, const float_t alpha, float_
 
 	// general case: there are board states to search.
 	auto value = INFINITY;
-	auto moves = board_->findAllPossibleMoves(oppositionColor_);
+	auto moves = gameAnalyzer_->findAllPossibleMoves(oppositionColor_);
 
 	for (const auto& move : moves)
 	{
-		board_->setMove(move);
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
 		value = min(value, maxValue(depth - 1, alpha, beta));
 		board_->undoMove();
 
@@ -120,11 +126,12 @@ float_t HardComputer::maxValue(const uint32_t depth)
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
-	auto moves = board_->findAllPossibleMoves(playerColor_); // This computer's color
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_); // This computer's color
 
 	for (const auto& move : moves)
 	{
-		board_->setMove(move);
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
 		value = max(value, minValue(depth - 1));
 		board_->undoMove();
 	}
@@ -142,11 +149,12 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
-	auto moves = board_->findAllPossibleMoves(playerColor_); // This computer's color
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_); // This computer's color
 
 	for (const auto& move : moves)
 	{
-		board_->setMove(move);
+		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+		board_->setMove(move, pipSum);
 		value = max(value, minValue(depth - 1, alpha, beta));
 		board_->undoMove();
 
@@ -164,8 +172,8 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 float_t HardComputer::evaluate() const
 {
 	// Should we add points if it can score a six
-	const auto whiteCount = static_cast<float_t>(board_->sumCellsWithColor(WHITE));
-	const auto blackCount = static_cast<float_t>(board_->sumCellsWithColor(BLACK));
+	const auto whiteCount = static_cast<float_t>(gameAnalyzer_->sumCellsWithColor(WHITE));
+	const auto blackCount = static_cast<float_t>(gameAnalyzer_->sumCellsWithColor(BLACK));
 
 	if (playerColor_ == WHITE)
 	{

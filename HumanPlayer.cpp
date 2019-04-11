@@ -3,42 +3,32 @@
 #include <iomanip>
 #include <iostream>
 
-HumanPlayer::HumanPlayer(const PlayerColor color, BoardModel* board)
-	: Player(color, board)
+HumanPlayer::HumanPlayer(const PlayerColor color, GameAnalyzer* gameAnalyzer, BoardModel* boardModel)
+	: Player(color, gameAnalyzer), board_(boardModel)
 {
 }
 
-void HumanPlayer::displayCaptureSelections(const vector<Move>& moves) const
+uint32_t HumanPlayer::promptForCaptureSelection(const vector<Move>& moves) const
 {
-	// Nothing to do as there is only one selection.
-	if (moves.size() == 1)
-	{
-		return;
-	}
-
-	auto neighbors = board_->getNeighbors(moves[0].position);
-
 	cout << "\nSelect one of the following capture options\n\n";
 
-	for (uint32_t i = 0; i < moves.size(); ++i)
+	gameAnalyzer_->printPossibleCaptures(moves);
+
+	uint32_t selection = 0;
+
+	do
 	{
-		cout << std::setw(2) << i + 1 << ") Neighbors: ";
+		promptForInteger(selection);
+		--selection;
 
-		auto move = moves[i];
-
-		auto pipSum = 0;
-		for (auto captureDirection : move.captureDirections)
+		if (selection < 0 || selection >= moves.size())
 		{
-			const auto neighbor = neighbors[captureDirection];
-
-			cout << directionEnumToString(captureDirection) << "("
-				<< neighbor->getPip() << "), ";
-			pipSum += neighbor->getPip();
+			cout << "Invalid selection.\n> ";
 		}
-
-		cout << "Pip Sum = " << pipSum << "\n";
 	}
-	cout << "\n> ";
+	while (selection < 0 || selection >= moves.size());
+
+	return selection;
 }
 
 Position HumanPlayer::promptForPosition() const
@@ -67,7 +57,7 @@ Position HumanPlayer::promptForPosition() const
 Move HumanPlayer::promptForMove()
 {
 	const auto position = promptForPosition();
-	auto moves = board_->findPossibleMoves(playerColor_, position);
+	auto moves = gameAnalyzer_->findPossibleMoves(playerColor_, position);
 
 	// There is only one possible move, no need to prompt for selection;
 	if (moves.size() == 1)
@@ -75,26 +65,6 @@ Move HumanPlayer::promptForMove()
 		return moves[0];
 	}
 
-	auto isValidInput = false;
-	uint32_t selection = 0;
-
-	while (!isValidInput)
-	{
-		displayCaptureSelections(moves);
-
-		promptForInteger(selection);
-
-		--selection;
-
-		if (selection < 0 || selection >= moves.size())
-		{
-			cout << "Invalid selection\n";
-		}
-		else
-		{
-			isValidInput = true;
-		}
-	}
-
+	const auto selection = promptForCaptureSelection(moves);
 	return moves[selection];
 }

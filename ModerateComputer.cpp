@@ -1,19 +1,19 @@
 #include "ModerateComputer.h"
 
-ModerateComputer::ModerateComputer(PlayerColor playerColor, BoardModel* board)
-	: Player(playerColor, board)
+ModerateComputer::ModerateComputer(const PlayerColor playerColor, GameAnalyzer* gameAnalyzer)
+	: Player(playerColor, gameAnalyzer)
 {
 }
 
 Move ModerateComputer::promptForMove()
 {
-	auto moves = board_->findAllPossibleMoves(playerColor_);
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
 	map<int, Move> pipMoveMap;
 
 	// Assign the capture pip value for each available move.
 	for (const auto& move : moves)
 	{
-		auto key = board_->sumPipForMove(move);
+		const auto key = gameAnalyzer_->sumPipForMove(move);
 		pipMoveMap[key] = move;
 	}
 

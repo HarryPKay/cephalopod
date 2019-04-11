@@ -3,6 +3,7 @@
 #include "BoardViewer.h"
 #include "Player.h"
 #include <vector>
+#include "GameAnalyzer.h"
 
 /*
  * =====================================================================================
@@ -34,6 +35,7 @@ public:
 	void promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& depth) const;
 	void init();
 	void initBoard();
+	void initGameAnalyzer();
 	void initBoardView();
 	void initPlayers();
 	void initPlayer(PlayerColor playerColor, PlayerType playerType);
@@ -42,6 +44,7 @@ private:
 	/* ====================  DATA MEMBERS  ======================================= */
 	BoardModel* board_{};
 	BoardViewer* boardViewer_{};
+	GameAnalyzer* gameAnalyzer_{};
 	GameState gameState_ = SETTINGS;
 	vector<Player*> players_;
 }; /* -----  end of class GameController  ----- */

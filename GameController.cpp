@@ -42,6 +42,7 @@ void GameController::init()
 {
 	srand(clock());
 	initBoard();
+	initGameAnalyzer();
 	initBoardView();
 	initPlayers();
 }
@@ -106,6 +107,12 @@ void GameController::initBoard()
 	}
 }
 
+void GameController::initGameAnalyzer()
+{
+	assert(board_ != nullptr);
+	gameAnalyzer_ = new GameAnalyzer(board_);
+}
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  initBoardView
@@ -132,7 +139,7 @@ void GameController::initPlayers()
 {
 	assert(board_ != nullptr);
 
-	for (auto i = 0; i < PLAYER_COUNT; ++i)
+	for (uint32_t i = 0; i < PLAYER_COUNT; ++i)
 	{
 		uint32_t selection = 0;
 
@@ -176,17 +183,17 @@ void GameController::initPlayer(const PlayerColor playerColor, const PlayerType 
 	switch (playerType)
 	{
 	case HUMAN_PLAYER:
-		players_.push_back(new HumanPlayer(playerColor, board_));
+		players_.push_back(new HumanPlayer(playerColor, gameAnalyzer_, board_));
 		break;
 	case HARD_COMPUTER:
 		promptForAiSettings(algorithmType, depth);
-		players_.push_back(new HardComputer(playerColor, board_, algorithmType, depth));
+		players_.push_back(new HardComputer(playerColor, gameAnalyzer_, board_, algorithmType, depth));
 		break;
 	case MODERATE_COMPUTER:
-		players_.push_back(new ModerateComputer(playerColor, board_));
+		players_.push_back(new ModerateComputer(playerColor, gameAnalyzer_));
 		break;
 	case EASY_COMPUTER:
-		players_.push_back(new EasyComputer(playerColor, board_));
+		players_.push_back(new EasyComputer(playerColor, gameAnalyzer_));
 		break;
 	default: ;
 	}
@@ -218,10 +225,23 @@ void GameController::play()
  */
 void GameController::delegateTurn(Player* player) const
 {
-	while (!board_->setMove(player->promptForMove()))
+	auto moveValid = false;
+
+	while (!moveValid)
 	{
-		boardViewer_->renderBoardToConsole();
-		cout << "Invalid move.\n";
+		const auto move = player->promptForMove();
+		moveValid = gameAnalyzer_->isMoveValid(move);
+
+		if (!moveValid)
+		{
+			cout << "Invalid move.\n";
+		}
+		else
+		{
+			boardViewer_->renderBoardToConsole();
+			const auto pipSum = gameAnalyzer_->sumPipForMove(move);
+			board_->setMove(move, pipSum);
+		}
 	}
 }
 
@@ -258,11 +278,13 @@ void GameController::cycleTurns()
  */
 void GameController::displayWinner() const
 {
-	if (board_->findMajorityColor() == BLACK)
+	const auto color = gameAnalyzer_->findMajorityColor();
+
+	if (color == BLACK)
 	{
 		cout << "\nBLACK WINS\n";
 	}
-	else if (board_->findMajorityColor() == WHITE)
+	else if (color == WHITE)
 	{
 		cout << "\nWHITE WINS\n";
 	}
@@ -309,10 +331,10 @@ void GameController::promptForAiSettings(AiAlgorithm& algorithmType, uint32_t& d
 
 		promptForInteger(depth);
 
-		if (depth < 1)
+		if (depth < MIN_DEPTH_SEARCH)
 		{
-			cout << "Depth must be an integer greater than 0.\n";
+			cout << "Depth must be an integer greater than " << MIN_DEPTH_SEARCH << ".\n";
 		}
 	}
-	while (depth < 1);
+	while (depth < MIN_DEPTH_SEARCH);
 }

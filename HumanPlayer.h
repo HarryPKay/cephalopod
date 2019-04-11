@@ -17,7 +17,7 @@ class HumanPlayer final : public Player
 public:
 	/* ====================  LIFECYCLE     ======================================= */
 	HumanPlayer() = delete; /* constructor */
-	HumanPlayer(PlayerColor color, BoardModel* board);
+	HumanPlayer(PlayerColor color, GameAnalyzer* gameAnalyzer, BoardModel* boardModel);
 	~HumanPlayer() = default; /* destructor */
 
 	/* ====================  SPECIAL       ======================================= */
@@ -33,6 +33,7 @@ public:
 
 private:
 	/* ====================  METHODS       ======================================= */
-	void displayCaptureSelections(const vector<Move>& moves) const;
+	uint32_t promptForCaptureSelection(const vector<Move>& moves) const;
 	Position promptForPosition() const;
+	BoardModel* board_{};
 }; /* -----  end of class HumanPlayer  ----- */

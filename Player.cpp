@@ -1,9 +1,9 @@
 #include "Player.h"
 #include "Helpers.h"
 
-Player::Player(const PlayerColor playerColor, BoardModel* board)
+Player::Player(const PlayerColor playerColor, GameAnalyzer* gameAnalyzer)
 	: playerColor_(playerColor)
-	  , board_(board)
+	  , gameAnalyzer_(gameAnalyzer)
 {
 	oppositionColor_ = findOpposition(playerColor);
 }

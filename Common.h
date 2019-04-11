@@ -3,7 +3,6 @@
 
 namespace cephalopod
 {
-
 	const int32_t WHITE_MIN_PIP = 1;
 	const int32_t BLACK_MIN_PIP = 1;
 	const int32_t WHITE_MAX_PIP = 6;
@@ -19,6 +18,7 @@ namespace cephalopod
 	const uint32_t MIN_CAPTURE_SIZE = 2;
 	const uint32_t MAX_CAPTURE_SIZE = 4;
 	const uint32_t CIN_IGNORE_BUFFER_SIZE = 256;
+	const uint32_t MIN_DEPTH_SEARCH = 2;
 
 	enum PlayerColor
 	{
