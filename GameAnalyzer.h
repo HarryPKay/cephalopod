@@ -44,7 +44,7 @@ public:
 	 * @return The boolean value indicating if the move does capture the rules.
 	 */
 	bool isCaptureValid(Move move);
-	
+
 	/*
 	 * Checks whether the move must be a capture.
 	 *
@@ -76,7 +76,7 @@ public:
 	 * @return The color who occupies the most.
 	 */
 	PlayerColor findMajorityColor() const;
-	
+
 	/*
 	* Finds who has won based on who occupies the majority of the cells.
 	* 

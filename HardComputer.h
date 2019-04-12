@@ -48,6 +48,25 @@ private:
 	 * maxValue(), however, it also has book keeping to record which move had the 
 	 * highest evaluation.
 	 * 
+	 * Computational complexity analysis:
+	 * 
+	 *		Let moves.size() = n
+	 *		Let depth_ = m
+	 *		Complexity: O(n^m)
+	 *		
+	 * Explanation:
+	 * minimax() calls minValue which is indirectly recursive with maxValue()
+	 * for a total of m times. For each of these calls, moves are evaluated for
+	 * a total of n times. For example, if we assume that n = 3, and m = 2, then
+	 * we have three moves for every level of depth, for a total of 6 moves that
+	 * need to be processed:
+	 * 
+	 * m_0: n_0, n_1, n_2
+	 * m_1: n_0, n_1, n_2
+	 * 
+	 * which is 3^2 = 6, or n^m
+	 * Therefor, the time complexity is O(n^m)
+	 *  
 	 * Pre-condition:
 	 * - The board is not full.
 	 * 
@@ -66,8 +85,6 @@ private:
 	 * - The child board state is terminal (full)
 	 * - The desired depth in the search
 	 * 
-	 * Complexity analysis:
-	 * 
 	 * @param depth The depth of the tree of possible board states to search.
 	 * @return The evaluation given by evaluate().
 	 */
@@ -80,8 +97,6 @@ private:
 	 * Base case:
 	 * - The child board state is terminal (full)
 	 * - The desired depth in the search
-	 *
-	 * Complexity analysis:
 	 *
 	 * @param depth The depth of the tree of possible board states to search.
 	 * @return The evaluation given by evaluate().
@@ -111,8 +126,6 @@ private:
 	 * - The child board state is terminal (full)
 	 * - The desired depth in the search
 	 * - Alpha is less than or equal to a child node evaluation.
-	 * 
-	 * Complexity analysis:
 	 *
 	 * @param depth The depth of the tree of possible board states to search.
 	 * @param alpha The greatest evaluation found so far.
@@ -130,8 +143,6 @@ private:
 	 * - The child board state is terminal (full)
 	 * - The desired depth in the search
 	 * - A child evaluation is equal to or greater than Beta.
-	 * 
-	 * Complexity analysis:
 	 *
 	 * @param depth The depth of the tree of possible board states to search.
 	 * @param alpha The greatest evaluation found so far.
@@ -144,6 +155,9 @@ private:
 	 * Finds the best move simulating random games for each move possible move.
 	 *
 	 * @return The move that had the highest win:simCount ratio.
+	 *
+	 * Pre-condition:
+	 * - The board is not full.
 	 *
 	 * Post-condition:
 	 * - The board state remains unchanged.

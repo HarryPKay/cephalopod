@@ -114,13 +114,13 @@ void GameController::initPlayers()
 		do
 		{
 			cout << "\nSelect player type for color: "
-			<< playerColorEnumToString(static_cast<PlayerColor>(i)) << endl << endl;
+				<< playerColorEnumToString(static_cast<PlayerColor>(i)) << endl << endl;
 
 			// Print out all of the available player types.
 			for (auto j = 0; j < PLAYER_TYPE_SIZE; ++j)
 			{
-				cout << j + 1 << ") " 
-				<< playerTypeEnumToString(static_cast<PlayerType>(j)) << "\n";
+				cout << j + 1 << ") "
+					<< playerTypeEnumToString(static_cast<PlayerType>(j)) << "\n";
 			}
 
 			promptForInteger(selection);

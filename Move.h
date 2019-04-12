@@ -23,6 +23,7 @@ struct Move
 		  , captureDirections(Captures())
 	{
 	};
+
 	Move(const Position position, const PlayerColor color, Captures captureDirections)
 		: position(position)
 		  , color(color)

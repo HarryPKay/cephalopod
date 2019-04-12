@@ -43,5 +43,4 @@ protected:
 	PlayerColor playerColor_;
 	PlayerColor oppositionColor_;
 	GameAnalyzer* gameAnalyzer_;
-
 };

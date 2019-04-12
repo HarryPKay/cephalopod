@@ -40,7 +40,7 @@ PlayerColor GameAnalyzer::findWinnersColor() const
 {
 	if (board_->isBoardFull())
 	{
-		return  findMajorityColor();
+		return findMajorityColor();
 	}
 
 	return NO_COLOR;
