@@ -63,7 +63,7 @@ void GameController::initBoard()
 
 		do
 		{
-			cout << "\nEnter board row and column size e.g: 1 3\n";
+			cout << "\nEnter board row and column size (must be odd). e.g: 1 3\n";
 			cout << "Valid column range: " << COL_MIN << "-" << COL_MAX << endl;
 			cout << "Valid row range: " << ROW_MIN << "-" << ROW_MAX << "\n> ";
 
@@ -71,13 +71,15 @@ void GameController::initBoard()
 
 			// Are the inputs within the allowable range for board dimensions.
 			if (rowCount > ROW_MAX || rowCount < ROW_MIN ||
-				colCount > COL_MAX || colCount < COL_MIN)
+				colCount > COL_MAX || colCount < COL_MIN ||
+				rowCount % 2 == 0 || colCount % 2 == 0)
 			{
 				cout << "Invalid row or column size.\n";
 			}
 		}
 		while (rowCount > ROW_MAX || rowCount < ROW_MIN ||
-			colCount > COL_MAX || colCount < COL_MIN);
+			colCount > COL_MAX || colCount < COL_MIN ||
+			rowCount % 2 == 0 || colCount % 2 == 0);
 
 		board_ = new BoardModel(rowCount, colCount);
 		break;
