@@ -11,7 +11,6 @@ namespace cephalopod
 	const uint32_t COL_MAX = 9;
 	const uint32_t COL_MIN = 3;
 	const uint32_t MIN_CAPTURE_PIP = 2;
-	const uint32_t REFRESH_PAGE_SIZE = 20;
 	const uint32_t PLAYER_COUNT = 2;
 	const uint32_t MIN_CAPTURE_SIZE = 2;
 	const uint32_t MAX_CAPTURE_SIZE = 4;

@@ -6,37 +6,42 @@
 using namespace cephalopod;
 
 /*
- * =====================================================================================
- *        Class:  Player
- *  Description:  
- *
- * =====================================================================================
+ * ABSTRACT CLASS
+ * 
+ * Provides the template for all players to inherit. All players must:
+ * - Implement a method to find moves.
+ * - A reference to the game rules.
+ * - A color.
  */
 class Player
 {
 public:
-	/* ====================  LIFECYCLE     ======================================= */
+	/* LIFECYCLE */
+
 	Player() = delete; /* constructor */
 	Player(PlayerColor playerColor, GameAnalyzer* gameAnalyzer);
-	virtual ~Player() = default; /* destructor */
-
-	/* ====================  SPECIAL       ======================================= */
 	Player(const Player&) = delete; /* copy */
 	Player(Player&&) = delete; /* move */
+	virtual ~Player() = default; /* destructor */
 
-	/* ====================  ACCESSORS     ======================================= */
-	PlayerColor getPlayerColor() const;
-
-	/* ====================  OPERATORS     ======================================= */
+	/* OPERATORS  */
 	Player& operator=(const Player&) = delete; /* copy assignment */
 	Player& operator=(Player&&) = delete; /* move assignment */
 
-	/* ====================  METHODS       ======================================= */
+	/* ACCESSORS */
+
+	PlayerColor getPlayerColor() const;
+
+	/* METHODS */
+
 	virtual Move promptForMove() = 0;
 
 protected:
-	/* ====================  DATA MEMBERS  ======================================= */
+
+	/* DATA MEMBERS */
+
 	PlayerColor playerColor_;
 	PlayerColor oppositionColor_;
 	GameAnalyzer* gameAnalyzer_;
-}; /* -----  end of class Player  ----- */
+
+};

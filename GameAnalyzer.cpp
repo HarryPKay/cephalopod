@@ -9,21 +9,22 @@ GameAnalyzer::GameAnalyzer(BoardModel* board)
 	assert(board != nullptr);
 	board_ = board;
 
+	// Ensure that each possible combination of captures is generated.
 	const Captures directions = {
 		UP,
 		RIGHT,
 		DOWN,
 		LEFT
 	};
-
 	captureCombinations_ = getCombinationsOfSizeKtoN(directions, MIN_CAPTURE_SIZE, MAX_CAPTURE_SIZE);
 }
 
 PlayerColor GameAnalyzer::findMajorityColor() const
 {
-	const auto whiteCount = sumCellsWithColor(WHITE);
-	const auto blackCount = sumCellsWithColor(BLACK);
-
+	// Count how many cells are owned by each player and then
+	// return the color of the player who owns the most.
+	const auto whiteCount = countCellsWithColor(WHITE);
+	const auto blackCount = countCellsWithColor(BLACK);
 	if (whiteCount > blackCount)
 	{
 		return WHITE;
@@ -32,7 +33,6 @@ PlayerColor GameAnalyzer::findMajorityColor() const
 	{
 		return BLACK;
 	}
-
 	return NO_COLOR;
 }
 
@@ -46,10 +46,10 @@ PlayerColor GameAnalyzer::findWinnersColor() const
 	return NO_COLOR;
 }
 
-uint32_t GameAnalyzer::sumCellsWithColor(const PlayerColor color) const
+uint32_t GameAnalyzer::countCellsWithColor(const PlayerColor color) const
 {
+	// For each cell on the board, count the color found on that cell.
 	uint32_t colorCount = 0;
-
 	for (uint32_t i = 0; i < board_->getRowCount(); ++i)
 	{
 		for (uint32_t j = 0; j < board_->getColCount(); ++j)
@@ -60,15 +60,14 @@ uint32_t GameAnalyzer::sumCellsWithColor(const PlayerColor color) const
 			}
 		}
 	}
-
 	return colorCount;
 }
 
 void GameAnalyzer::displayWinner() const
 {
+	// The winner is the player who occupies the most cells.
 	assert(board_->isBoardFull());
 	const auto color = findMajorityColor();
-
 	if (color == BLACK)
 	{
 		cout << "\nBLACK WINS\n";
@@ -85,15 +84,17 @@ void GameAnalyzer::displayWinner() const
 
 uint32_t GameAnalyzer::sumPipForMove(Move move) const
 {
+	// For each neighbor, sum the pip.
 	int32_t pipSum = 0;
 	auto neighbors = board_->getNeighbors(move.position);
-
 	for (auto captureDirection : move.captureDirections)
 	{
 		const auto neighbor = neighbors[captureDirection];
 		pipSum += neighbor->pip;
 	}
 
+	// If it is found that the pipSum is zero, assume that
+	// this move is a non-capture and return 1 instead.
 	if (pipSum == 0)
 	{
 		pipSum = 1;
@@ -107,21 +108,22 @@ vector<Move> GameAnalyzer::findPossibleMoves(const PlayerColor playerColor, cons
 	vector<Move> potentialMoves;
 	Move move = {position, playerColor, Captures()};
 
-	// Nothing to do.
+	// Nothing to do, no possible moves for a occupied cell.
 	if (!board_->isCellVacant(move.position))
 	{
 		return potentialMoves;
 	}
 
+	// Record the first move: the move where there are no captures.
 	if (isMoveValid(move))
 	{
 		potentialMoves.push_back(move);
 	}
 
+	// Record all of the moves that involve a capture
 	for (const auto& captureCombination : captureCombinations_)
 	{
 		move.captureDirections = captureCombination;
-
 		if (isMoveValid(move))
 		{
 			potentialMoves.push_back(move);
@@ -133,8 +135,9 @@ vector<Move> GameAnalyzer::findPossibleMoves(const PlayerColor playerColor, cons
 
 vector<Move> GameAnalyzer::findAllPossibleMoves(const PlayerColor playerColor)
 {
+	// For each position, find the available moves and append it to the total
+	// available moves for all positions.
 	vector<Move> potentialMoves;
-
 	for (uint32_t i = 0; i < board_->getRowCount(); ++i)
 	{
 		for (uint32_t j = 0; j < board_->getColCount(); ++j)
@@ -155,8 +158,10 @@ void GameAnalyzer::printPossibleCaptures(const vector<Move>& moves) const
 		return;
 	}
 
+	// For each possible capture, print out the neighbors to capture,
+	// their pip and the direction that they exist, relative to the current
+	// position.
 	auto neighbors = board_->getNeighbors(moves[0].position);
-
 	for (uint32_t i = 0; i < moves.size(); ++i)
 	{
 		cout << std::setw(2) << i + 1 << ") Neighbors: ";
@@ -180,11 +185,11 @@ void GameAnalyzer::printPossibleCaptures(const vector<Move>& moves) const
 
 bool GameAnalyzer::isMoveValid(Move move)
 {
+	// Check everything that could make this an invalid move.
 	if (mustCapture(move) && move.captureDirections.size() < MIN_CAPTURE_PIP)
 	{
 		return false;
 	}
-
 	return board_->isWithinBounds(move.position)
 		&& board_->isCellVacant(move.position)
 		&& isCaptureValid(move);
@@ -198,16 +203,16 @@ bool GameAnalyzer::isCaptureValid(Move move)
 		return true;
 	}
 
-	// Capture direction_size is within the valid range of 2 and max.
+	// Check Capture direction_size is within the valid range of 2 and max.
 	if (move.captureDirections.size() > static_cast<int>(DIRECTION_SIZE)
 		|| move.captureDirections.size() == 1)
 	{
 		return false;
 	}
 
+	// Else there is actually something to capture. Ensure that those captures
+	// are capturing the opposition and not vacant cells.
 	auto neighbors = board_->getNeighbors(move.position);
-
-	// There is actually something to capture.
 	for (auto captureDirection : move.captureDirections)
 	{
 		const auto neighbor = neighbors[captureDirection];
@@ -219,22 +224,25 @@ bool GameAnalyzer::isCaptureValid(Move move)
 		}
 	}
 
-	// Capture's pip sum does not exceed maximum.
+	// Check that the capture's pip sum does not exceed maximum.
 	const auto pipSum = sumPipForMove(move);
 	return pipSum <= MAX_PIP;
 }
 
 bool GameAnalyzer::mustCapture(const Move move)
 {
+	// For each capture relative to the position of the move.
+	// Check to see that a capture is valid. If it is, then the move must
+	// be a capture by the game rules.
 	auto neighbors = board_->getNeighbors(move.position);
-
 	auto mustCapture = false;
-
 	for (const auto& temp : captureCombinations_)
 	{
 		uint32_t occupiedCellCount = 0;
 		uint32_t pipSum = 0;
 
+		// if the occupied cell count is greater than 2 and the pip sum is less or
+		// equal than the max pip sum, then this move must be a capture.
 		for (auto j : temp)
 		{
 			if (neighbors[j] == nullptr)
@@ -247,7 +255,6 @@ bool GameAnalyzer::mustCapture(const Move move)
 				pipSum += neighbors[j]->pip;
 			}
 		}
-
 		if (pipSum >= MIN_CAPTURE_PIP
 			&& pipSum <= MAX_PIP
 			&& occupiedCellCount >= 2)

@@ -13,6 +13,7 @@ BoardModel::BoardModel(const uint32_t rowCount, const uint32_t colCount)
 		grid_[i].resize(colCount, Cell());
 	}
 
+	// Ensure that a mapping exists from the start.
 	initializePositionToNeighborMapping();
 }
 
@@ -42,10 +43,6 @@ uint32_t BoardModel::getRowCount() const
 	return rowCount_;
 }
 
-BoardModel::Grid* BoardModel::getGrid()
-{
-	return &grid_;
-}
 
 bool BoardModel::isWithinBounds(const Position position) const
 {
@@ -55,14 +52,7 @@ bool BoardModel::isWithinBounds(const Position position) const
 
 BoardModel::Neighbors BoardModel::getNeighbors(const Position origin)
 {
-	Neighbors neighbors;
-
-	neighbors[UP] = getCellPointer(Position(origin.row - 1, origin.col));
-	neighbors[RIGHT] = getCellPointer(Position(origin.row, origin.col + 1));
-	neighbors[DOWN] = getCellPointer(Position(origin.row + 1, origin.col));
-	neighbors[LEFT] = getCellPointer(Position(origin.row, origin.col - 1));
-
-	return neighbors;
+	return positionToNeighborsMap_[origin];
 }
 
 string BoardModel::getNeighborsInfo() const
@@ -73,24 +63,28 @@ string BoardModel::getNeighborsInfo() const
 void BoardModel::setNeighborsInfo(const Position position)
 {
 	auto neighbors = positionToNeighborsMap_[position];
-
 	int32_t pipSum = 0;
 	string info;
+
+	// Gather information on previous move location.
 	info.append(
 		"\nPrevious neighbor information for position: " +
 		to_string(position.row + 1) +
 		"," + to_string(position.col + 1) +
 		":\n\n");
 
+	// For each possible direction a neighbor could exist in.
 	for (auto i = 0; i < DIRECTION_SIZE; ++i)
 	{
 		const auto neighbor = neighbors[static_cast<Direction>(i)];
 
+		// If there isn't a neighbor, then nothing to do.
 		if (neighbor == nullptr)
 		{
 			continue;
 		}
 
+		// record the individual pip and the total pip.
 		auto pip = neighbor->pip;
 		pipSum += pip;
 
@@ -109,7 +103,8 @@ void BoardModel::setNeighborsInfo(const Position position)
 	}
 	info.append("Total pip counts: " + to_string(pipSum) + "\n\n");
 
-	// If there wasn't actually any neighbors occupied, nothing to print.
+	// If there wasn't actually any neighbors occupied. Change the message
+	// to reflect this.
 	if (pipSum == 0)
 	{
 		info = "\nNo neighbors occupied for position: " + to_string(position.row + 1) + "," +
@@ -121,22 +116,24 @@ void BoardModel::setNeighborsInfo(const Position position)
 
 bool BoardModel::setMove(Move move, const int32_t pip)
 {
+	// Will this move leave the board in a consistent state?
 	assert(pip >= MIN_PIP && pip <= MAX_PIP);
-
 	if (!isCellVacant(move.position) && !isWithinBounds(move.position))
 	{
 		return false;
 	}
 
+	// Record the current state before altering.
 	gridHistory_.push(grid_);
 	setNeighborsInfo(move.position);
 
+	// Update the targeted targeted cell.
 	auto neighbors = positionToNeighborsMap_[move.position];
-
 	auto& cell = grid_[move.position.row][move.position.col];
 	cell.occupant = move.color;
 	cell.pip = pip;
 
+	// Capture the desired cells.
 	for (auto captureDirection : move.captureDirections)
 	{
 		auto neighbor = neighbors[captureDirection];
@@ -151,19 +148,26 @@ void BoardModel::undoMove()
 {
 	grid_ = gridHistory_.top();
 	gridHistory_.pop();
+
+	// Call this in the case that pointers need to be updated.
 	initializePositionToNeighborMapping();
 }
 
 void BoardModel::initializePositionToNeighborMapping()
 {
-	// possible issue with stack and pointers
 	for (uint32_t i = 0; i < rowCount_; ++i)
 	{
 		for (uint32_t j = 0; j < colCount_; ++j)
 		{
+			// For each possible direction a neighbor can exist in, create the 
+			// corresponding mapping
 			auto position = Position(i, j);
-			const auto neighbor = getNeighbors(position);
-			positionToNeighborsMap_[position] = neighbor;
+			Neighbors neighbors;
+			neighbors[UP] = getCellPointer(Position(position.row - 1, position.col));
+			neighbors[RIGHT] = getCellPointer(Position(position.row, position.col + 1));
+			neighbors[DOWN] = getCellPointer(Position(position.row + 1, position.col));
+			neighbors[LEFT] = getCellPointer(Position(position.row, position.col - 1));
+			positionToNeighborsMap_[position] = neighbors;
 		}
 	}
 }

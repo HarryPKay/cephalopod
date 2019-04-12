@@ -14,29 +14,48 @@ using namespace std;
 class BoardViewer final
 {
 public:
-	/* ====================  LIFECYCLE     ======================================= */
+
+	/* LIFECYCLE */
+
 	BoardViewer() = default; /* constructor */
 	BoardViewer(BoardModel* board);
-	~BoardViewer() = default; /* destructor */
-
-	/* ====================  SPECIAL       ======================================= */
 	BoardViewer(const BoardViewer&) = delete; /* copy */
 	BoardViewer(BoardViewer&&) = delete; /* move */
+	~BoardViewer() = default; /* destructor */
 
-	/* ====================  OPERATORS     ======================================= */
+	/* OPERATORS */
+
 	BoardViewer& operator=(const BoardViewer&) = delete; /* copy assignment */
 	BoardViewer& operator=(BoardViewer&&) = delete; /* move assignment */
 
-	/* ====================  METHODS       ======================================= */
+	/* METHODS */
+
+	/*
+	 * Prints out a text based representation of the board and it's dice.
+	 */
 	void renderBoardToConsole() const;
 
 private:
-	/* ====================  METHODS       ======================================= */
-	void printColumnNumbers() const;
-	void printRows() const;
-	void printRowSeparator() const;
-	static void refreshConsole();
 
-	/* ====================  DATA MEMBERS  ======================================= */
+	/* METHODS */
+
+	/*
+	 * Prints out the numbered column guides for the board.
+	 */
+	void printColumnNumbers() const;
+
+	/*
+	 * Prints out each row with it's row number, dice and partitions separating
+	 * each column.
+	 */
+	void printRows() const;
+
+	/*
+	 * Prints the partitions separating each row.
+	 */
+	void printRowSeparator() const;
+
+	/* DATA MEMBERS */
+
 	BoardModel* board_;
-}; /* -----  end of class BoardViewer  ----- */
+};

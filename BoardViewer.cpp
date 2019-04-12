@@ -6,19 +6,8 @@ BoardViewer::BoardViewer(BoardModel* board)
 {
 }
 
-void BoardViewer::refreshConsole()
-{
-	string buffer;
-	for (uint32_t i = 0; i < REFRESH_PAGE_SIZE; ++i)
-	{
-		buffer.append("\n");
-	}
-	cout << buffer;
-}
-
 void BoardViewer::renderBoardToConsole() const
 {
-	//refreshConsole();
 	printColumnNumbers();
 	printRowSeparator();
 	printRows();
@@ -41,8 +30,8 @@ void BoardViewer::printRows() const
 		std::cout << (i + 1) << " |";
 		for (uint32_t j = 0; j < board_->getColCount(); ++j)
 		{
-			const auto color = (*board_->getGrid())[i][j].occupant;
-			const auto pip = (*board_->getGrid())[i][j].pip;
+			const auto color = board_->getCell(Position(i, j)).occupant;
+			const auto pip = board_->getCell(Position(i, j)).pip;
 
 			if (color == NO_COLOR)
 			{

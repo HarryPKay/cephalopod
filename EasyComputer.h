@@ -5,28 +5,26 @@
 using namespace cephalopod;
 
 /*
- * =====================================================================================
- *        Class:  EasyComputer
- *  Description:  
- *
- * =====================================================================================
+ * A player that moves and captures randomly.
  */
 class EasyComputer final : public Player
 {
 public:
-	/* ====================  LIFECYCLE     ======================================= */
+
+	/* LIFECYCLE */
+
 	EasyComputer() = delete; /* constructor */
 	EasyComputer(PlayerColor playerColor, GameAnalyzer* gameAnalyzer);
-	~EasyComputer() = default; /* destructor */
-
-	/* ====================  SPECIAL       ======================================= */
 	EasyComputer(const EasyComputer&) = delete; /* copy */
 	EasyComputer(EasyComputer&&) = delete; /* move */
+	~EasyComputer() = default; /* destructor */
 
-	/* ====================  OPERATORS     ======================================= */
+	/* OPERATORS */
+
 	EasyComputer& operator=(const EasyComputer&) = delete; /* copy assignment */
 	EasyComputer& operator=(EasyComputer&&) = delete; /* move assignment */
 
-	/* ====================  METHODS       ======================================= */
+	/* METHODS */
+
 	Move promptForMove() override;
-}; /* -----  end of class EasyComputer  ----- */
+};

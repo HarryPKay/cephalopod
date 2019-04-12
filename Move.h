@@ -7,18 +7,22 @@
 using namespace std;
 using namespace cephalopod;
 
+/*
+ * Stores information about a move, such as where to move, what to capture and
+ * who is capturing.
+ */
 struct Move
 {
 	typedef vector<Direction> Captures;
 
-	/* ==================== LIFE CYCLE     ======================================= */
+	/* LIFE CYCLE */
+
 	Move()
 		: position(Position(0, 0))
 		  , color(NO_COLOR)
 		  , captureDirections(Captures())
 	{
 	};
-
 	Move(const Position position, const PlayerColor color, Captures captureDirections)
 		: position(position)
 		  , color(color)
@@ -26,8 +30,9 @@ struct Move
 	{
 	};
 
-	/* ====================  DATA MEMBERS  ======================================= */
-	Position position;
-	PlayerColor color;
-	Captures captureDirections;
+	/* DATA MEMBERS  */
+
+	Position position; // Where to move
+	PlayerColor color; // Who is capturing
+	Captures captureDirections; // In which directions should neighbors be captured.
 };

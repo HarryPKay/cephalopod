@@ -1,9 +1,6 @@
 #include "HardComputer.h"
 #include "Helpers.h"
 
-//temp
-#include <iostream>
-
 HardComputer::HardComputer(
 	const PlayerColor playerColor,
 	GameAnalyzer* gameAnalyzer,
@@ -245,8 +242,8 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 
 float_t HardComputer::evaluate() const
 {
-	const auto whiteCount = static_cast<float_t>(gameAnalyzer_->sumCellsWithColor(WHITE));
-	const auto blackCount = static_cast<float_t>(gameAnalyzer_->sumCellsWithColor(BLACK));
+	const auto whiteCount = static_cast<float_t>(gameAnalyzer_->countCellsWithColor(WHITE));
+	const auto blackCount = static_cast<float_t>(gameAnalyzer_->countCellsWithColor(BLACK));
 
 	if (playerColor_ == WHITE)
 	{

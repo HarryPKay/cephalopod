@@ -37,4 +37,4 @@ int main(int argc, char* argv[])
 	while (selection == 0);
 
 	return EXIT_SUCCESS;
-} /* ----------  end of function main  ---------- */
+}

@@ -7,10 +7,9 @@ ModerateComputer::ModerateComputer(const PlayerColor playerColor, GameAnalyzer* 
 
 Move ModerateComputer::promptForMove()
 {
-	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
-	map<int, Move> pipMoveMap;
-
 	// Assign the capture pip value for each available move.
+	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
+	map<int32_t, Move> pipMoveMap;
 	for (const auto& move : moves)
 	{
 		const auto key = gameAnalyzer_->sumPipForMove(move);
