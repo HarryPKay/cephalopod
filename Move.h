@@ -28,7 +28,7 @@ struct Move
 		: position(position)
 		  , color(color)
 		  , captureDirections(std::move(captureDirections))
-	      , pipSum(pipSum)
+		  , pipSum(pipSum)
 	{
 	};
 
@@ -37,5 +37,5 @@ struct Move
 	Position position; // Where to move.
 	PlayerColor color; // Who is capturing.
 	Captures captureDirections; // In which directions should neighbors be captured.
-	int32_t pipSum;	// What value to place in the targeted cell/
+	int32_t pipSum; // What value to place in the targeted cell/
 };

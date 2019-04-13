@@ -1,7 +1,16 @@
-﻿  HardComputer.cpp
+﻿  BoardModel.cpp
+  GameAnalyzer.cpp
+  GameController.cpp
+  BoardViewer.cpp
+  HardComputer.cpp
+  Helpers.cpp
+  HumanPlayer.cpp
+  main.cpp
+  ModerateComputer.cpp
+  Player.cpp
+  EasyComputer.cpp
+  Position.cpp
   Generating code
-  3 of 1464 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  All 1464 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   cephalopod.vcxproj -> C:\projects\cephalopod\x64\Release\cephalopod.exe

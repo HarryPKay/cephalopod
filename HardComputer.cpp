@@ -30,7 +30,7 @@ Move HardComputer::minimax()
 	map<float_t, Move> valueMoveMap;
 	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 
-	// For each move, record it's evaluation.
+	// For each move, record its evaluation.
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
@@ -48,7 +48,7 @@ Move HardComputer::alphaBeta()
 	map<float_t, Move> valueMoveMap;
 	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 
-	// For each move, record it's evaluation.
+	// For each move, record its evaluation.
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
@@ -66,7 +66,7 @@ Move HardComputer::monteCarlo() const
 	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	map<float_t, Move> valueMoveMapping;
 
-	// For each move, record it's evaluation.
+	// For each move, record its evaluation.
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
@@ -132,14 +132,12 @@ float_t HardComputer::minValue(const uint32_t depth)
 	// general case: there are board states to search.
 	auto value = INFINITY;
 	auto moves = gameAnalyzer_->findAllValidMoves(oppositionColor_);
-
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
 		value = min(value, maxValue(depth - 1));
 		board_->undoMove();
 	}
-
 	return value;
 }
 
@@ -154,21 +152,17 @@ float_t HardComputer::minValue(const uint32_t depth, const float_t alpha, float_
 	// general case: there are board states to search.
 	auto value = INFINITY;
 	auto moves = gameAnalyzer_->findAllValidMoves(oppositionColor_);
-
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
 		value = min(value, maxValue(depth - 1, alpha, beta));
 		board_->undoMove();
-
 		if (value <= alpha)
 		{
 			return value;
 		}
-
 		beta = min(beta, value);
 	}
-
 	return value;
 }
 
@@ -182,15 +176,13 @@ float_t HardComputer::maxValue(const uint32_t depth)
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
-	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_); // This computer's color
-
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
 		value = max(value, minValue(depth - 1));
 		board_->undoMove();
 	}
-
 	return value;
 }
 
@@ -204,22 +196,18 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
-	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_); // This computer's color
-
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	for (const auto& move : moves)
 	{
 		board_->setMove(move);
 		value = max(value, minValue(depth - 1, alpha, beta));
 		board_->undoMove();
-
 		if (value >= beta)
 		{
 			return value;
 		}
-
 		alpha = max(alpha, value);
 	}
-
 	return value;
 }
 
