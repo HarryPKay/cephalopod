@@ -57,4 +57,10 @@ namespace cephalopod
 		HARD_COMPUTER,
 		PLAYER_TYPE_SIZE
 	};
+
+	enum HeuristicMethod
+	{
+		OCCUPANT_COUNT_DIFFERENCE,
+		GAME_RESULT_ENCODING
+	};
 }

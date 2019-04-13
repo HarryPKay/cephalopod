@@ -93,7 +93,7 @@ public:
 	 * @param position The position for which captures should be found for.
 	 * @return The vector of moves found.
 	 */
-	vector<Move> findPossibleMoves(PlayerColor playerColor, Position position);
+	vector<Move> findValidMoves(PlayerColor playerColor, Position position);
 
 	/*
 	 * Find all of the available positions and corresponding captures that could
@@ -102,7 +102,7 @@ public:
 	 * @param playerColor The owner of the moves.
 	 * @return The vector of moves found.
 	 */
-	vector<Move> findAllPossibleMoves(PlayerColor playerColor);
+	vector<Move> findAllValidMoves(PlayerColor playerColor);
 
 	/*
 	 * Prints to console all of the possible captures available to the user for
@@ -115,7 +115,7 @@ public:
 	 * @param moves The vector holding all of the possible captures for a given
 	 * position
 	 */
-	void printPossibleCaptures(const vector<Move>& moves) const;
+	void printValidCaptures(const vector<Move>& moves) const;
 
 	/*
 	* Prints out the color of the player who owns the majority of the cells and

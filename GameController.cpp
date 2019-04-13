@@ -193,8 +193,7 @@ void GameController::delegateTurn(Player* player) const
 		}
 		else
 		{
-			const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-			board_->setMove(move, pipSum);
+			board_->setMove(move);
 		}
 	}
 }

@@ -58,14 +58,14 @@ private:
 	 * minimax() calls minValue which is indirectly recursive with maxValue()
 	 * for a total of m times. For each of these calls, moves are evaluated for
 	 * a total of n times. For example, if we assume that n = 3, and m = 2, then
-	 * we have three moves for every level of depth, for a total of 6 moves that
+	 * we have 3 moves for every level of depth, for a total of 6 moves that
 	 * need to be processed:
 	 * 
 	 * m_0: n_0, n_1, n_2
 	 * m_1: n_0, n_1, n_2
 	 * 
 	 * which is 3^2 = 6, or n^m
-	 * Therefor, the time complexity is O(n^m)
+	 * Therefor, the computational complexity is O(n^m)
 	 *  
 	 * Pre-condition:
 	 * - The board is not full.
@@ -183,13 +183,12 @@ private:
 	float_t expansion(uint32_t moveCount, PlayerColor color) const;
 
 	/*
-	 * Finds the heuristic for the current board state. That is, the value that
-	 * maximum cells occupied by this player and the minimum occupied by the 
-	 * opponent.
+	 * Finds the heuristic value for the current board state.
 	 */
-	float_t evaluate() const;
+	float_t evaluate(HeuristicMethod method) const;
 
 	/* DATA MEMBERS */
+
 	BoardModel* board_{};
 	AiAlgorithm algorithmType_;
 	uint32_t depth_;

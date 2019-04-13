@@ -114,10 +114,9 @@ void BoardModel::setNeighborsInfo(const Position position)
 	neighborInfo_ = info;
 }
 
-bool BoardModel::setMove(Move move, const int32_t pip)
+bool BoardModel::setMove(Move move)
 {
 	// Will this move leave the board in a consistent state?
-	assert(pip >= MIN_PIP && pip <= MAX_PIP);
 	if (!isCellVacant(move.position) && !isWithinBounds(move.position))
 	{
 		return false;
@@ -131,7 +130,7 @@ bool BoardModel::setMove(Move move, const int32_t pip)
 	auto neighbors = positionToNeighborsMap_[move.position];
 	auto& cell = grid_[move.position.row][move.position.col];
 	cell.occupant = move.color;
-	cell.pip = pip;
+	cell.pip = move.pipSum;
 
 	// Capture the desired cells.
 	for (auto captureDirection : move.captureDirections)

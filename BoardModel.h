@@ -69,7 +69,7 @@ public:
 	 * - Neighbor's pip counts set to 0 for each capture in move.
 	 * - Neighbor's occupant is set to NO_COLOR for each capture in move.
 	 */
-	bool setMove(Move move, int32_t pip);
+	bool setMove(Move move);
 
 	/*
 	 * Rewinds the board state by one move, undoing the last setMove() call.

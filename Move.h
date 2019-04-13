@@ -8,8 +8,7 @@ using namespace std;
 using namespace cephalopod;
 
 /*
- * Stores information about a move, such as where to move, what to capture and
- * who is capturing.
+ * Stores information about a move.
  */
 struct Move
 {
@@ -21,19 +20,22 @@ struct Move
 		: position(Position(0, 0))
 		  , color(NO_COLOR)
 		  , captureDirections(Captures())
+		  , pipSum(MIN_PIP)
 	{
 	};
 
-	Move(const Position position, const PlayerColor color, Captures captureDirections)
+	Move(const Position position, const PlayerColor color, Captures captureDirections, const int32_t pipSum)
 		: position(position)
 		  , color(color)
 		  , captureDirections(std::move(captureDirections))
+	      , pipSum(pipSum)
 	{
 	};
 
 	/* DATA MEMBERS  */
 
-	Position position; // Where to move
-	PlayerColor color; // Who is capturing
+	Position position; // Where to move.
+	PlayerColor color; // Who is capturing.
 	Captures captureDirections; // In which directions should neighbors be captured.
+	int32_t pipSum;	// What value to place in the targeted cell/
 };

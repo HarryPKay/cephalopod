@@ -103,10 +103,10 @@ uint32_t GameAnalyzer::sumPipForMove(Move move) const
 	return pipSum;
 }
 
-vector<Move> GameAnalyzer::findPossibleMoves(const PlayerColor playerColor, const Position position)
+vector<Move> GameAnalyzer::findValidMoves(const PlayerColor playerColor, const Position position)
 {
 	vector<Move> potentialMoves;
-	Move move = {position, playerColor, Captures()};
+	Move move = {position, playerColor, Captures(), MIN_PIP};
 
 	// Nothing to do, no possible moves for a occupied cell.
 	if (!board_->isCellVacant(move.position))
@@ -126,6 +126,7 @@ vector<Move> GameAnalyzer::findPossibleMoves(const PlayerColor playerColor, cons
 		move.captureDirections = captureCombination;
 		if (isMoveValid(move))
 		{
+			move.pipSum = sumPipForMove(move);
 			potentialMoves.push_back(move);
 		}
 	}
@@ -133,7 +134,7 @@ vector<Move> GameAnalyzer::findPossibleMoves(const PlayerColor playerColor, cons
 	return potentialMoves;
 }
 
-vector<Move> GameAnalyzer::findAllPossibleMoves(const PlayerColor playerColor)
+vector<Move> GameAnalyzer::findAllValidMoves(const PlayerColor playerColor)
 {
 	// For each position, find the available moves and append it to the total
 	// available moves for all positions.
@@ -142,7 +143,7 @@ vector<Move> GameAnalyzer::findAllPossibleMoves(const PlayerColor playerColor)
 	{
 		for (uint32_t j = 0; j < board_->getColCount(); ++j)
 		{
-			auto temp = findPossibleMoves(playerColor, Position(i, j));
+			auto temp = findValidMoves(playerColor, Position(i, j));
 			potentialMoves.insert(potentialMoves.end(), temp.begin(), temp.end());
 		}
 	}
@@ -150,7 +151,7 @@ vector<Move> GameAnalyzer::findAllPossibleMoves(const PlayerColor playerColor)
 	return potentialMoves;
 }
 
-void GameAnalyzer::printPossibleCaptures(const vector<Move>& moves) const
+void GameAnalyzer::printValidCaptures(const vector<Move>& moves) const
 {
 	// Nothing to do as there is only one selection.
 	if (moves.size() == 1)

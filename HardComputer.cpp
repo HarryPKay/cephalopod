@@ -28,63 +28,63 @@ Move HardComputer::promptForMove()
 Move HardComputer::minimax()
 {
 	map<float_t, Move> valueMoveMap;
-	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 
+	// For each move, record it's evaluation.
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
-
+		board_->setMove(move);
 		auto value = minValue(depth_ - 1);
 		valueMoveMap[value] = move;
 		board_->undoMove();
 	}
 
+	// Return the move that had the highest evaluation.
 	return valueMoveMap.rbegin()->second;
 }
 
 Move HardComputer::alphaBeta()
 {
 	map<float_t, Move> valueMoveMap;
-	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 
+	// For each move, record it's evaluation.
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
+		board_->setMove(move);
 		auto value = minValue(depth_ - 1, -INFINITY, INFINITY);
 		valueMoveMap[value] = move;
 		board_->undoMove();
 	}
 
+	// Return the move that had the highest evaluation.
 	return valueMoveMap.rbegin()->second;
 }
 
 Move HardComputer::monteCarlo() const
 {
-	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	map<float_t, Move> valueMoveMapping;
 
+	// For each move, record it's evaluation.
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
-
+		board_->setMove(move);
 		// If this move ends with a win, nothing to do, so return early.
 		if (gameAnalyzer_->findWinnersColor() == playerColor_)
 		{
 			board_->undoMove();
 			return move;
 		}
-
 		auto value = simulation();
 		valueMoveMapping[value] = move;
-
 		board_->undoMove();
 	}
-
 	auto move = valueMoveMapping.rbegin()->second;
+
+	// Ensure that the correct neighbor information is shown.
 	board_->setNeighborsInfo(move.position);
+
 	return move;
 }
 
@@ -105,32 +105,19 @@ float_t HardComputer::expansion(const uint32_t moveCount, const PlayerColor colo
 	// Base case, the board has reached terminal state.
 	if (board_->isBoardFull())
 	{
-		const auto winner = gameAnalyzer_->findWinnersColor();
-
+		// Rewind all of the moves that have been set in this simulation before return.
 		for (uint32_t i = 0; i < moveCount; ++i)
 		{
 			board_->undoMove();
 		}
-
-		if (winner == playerColor_)
-		{
-			return 1.0;
-		}
-		if (winner == oppositionColor_)
-		{
-			return -1.0;
-		}
-		return 0.0;
+		return evaluate(GAME_RESULT_ENCODING);
 	}
 
 	// General case: the board is unfinished.
-	auto moves = gameAnalyzer_->findAllPossibleMoves(color);
+	auto moves = gameAnalyzer_->findAllValidMoves(color);
 	const auto index = rand() % moves.size();
 	const auto move = moves[index];
-	const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-
-	board_->setMove(move, pipSum);
-
+	board_->setMove(move);
 	return expansion(moveCount + 1, findOpposition(color));
 }
 
@@ -139,17 +126,16 @@ float_t HardComputer::minValue(const uint32_t depth)
 	// Base case: board is full or depth of search reaches 0.
 	if (depth == 0 || board_->isBoardFull())
 	{
-		return evaluate();
+		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
 	// general case: there are board states to search.
 	auto value = INFINITY;
-	auto moves = gameAnalyzer_->findAllPossibleMoves(oppositionColor_);
+	auto moves = gameAnalyzer_->findAllValidMoves(oppositionColor_);
 
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
+		board_->setMove(move);
 		value = min(value, maxValue(depth - 1));
 		board_->undoMove();
 	}
@@ -162,17 +148,16 @@ float_t HardComputer::minValue(const uint32_t depth, const float_t alpha, float_
 	// Base case: board is full or depth of search reaches 0.
 	if (depth == 0 || board_->isBoardFull())
 	{
-		return evaluate();
+		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
 	// general case: there are board states to search.
 	auto value = INFINITY;
-	auto moves = gameAnalyzer_->findAllPossibleMoves(oppositionColor_);
+	auto moves = gameAnalyzer_->findAllValidMoves(oppositionColor_);
 
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
+		board_->setMove(move);
 		value = min(value, maxValue(depth - 1, alpha, beta));
 		board_->undoMove();
 
@@ -192,17 +177,16 @@ float_t HardComputer::maxValue(const uint32_t depth)
 	// Base case: board is full or depth of search reaches 0.
 	if (depth == 0 || board_->isBoardFull())
 	{
-		return evaluate();
+		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
-	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_); // This computer's color
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_); // This computer's color
 
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
+		board_->setMove(move);
 		value = max(value, minValue(depth - 1));
 		board_->undoMove();
 	}
@@ -215,17 +199,16 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 	// Base case: board is full or depth of search reaches 0.
 	if (depth == 0 || board_->isBoardFull())
 	{
-		return evaluate();
+		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
 	// general case: there are board states to search.
 	auto value = -INFINITY;
-	auto moves = gameAnalyzer_->findAllPossibleMoves(playerColor_); // This computer's color
+	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_); // This computer's color
 
 	for (const auto& move : moves)
 	{
-		const auto pipSum = gameAnalyzer_->sumPipForMove(move);
-		board_->setMove(move, pipSum);
+		board_->setMove(move);
 		value = max(value, minValue(depth - 1, alpha, beta));
 		board_->undoMove();
 
@@ -240,15 +223,35 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 	return value;
 }
 
-float_t HardComputer::evaluate() const
+float_t HardComputer::evaluate(const HeuristicMethod method) const
 {
 	const auto whiteCount = static_cast<float_t>(gameAnalyzer_->countCellsWithColor(WHITE));
 	const auto blackCount = static_cast<float_t>(gameAnalyzer_->countCellsWithColor(BLACK));
+	const auto winner = gameAnalyzer_->findWinnersColor();
 
-	if (playerColor_ == WHITE)
+	switch (method)
 	{
-		return whiteCount - blackCount;
-	}
+	case OCCUPANT_COUNT_DIFFERENCE:
 
-	return blackCount - whiteCount;
+		// Counts the number of occupancies and returns a difference that is
+		// maximized for the maxing player and minimized for the mining player.
+		if (playerColor_ == WHITE)
+		{
+			return whiteCount - blackCount;
+		}
+		return blackCount - whiteCount;
+
+	case GAME_RESULT_ENCODING:
+
+		//Encodes the result of games with a 1 for a win or a - 1 for a loss.
+		if (winner == playerColor_)
+		{
+			return 1.0;
+		}
+		if (winner == oppositionColor_)
+		{
+			return -1.0;
+		}
+	}
+	return 0.0;
 }

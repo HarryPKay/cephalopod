@@ -8,7 +8,7 @@ EasyComputer::EasyComputer(const PlayerColor playerColor, GameAnalyzer* gameAnal
 Move EasyComputer::promptForMove()
 {
 	// Grab all of the moves and randomly select an index of a move to return.
-	auto potentialMoves = gameAnalyzer_->findAllPossibleMoves(playerColor_);
+	auto potentialMoves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	const uint32_t index = rand() % potentialMoves.size();
 	return potentialMoves[index];
 }

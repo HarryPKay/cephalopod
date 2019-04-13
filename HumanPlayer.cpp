@@ -12,7 +12,7 @@ uint32_t HumanPlayer::promptForCaptureSelection(const vector<Move>& moves) const
 {
 	cout << "\nSelect one of the following capture options\n\n";
 
-	gameAnalyzer_->printPossibleCaptures(moves);
+	gameAnalyzer_->printValidCaptures(moves);
 
 	uint32_t selection = 0;
 
@@ -57,7 +57,7 @@ Position HumanPlayer::promptForPosition() const
 Move HumanPlayer::promptForMove()
 {
 	const auto position = promptForPosition();
-	auto moves = gameAnalyzer_->findPossibleMoves(playerColor_, position);
+	auto moves = gameAnalyzer_->findValidMoves(playerColor_, position);
 
 	// There is only one possible move, no need to prompt for selection;
 	if (moves.size() == 1)
