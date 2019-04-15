@@ -16,7 +16,7 @@ GameAnalyzer::GameAnalyzer(BoardModel* board)
 		DOWN,
 		LEFT
 	};
-	captureCombinations_ = getCombinationsOfSizeKtoN(directions, MIN_CAPTURE_SIZE, MAX_CAPTURE_SIZE);
+	captureCombinations_ = findCombinationsOfSizeKtoN(directions, MIN_CAPTURE_SIZE, MAX_CAPTURE_SIZE);
 }
 
 PlayerColor GameAnalyzer::findMajorityColor() const

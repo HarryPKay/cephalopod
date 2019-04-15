@@ -6,10 +6,7 @@ using namespace cephalopod;
 using namespace std;
 
 /*
- * =====================================================================================
- *        Class:  BoardViewer
- *  Description:  
- * =====================================================================================
+ * Provides the representation of the board to the user.
  */
 class BoardViewer final
 {

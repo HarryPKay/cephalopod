@@ -27,7 +27,7 @@ struct Move
 	Move(const Position position, const PlayerColor color, Captures captureDirections, const int32_t pipSum)
 		: position(position)
 		  , color(color)
-		  , captureDirections(std::move(captureDirections))
+		  , captureDirections(move(captureDirections))
 		  , pipSum(pipSum)
 	{
 	};

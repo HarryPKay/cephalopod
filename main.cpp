@@ -11,16 +11,9 @@ lost or damaged.
 #include <iostream>
 #include "Helpers.h"
 
-int main(int argc, char* argv[])
+int main()
 {
-	if (argc > 1)
-	{
-		cout << "Program does not take arguments\n";
-		return EXIT_FAILURE;
-	}
-
 	uint32_t selection = 0;
-
 	do
 	{
 		GameController game;
@@ -29,9 +22,7 @@ int main(int argc, char* argv[])
 		cout << "Play again?.\n\n";
 		cout << "1) Yes\n";
 		cout << "Any other number for no.\n\n> ";
-
 		promptForInteger(selection);
-
 		--selection;
 	}
 	while (selection == 0);

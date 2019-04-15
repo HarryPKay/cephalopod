@@ -129,7 +129,7 @@ float_t HardComputer::minValue(const uint32_t depth)
 		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
-	// general case: there are board states to search.
+	// General case: there are board states to search.
 	auto value = INFINITY;
 	auto moves = gameAnalyzer_->findAllValidMoves(oppositionColor_);
 	for (const auto& move : moves)
@@ -149,7 +149,7 @@ float_t HardComputer::minValue(const uint32_t depth, const float_t alpha, float_
 		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
-	// general case: there are board states to search.
+	// General case: there are board states to search.
 	auto value = INFINITY;
 	auto moves = gameAnalyzer_->findAllValidMoves(oppositionColor_);
 	for (const auto& move : moves)
@@ -174,7 +174,7 @@ float_t HardComputer::maxValue(const uint32_t depth)
 		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
-	// general case: there are board states to search.
+	// General case: there are board states to search.
 	auto value = -INFINITY;
 	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	for (const auto& move : moves)
@@ -194,7 +194,7 @@ float_t HardComputer::maxValue(const uint32_t depth, float_t alpha, const float_
 		return evaluate(OCCUPANT_COUNT_DIFFERENCE);
 	}
 
-	// general case: there are board states to search.
+	// General case: there are board states to search.
 	auto value = -INFINITY;
 	auto moves = gameAnalyzer_->findAllValidMoves(playerColor_);
 	for (const auto& move : moves)
@@ -231,14 +231,14 @@ float_t HardComputer::evaluate(const HeuristicMethod method) const
 
 	case GAME_RESULT_ENCODING:
 
-		//Encodes the result of games with a 1 for a win or a - 1 for a loss.
+		//Encodes the result of games with a 1 for a win or a 0 for a loss.
 		if (winner == playerColor_)
 		{
 			return 1.0;
 		}
 		if (winner == oppositionColor_)
 		{
-			return -1.0;
+			return 0.0;
 		}
 	}
 	return 0.0;

@@ -126,7 +126,7 @@ bool BoardModel::setMove(Move move)
 	gridHistory_.push(grid_);
 	setNeighborsInfo(move.position);
 
-	// Update the targeted targeted cell.
+	// Update the targeted cell.
 	auto neighbors = positionToNeighborsMap_[move.position];
 	auto& cell = grid_[move.position.row][move.position.col];
 	cell.occupant = move.color;
